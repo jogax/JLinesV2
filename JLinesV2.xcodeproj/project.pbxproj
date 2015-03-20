@@ -132,9 +132,9 @@
 				2009B0B71AB30F7700452C4C /* Game.swift */,
 				2009B0B81AB30F7700452C4C /* MyGameView.swift */,
 				2009B0B91AB30F7700452C4C /* GameBoard.swift */,
+				2009B0BC1AB30F7700452C4C /* Line.swift */,
 				2009B0BA1AB30F7700452C4C /* Point.swift */,
 				2009B0BB1AB30F7700452C4C /* Set.swift */,
-				2009B0BC1AB30F7700452C4C /* Line.swift */,
 				2009B0BD1AB30F7700452C4C /* SettingsViewController.swift */,
 				2009B0BE1AB30F7700452C4C /* Package.swift */,
 				2009B0BF1AB30F7700452C4C /* SwiftyJSON.swift */,
@@ -425,6 +425,7 @@
 				INFOPLIST_FILE = JLinesV2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -435,6 +436,7 @@
 				INFOPLIST_FILE = JLinesV2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -491,6 +493,7 @@
 				2009B0AD1AB30EAD00452C4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2009B0AE1AB30EAD00452C4C /* Build configuration list for PBXNativeTarget "JLinesV2Tests" */ = {
 			isa = XCConfigurationList;
@@ -499,6 +502,7 @@
 				2009B0B01AB30EAD00452C4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

@@ -74,7 +74,7 @@ class Line: Hashable, Printable {
     
     func addPoint(point: Point) {
         points.append(point)
-        lineEnded = pointInLine(point1!) && pointInLine(point2!)
+        //lineEnded = pointInLine(point1!) && pointInLine(point2!)
         cnt = points.count
     }
     
