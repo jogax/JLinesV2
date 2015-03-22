@@ -12,6 +12,7 @@ struct Member: Hashable {
     var x: Int
     var y: Int
     var checked: Bool
+    var endPoint: Bool
     var hashValue: Int {
         return x * 100 + y
     }
@@ -26,25 +27,31 @@ func ==(lhs: Member, rhs: Member) -> Bool {
 class GameBoard {
     struct Area {
         var points:Array<Member>
+        var hasEndPoints: Bool
+        var countEndPoints: Int
         var countNotCheckedMembers: Int
         
         init () {
             points = Array<Member>()
             countNotCheckedMembers = 0
+            hasEndPoints = false
+            countEndPoints = 0
         }
     }
 
     
     var gameArray: Array2D<Point>
-    var directions: Array2D<Directions>
+    //var directions: Array2D<Directions>
     var tempGameArray: Array2D<Point>?
-    var tempDirections: Array2D<Directions>?
+    //var tempDirections: Array2D<Directions>?
     var lowCountDirections: Array<(Int, Int)>?
     var lines: [LineType:Line]
-    var gameSize: Int
-    var numColors: Int?
+    var gameSize: Int = 0
+    var numColors: Int = 0
     var countMoves: Int = 0
     var areas = [Int:Area]()
+    var areaNr = 0
+    
     
     init (gameArray: Array2D<Point>, lines: [LineType:Line], gameSize: Int, numColors: Int) {
         
@@ -52,7 +59,7 @@ class GameBoard {
         self.numColors = numColors
         self.gameArray = gameArray
         self.lines = lines
-        self.directions = Array2D<Directions>(columns:gameSize, rows: gameSize)
+        //self.directions = Array2D<Directions>(columns:gameSize, rows: gameSize)
     }
     
     init (gameSize: Int) {
@@ -66,11 +73,11 @@ class GameBoard {
         self.gameSize = gameSize
         var (minColorCount, maxColorCount) = minMaxColorCount[gameSize]!
         self.gameArray =  Array2D<Point>(columns:gameSize, rows: gameSize)
-        self.directions = Array2D<Directions>(columns:gameSize, rows: gameSize)
+        //self.directions = Array2D<Directions>(columns:gameSize, rows: gameSize)
         
         self.lines = [LineType:Line]()
         
-        numColors = random(minColorCount, max: maxColorCount + 1)
+        numColors = random(minColorCount, max: maxColorCount)
 
         (gameArray, lines) = generateGameArray()
         
@@ -79,14 +86,14 @@ class GameBoard {
     
     func generateGameArray() -> (Array2D<Point>, [LineType:Line]) {
 
-        let countColors = LineType.LastColor.rawValue - 1
+        //let countColors = LineType.LastColor.rawValue - 1
         tempGameArray = Array2D<Point>(columns: gameSize, rows: gameSize)
-        tempDirections = Array2D<Directions>(columns: gameSize, rows: gameSize)
+        //tempDirections = Array2D<Directions>(columns: gameSize, rows: gameSize)
       
         for column in 0..<gameSize {  // empty Array generieren
             for row in 0..<gameSize {
                 tempGameArray![column, row] = Point(column: column, row: row, type: LineType.Unknown, originalPoint: false, inLinePoint: false, size: gameSize, delegate: checkDirections)
-                tempDirections![column, row] = Directions()
+                //tempDirections![column, row] = Directions()
             }
         }
         lowCountDirections = Array<(Int, Int)>()
@@ -100,34 +107,24 @@ class GameBoard {
         var y2 = 0
         var line: Line
         
-        var repeat = false
+        //var repeat = false
         
 
-        for ind in 0..<numColors! {
+        for ind in 0..<self.numColors {
         //for ind in 0..<2 {
             let color = LineType(rawValue: (LineType.Red.rawValue + ind))!
-            /*
-            if lowCountDirections!.count > 0 {
-                (x1, y1) = lowCountDirections![0]
-            } else {
-                (x1, y1) = getRandomPoint()
-            }
-            */
             
-            if areas[0]!.points.count > 5 {
-                (x1, y1) = getRandomPoint()
-            } else {
-                x1 = areas[0]!.points[0].x
-                y1 = areas[0]!.points[0].y
-            }
+            
+            (x1, y1) = getRandomPoint()
+            
             tempGameArray![x1, y1]!.color = color
             tempGameArray![x1, y1]!.originalPoint = true
             
-            
+            /*
             let line = Line(lineType: color)
             lines[color] = line
             lines[color]!.point1 = Point(column: x1, row: y1, type: color, originalPoint: true, inLinePoint: false, size:gameSize, delegate: checkDirections)
-            
+            */
             lines[color] = generateLineFromPoint(x1, y: y1, color: color)
             
         }
@@ -136,20 +133,24 @@ class GameBoard {
     }
     
     func random(min: Int, max: Int) -> Int {
-        return min + Int(arc4random_uniform(UInt32(max - min)))
+        return min + Int(arc4random_uniform(UInt32(max + 1 - min)))
     }
     
     func getRandomPoint () -> (Int, Int) {
         var randomSet: [(x:Int, y:Int)]
         randomSet = []
-        for x in 0..<gameSize {
-            for y in 0..<gameSize {
-                if tempGameArray![x, y]!.color == .Unknown {
-                    randomSet.append(x: x, y: y)
-                }
+        
+
+        var area = areas[self.areaNr]!
+        for (index, member) in enumerate(area.points) {
+            if !area.hasEndPoints || area.points[index].endPoint {
+                let x = area.points[index].x
+                let y = area.points[index].y
+                randomSet.append(x: x, y: y)
             }
+
         }
-        return randomSet[random(0, max: randomSet.count)]
+        return randomSet[random(0, max: randomSet.count - 1)]
     }
     
     func generateLineFromPoint(x: Int, y: Int, color:LineType) -> Line {
@@ -158,27 +159,43 @@ class GameBoard {
             println("areas[ind].count:\(areas[ind]!.points.count)")
         }
         let line = Line(lineType: color)
-        lines[color] = line
-        while line.length == 0 {
-            let point = Point(column: x, row: y, type: color, originalPoint: true, inLinePoint: false, size:gameSize, delegate: checkDirections)
-            lines[color]!.point1 = point
-            lines[color]!.addPoint(point)
+        let left = 0
+        let up = 1
+        let right = 2
+        let down = 3
+        
+        var leftUpRightDown = random(left, max: down)
+        
+        while line.length < 3 {
+            let point = Point(column: x, row: y, type: color, originalPoint: true, inLinePoint: true, size:gameSize, delegate: checkDirections)
+            line.point1 = point
+            line.point2 = point
+            line.addPoint(point)
             println("color: \(color), line.count: \(line.length), aktX: \(x), aktY:\(y)")
 
-            let emptyPointsCount = areas[0]!.points.count  // nehme die 1st area
+            let emptyPointsCount = areas[areaNr]!.points.count  // nehme die 1st area
             
+            var allEmptyPointsCount = 0
             var otherEmptyPointsCount = 0
             for col in 0..<gameSize {
                 for row in 0..<gameSize {
-                    if tempGameArray![col, row]!.color == LineType.Unknown {otherEmptyPointsCount++}
+                    if tempGameArray![col, row]!.color == LineType.Unknown {allEmptyPointsCount++}
                 }
             }
-            otherEmptyPointsCount -= emptyPointsCount
+            otherEmptyPointsCount = allEmptyPointsCount - emptyPointsCount
+            
             var lineLength = 0
-            if emptyPointsCount < 6 {
-                lineLength = emptyPointsCount
+            var restLinesCount = numColors - self.lines.count
+            var areasCount = areas.count
+            
+            if emptyPointsCount < 6 || restLinesCount == 1 || areasCount == restLinesCount {
+                lineLength = emptyPointsCount + 1
             } else {
-                lineLength = random(3, max: emptyPointsCount - (numColors! - lines.count) * 3)
+                if emptyPointsCount >  9 {
+                    lineLength = random(3, max: emptyPointsCount - (restLinesCount - areasCount) * 3)
+                } else {
+                    lineLength = 3
+                }
             }
             var aktX: Int = x
             var aktY: Int = y
@@ -186,61 +203,78 @@ class GameBoard {
             while line.length < lineLength {
                 var randomSet: [(x:Int, y:Int)]
                 randomSet = []
-                if aktX > 0 && tempGameArray![aktX - 1, aktY]!.color == .Unknown {
-                    let setX = aktX - 1
-                    let setY = aktY
-                    randomSet.append(x: setX, y: setY)
+                var cnt = 0
+                while randomSet.count == 0 || cnt > 3 {
+                    switch leftUpRightDown {
+                    case left:
+                        if aktX > 0 && tempGameArray![aktX - 1, aktY]!.color == .Unknown {
+                            let setX = aktX - 1
+                            let setY = aktY
+                            randomSet.append(x: setX, y: setY)
+                        }
+                    case up:
+                        if aktX < gameSize - 1 && tempGameArray![aktX + 1, aktY]!.color == .Unknown {
+                            let setX = aktX + 1
+                            let setY = aktY
+                            randomSet.append(x: setX, y: setY)
+                        }
+                    case right:
+                        if aktY > 0 && tempGameArray![aktX, aktY - 1]!.color == .Unknown {
+                            let setX = aktX
+                            let setY = aktY - 1
+                            randomSet.append(x: setX, y: setY)
+                        }
+                    default:
+                        if aktY < gameSize - 1 && tempGameArray![aktX, aktY + 1]!.color == .Unknown {
+                            let setX = aktX
+                            let setY = aktY + 1
+                            randomSet.append(x: setX, y: setY)}
+                    }
+                    if randomSet.count == 0 {
+                        if ++leftUpRightDown > down {leftUpRightDown = 0}
+                        cnt++
+                    }
                 }
                 
-                if aktX < gameSize - 1 && tempGameArray![aktX + 1, aktY]!.color == .Unknown {
-                    let setX = aktX + 1
-                    let setY = aktY
-                    randomSet.append(x: setX, y: setY)
+                
+                if randomSet.count == 0 {
+                    lineLength = line.length
+                } else {
+                    (aktX, aktY) = randomSet[random(0, max: randomSet.count - 1)]
+                    tempGameArray![aktX, aktY]!.color = color
+                    tempGameArray![aktX, aktY]!.inLinePoint = true
+                    line.point2 = Point(column: aktX, row: aktY, type: color, originalPoint: false, inLinePoint: true, size:gameSize, delegate: checkDirections )
+                    println("color: \(color), line.count: \(line.length), aktX: \(aktX), aktY:\(aktY)")
+                    line.addPoint(tempGameArray![aktX, aktY]!)
                 }
-                
-                if aktY > 0 && tempGameArray![aktX, aktY - 1]!.color == .Unknown {
-                    let setX = aktX
-                    let setY = aktY - 1
-                    randomSet.append(x: setX, y: setY)
-                }
-                if aktY < gameSize - 1 && tempGameArray![aktX, aktY + 1]!.color == .Unknown {
-                    let setX = aktX
-                    let setY = aktY + 1
-                    randomSet.append(x: setX, y: setY)}
-                
-                var nextX: Int
-                var nextY: Int
-                
-                (aktX, aktY) = randomSet[random(0, max: randomSet.count)]
-                tempGameArray![aktX, aktY]!.color = color
-                tempGameArray![aktX, aktY]!.inLinePoint = true
-                lines[color]!.point2 = Point(column: aktX, row: aktY, type: color, originalPoint: false, inLinePoint: true, size:gameSize, delegate: checkDirections )
-                println("color: \(color), line.count: \(line.length), aktX: \(aktX), aktY:\(aktY)")
-                line.addPoint(tempGameArray![aktX, aktY]!)
             }
-            for ind in 0..<lines[color]!.length {
-                lines[color]!.points[ind].originalPoint = false
+            for ind in 0..<line.length {
+                line.points[ind].originalPoint = false
             }
             
-            lines[color]!.point2!.originalPoint = true
-            let x2 = lines[color]!.point2!.column
-            let y2 = lines[color]!.point2!.row
-            lines[color]!.firstPoint().originalPoint = true
-            lines[color]!.lastPoint().originalPoint = true
+            line.point2!.originalPoint = true
+            let x2 = line.point2!.column
+            let y2 = line.point2!.row
+            line.firstPoint().originalPoint = true
+            line.lastPoint().originalPoint = true
             tempGameArray![x2, x2]!.originalPoint = true
-            println("point1: \(lines[color]!.point1), point2: \(lines[color]!.point2)")
-            printGameboard()
+            println("point1: \(line.point1), point2: \(line.point2)")
+            //printGameboard()
             for ind in 0..<areas.count {
-                if areas[ind]!.points.count < 3 { //zu kurze Area --> line weglöschen!
-                    while lines[color]!.points.count > 0 {
-                        let x = lines[color]!.lastPoint().column
-                        let y = lines[color]!.lastPoint().row
+                if areas[ind]!.points.count < 3 || areas[ind]!.countEndPoints == 3  {//> 2 && areas[ind]!.points.count < 6) { //zu kurze Area or zu viele EndPoints --> line weglöschen!
+                    while line.points.count > 2 {
+                        let x = line.lastPoint().column
+                        let y = line.lastPoint().row
                         tempGameArray![x, y]!.color = .Unknown
-                        lines[color]!.removeLastPoint()
+                        line.removeLastPoint()
+                        //printGameboard()
                     }
                 }
             }
         }
+        
+        lines[color] = line
+
         return lines[color]!
     }
     
@@ -282,11 +316,12 @@ class GameBoard {
             }
         }
         var areaNumber = 0
+        var minAreaLength = 1000
         for x in 0..<gameSize {
             for y in 0..<gameSize {
                 if tempGameArray![x, y]!.color == .Unknown &&
                 tempGameArray![x, y]!.areaNumber == -1 {
-                    area.points.append(Member(x: x, y: y, checked: false))
+                    area.points.append(Member(x: x, y: y, checked: false, endPoint: false))
                     tempGameArray![x, y]!.areaNumber = areaNumber
                     area.countNotCheckedMembers++
                     while area.countNotCheckedMembers > 0 {
@@ -298,8 +333,8 @@ class GameBoard {
                                     tempGameArray![x - 1, y]!.color == .Unknown &&
                                     tempGameArray![x - 1, y]!.areaNumber == -1 {
                                     
-                                    tempGameArray![x - 1, y]!.areaNumber == areaNumber
-                                    area.points.append(Member(x: x - 1, y: y, checked: false))
+                                    tempGameArray![x - 1, y]!.areaNumber = areaNumber
+                                    area.points.append(Member(x: x - 1, y: y, checked: false, endPoint: false))
                                     area.countNotCheckedMembers++
                                 }
                                 if tempGameArray![x, y]!.directions.right > 0 &&
@@ -307,7 +342,7 @@ class GameBoard {
                                     tempGameArray![x + 1, y]!.areaNumber == -1 {
                                         
                                     tempGameArray![x + 1, y]!.areaNumber = areaNumber
-                                    area.points.append(Member(x: x + 1, y: y, checked: false))
+                                    area.points.append(Member(x: x + 1, y: y, checked: false, endPoint: false))
                                     area.countNotCheckedMembers++
                                 }
                                 if tempGameArray![x, y]!.directions.up > 0 &&
@@ -315,7 +350,7 @@ class GameBoard {
                                     tempGameArray![x, y - 1]!.areaNumber == -1 {
 
                                     tempGameArray![x, y - 1]!.areaNumber = areaNumber
-                                    area.points.append(Member(x: x, y: y - 1, checked: false))
+                                    area.points.append(Member(x: x, y: y - 1, checked: false, endPoint: false))
                                     area.countNotCheckedMembers++
                                 }
                                 if tempGameArray![x, y]!.directions.down > 0 &&
@@ -323,8 +358,13 @@ class GameBoard {
                                     tempGameArray![x, y + 1]!.areaNumber == -1 {
                                     
                                     tempGameArray![x, y + 1]!.areaNumber = areaNumber
-                                    area.points.append(Member(x: x, y: y + 1, checked: false))
+                                    area.points.append(Member(x: x, y: y + 1, checked: false, endPoint: false))
                                     area.countNotCheckedMembers++
+                                }
+                                if tempGameArray![x, y]!.directions.countDirections == 1 {
+                                    area.hasEndPoints = true
+                                    area.countEndPoints++
+                                    area.points[index].endPoint = true
                                 }
                                 area.points[index].checked = true
                                 area.countNotCheckedMembers--
@@ -333,6 +373,10 @@ class GameBoard {
                         }
                     }
                     self.areas[areaNumber] = area
+                    if minAreaLength > area.points.count {
+                        minAreaLength = area.points.count
+                        self.areaNr = areaNumber
+                    }
                     area = Area()
                     areaNumber++
                 }
