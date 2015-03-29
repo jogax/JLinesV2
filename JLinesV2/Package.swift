@@ -126,7 +126,7 @@ class Package {
         //println("lines: \(lines)")
         return (true, numColors, spielArray, error, lines)
     }
-    func checkDirections () {
+    func checkDirections (Int, Int) {
         
     }
     

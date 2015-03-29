@@ -25,28 +25,30 @@ struct Directions {
         count = 0
         countDirections = 0
     }
+    
 }
 
 class Point: Printable, Hashable {
     
     var column: Int
     var row: Int
-    var checkDirections: ()->()
+    var checkDirections: (x:Int, y:Int)->()
     var color: LineType {
         didSet {
             if color != oldValue {
-                checkDirections()
+                checkDirections(x: column, y: row)
             }
         }
     }
     var originalPoint: Bool
+    
     var inLinePoint: Bool
     var earlierColor: LineType
     var gameSize: Int
     var areaNumber: Int
     var directions: Directions
     
-    init(column: Int, row: Int, type: LineType, originalPoint: Bool, inLinePoint: Bool, size: Int, delegate: ()->()) {
+    init(column: Int, row: Int, type: LineType, originalPoint: Bool, inLinePoint: Bool, size: Int, delegate: (Int, Int)->()) {
         self.column = column
         self.row = row
         self.color = type
@@ -57,6 +59,31 @@ class Point: Printable, Hashable {
         self.checkDirections = delegate
         self.areaNumber = -1
         self.directions = Directions()
+    }
+    
+    func clearDirections () {
+        directions.left = 0
+        directions.right = 0
+        directions.up = 0
+        directions.down = 0
+        directions.count = 0
+        directions.countDirections = 0
+    }
+    
+    func countDirections(){
+        directions.count = directions.left + directions.right + directions.up + directions.down
+        directions.countDirections = directions.left > 0 ? 1 : 0
+        directions.countDirections += directions.right > 0 ? 1 : 0
+        directions.countDirections += directions.up > 0 ? 1 : 0
+        directions.countDirections += directions.down > 0 ? 1 : 0
+    }
+    
+    func clearPoint () {
+        color = .Unknown
+        originalPoint = false
+        inLinePoint = false
+        earlierColor = .Unknown
+        areaNumber = 0
     }
     
     var description: String {

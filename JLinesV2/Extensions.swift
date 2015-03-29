@@ -36,4 +36,30 @@ extension Dictionary {
         }
         return (nil,nil)
     }
+    
 }
+
+extension Array {
+    func find<T: Equatable> (item: T) -> Int? {
+        for (idx, element) in enumerate(self) {
+            if element as T == item {
+                return idx
+            }
+        }
+        return nil
+    }
+
+    mutating func remove <T: Equatable> (item: T) {
+        if let index = find(item) {
+            removeAtIndex(index)
+        }
+
+    }
+
+}
+
+
+
+
+
+

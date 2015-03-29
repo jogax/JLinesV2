@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 enum LineType: Int, Printable {
-    case Unknown = 0, Red, Green, Blue, Magenta, Yellow, Purple, Orange, Cyan, Brown, LastColor
+    case Unknown = 0, Red, Green, Blue, Magenta, Yellow, Purple, Orange, Cyan, Brown, LightGrayColor, DarkGreyColor, LastColor
     
     var colorName: String {
         let colorNames = [
@@ -24,6 +24,8 @@ enum LineType: Int, Printable {
             "Orange",
             "Cyan",
             "Brown",
+            "LightGrayColor",
+            "DarkGreyColor",
             "LastColor"
         ]
         
@@ -42,6 +44,8 @@ enum LineType: Int, Printable {
             UIColor.orangeColor().CGColor,
             UIColor.cyanColor().CGColor,
             UIColor.brownColor().CGColor,
+            UIColor.lightGrayColor().CGColor,
+            UIColor.darkGrayColor().CGColor,
             UIColor.blackColor().CGColor
         ]
         
@@ -106,7 +110,7 @@ class Line: Hashable, Printable {
     }
     
     var description: String {
-        return "cnt: \(cnt), point1: \(point1), point2: \(point2), type: \(color) \n points: \(points)"
+        return "cnt: \(cnt), \npoint1: \(point1), \npoint2: \(point2), type: \(color) \n points: \(points)"
     }
     
     var hashValue: Int {

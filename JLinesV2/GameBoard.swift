@@ -8,6 +8,16 @@
 
 import Foundation
 
+struct LowValues: Hashable {
+    var tuple: (x:Int, y:Int)
+    var hashValue: Int {
+        return tuple.x * 100 + tuple.y
+    }
+}
+func ==(lhs: LowValues, rhs: LowValues) -> Bool {
+    return lhs.tuple.x == rhs.tuple.x && lhs.tuple.y == rhs.tuple.y
+}
+
 struct Member: Hashable {
     var x: Int
     var y: Int
@@ -40,11 +50,14 @@ class GameBoard {
     }
 
     
+    
     var gameArray: Array2D<Point>
     //var directions: Array2D<Directions>
     var tempGameArray: Array2D<Point>?
     //var tempDirections: Array2D<Directions>?
-    var lowCountDirections: Array<(Int, Int)>?
+    var lowCountDirections = Array<(x:Int, y:Int)>()
+    //var lowValuesIndex: Int = 0
+    var numEmptyPoints: Int
     var lines: [LineType:Line]
     var gameSize: Int = 0
     var numColors: Int = 0
@@ -59,6 +72,8 @@ class GameBoard {
         self.numColors = numColors
         self.gameArray = gameArray
         self.lines = lines
+        self.numEmptyPoints = self.gameSize * self.gameSize
+        
         //self.directions = Array2D<Directions>(columns:gameSize, rows: gameSize)
     }
     
@@ -67,24 +82,29 @@ class GameBoard {
             5:(4, 5),
             6:(4, 6),
             7:(5, 8),
-            8:(5, 9),
+            8:(6, 9),
             9:(6, 10)
         ]
         self.gameSize = gameSize
         var (minColorCount, maxColorCount) = minMaxColorCount[gameSize]!
         self.gameArray =  Array2D<Point>(columns:gameSize, rows: gameSize)
         //self.directions = Array2D<Directions>(columns:gameSize, rows: gameSize)
+        self.numEmptyPoints = self.gameSize * self.gameSize
         
         self.lines = [LineType:Line]()
-        
-        numColors = random(minColorCount, max: maxColorCount)
-
+        printFunction("GameBoard.init(gameSize: \(gameSize))")
+        numColors = random(minColorCount, max: maxColorCount, comment: "wähle Anzahl colors")
+        let startTime = NSDate()
         (gameArray, lines) = generateGameArray()
-        
+        let currentTime = NSDate()
+        let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000 / 1000
+        println("Time für Generierung von Gameboard:\(elapsedTime) sec")
+
     }
 
     
     func generateGameArray() -> (Array2D<Point>, [LineType:Line]) {
+        printFunction("generateGameArray()")
 
         //let countColors = LineType.LastColor.rawValue - 1
         tempGameArray = Array2D<Point>(columns: gameSize, rows: gameSize)
@@ -96,7 +116,7 @@ class GameBoard {
                 //tempDirections![column, row] = Directions()
             }
         }
-        lowCountDirections = Array<(Int, Int)>()
+        //lowCountDirections = [Int:Array<(x:Int, y:Int)>]()
         checkDirections()
         //analyzeGameboard()
 
@@ -109,31 +129,63 @@ class GameBoard {
         
         //var repeat = false
         
-
-        for ind in 0..<self.numColors {
-        //for ind in 0..<2 {
+        var deleted = false
+        var ind = 0
+        var toContinue = false
+        //for ind in 0..<self.numColors {
+        //for ind in 0..<2 
+        do {
             let color = LineType(rawValue: (LineType.Red.rawValue + ind))!
+            let startTime = NSDate()
             
             
             (x1, y1) = getRandomPoint()
             
-            tempGameArray![x1, y1]!.color = color
-            tempGameArray![x1, y1]!.originalPoint = true
+            do {
+                tempGameArray![x1, y1]!.color = color
+                tempGameArray![x1, y1]!.originalPoint = true
+                tempGameArray![x1, y1]!.inLinePoint = true
+                lines[color] = generateLineFromPoint(x1, y: y1, color: color)
+                deleted = deleteLineIfRequired(color)
+            } while deleted
+        
+            let currentTime = NSDate()
+            let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
+            println("laufTime:\(elapsedTime) ms für \(color)")
+            ind++
+            toContinue = (ind < self.numColors && self.numEmptyPoints != 0) || self.numEmptyPoints != 0
+        } while toContinue
+        
+        
+        for (color,line) in lines {
+            while line.points.count > 0 {
+                let x = line.lastPoint().column
+                let y = line.lastPoint().row
+                if line.lastPoint() != line.point1 && line.lastPoint() != line.point2 {
+                    tempGameArray![x, y]!.color = .Unknown
+                    tempGameArray![x, y]!.originalPoint = false
+                }
+                tempGameArray![x, y]!.inLinePoint = false
+                line.removeLastPoint()
+            }
+            line.point1!.inLinePoint = false
+            line.point2!.inLinePoint = false
+            //tempGameArray![line.point1!.column, line.point1!.row] = line.point1
+            //tempGameArray![line.point2!.column, line.point1!.row] = line.point2
             
-            /*
-            let line = Line(lineType: color)
-            lines[color] = line
-            lines[color]!.point1 = Point(column: x1, row: y1, type: color, originalPoint: true, inLinePoint: false, size:gameSize, delegate: checkDirections)
-            */
-            lines[color] = generateLineFromPoint(x1, y: y1, color: color)
+            //line.addPoint(line.point1!)
+            //line.addPoint(line.point2!)
             
+ 
         }
         return (tempGameArray!, lines)
         
     }
     
-    func random(min: Int, max: Int) -> Int {
-        return min + Int(arc4random_uniform(UInt32(max + 1 - min)))
+    func random(min: Int, max: Int, comment: String) -> Int {
+        let randomInt = min + Int(arc4random_uniform(UInt32(max + 1 - min)))
+        printFunction("random(min: \(min), max: \(max)) -> \(randomInt), comment: \(comment)")
+        return randomInt
     }
     
     func getRandomPoint () -> (Int, Int) {
@@ -150,49 +202,69 @@ class GameBoard {
             }
 
         }
-        return randomSet[random(0, max: randomSet.count - 1)]
+        let randomWert = randomSet[random(0, max: randomSet.count - 1, comment: "generiere Point")]
+        printFunction("getRandomPoint () -> \(randomWert)")
+
+        return randomWert
     }
     
     func generateLineFromPoint(x: Int, y: Int, color:LineType) -> Line {
+        printFunction("generateLineFromPoint(x: \(x), y: \(y), color:\(color))")
+        /*
         println("arrays:\(areas.count)")
         for ind in 0..<areas.count {
             println("areas[ind].count:\(areas[ind]!.points.count)")
         }
+        */
         let line = Line(lineType: color)
         let left = 0
         let up = 1
         let right = 2
         let down = 3
         
-        var leftUpRightDown = random(left, max: down)
+        var leftUpRightDown = random(left, max: down, comment: "wähle Direction")
+        var blockedX = gameSize
+        var blockedY = gameSize
         
         while line.length < 3 {
-            let point = Point(column: x, row: y, type: color, originalPoint: true, inLinePoint: true, size:gameSize, delegate: checkDirections)
-            line.point1 = point
-            line.point2 = point
-            line.addPoint(point)
-            println("color: \(color), line.count: \(line.length), aktX: \(x), aktY:\(y)")
+            //let point = Point(column: x, row: y, type: color, originalPoint: true, inLinePoint: true, size:gameSize, delegate: checkDirections)
+            //line.point1 = point
+            //line.point2 = point
+            line.point1 = tempGameArray![x, y]!
+            line.point2 = line.point1
+            line.addPoint(line.point1!)
+            //println("color: \(color), line.count: \(line.length), aktX: \(x), aktY:\(y)")
 
             let emptyPointsCount = areas[areaNr]!.points.count  // nehme die 1st area
             
-            var allEmptyPointsCount = 0
             var otherEmptyPointsCount = 0
-            for col in 0..<gameSize {
-                for row in 0..<gameSize {
-                    if tempGameArray![col, row]!.color == LineType.Unknown {allEmptyPointsCount++}
-                }
-            }
-            otherEmptyPointsCount = allEmptyPointsCount - emptyPointsCount
+            otherEmptyPointsCount = numEmptyPoints - emptyPointsCount
             
             var lineLength = 0
             var restLinesCount = numColors - self.lines.count
             var areasCount = areas.count
+            var averageLength = 0
+            if restLinesCount > 0 {
+                averageLength = emptyPointsCount / restLinesCount
+            } else {
+                averageLength = 3
+            }
+            var possibleLengths = [Int]()
+            for i in 0..<6 {
+                if averageLength - 3 + i > 2 {
+                    possibleLengths.append(averageLength - 3 + i)
+                    if i == 3 {
+                        possibleLengths.append(averageLength - 3 + i)
+                    }
+                }
+            }
             
             if emptyPointsCount < 6 || restLinesCount == 1 || areasCount == restLinesCount {
                 lineLength = emptyPointsCount + 1
             } else {
                 if emptyPointsCount >  9 {
-                    lineLength = random(3, max: emptyPointsCount - (restLinesCount - areasCount) * 3)
+                    //lineLength = random(3, max: emptyPointsCount - (restLinesCount - areasCount) * 3, comment: "wähle Linelenght")
+                    lineLength = possibleLengths[random(0, max: possibleLengths.count - 1, comment: "wähle Linelenght")]
                 } else {
                     lineLength = 3
                 }
@@ -204,28 +276,28 @@ class GameBoard {
                 var randomSet: [(x:Int, y:Int)]
                 randomSet = []
                 var cnt = 0
-                while randomSet.count == 0 || cnt > 3 {
+                while randomSet.count == 0 && cnt <= 3 {
                     switch leftUpRightDown {
                     case left:
-                        if aktX > 0 && tempGameArray![aktX - 1, aktY]!.color == .Unknown {
-                            let setX = aktX - 1
-                            let setY = aktY
-                            randomSet.append(x: setX, y: setY)
+                        if aktX > 0 && tempGameArray![aktX - 1, aktY]!.color == .Unknown && tempGameArray![aktX - 1, aktY]!.areaNumber == areaNr && (aktX - 1 != blockedX || aktY != blockedY) {
+                                let setX = aktX - 1
+                                let setY = aktY
+                                randomSet.append(x: setX, y: setY)
                         }
-                    case up:
-                        if aktX < gameSize - 1 && tempGameArray![aktX + 1, aktY]!.color == .Unknown {
+                    case right:
+                        if aktX < gameSize - 1 && tempGameArray![aktX + 1, aktY]!.color == .Unknown && tempGameArray![aktX + 1, aktY]!.areaNumber == areaNr  && (aktX + 1 != blockedX || aktY != blockedY) {
                             let setX = aktX + 1
                             let setY = aktY
                             randomSet.append(x: setX, y: setY)
                         }
-                    case right:
-                        if aktY > 0 && tempGameArray![aktX, aktY - 1]!.color == .Unknown {
+                    case up:
+                        if aktY > 0 && tempGameArray![aktX, aktY - 1]!.color == .Unknown && tempGameArray![aktX, aktY - 1]!.areaNumber == areaNr && (aktX != blockedX || aktY - 1 != blockedY) {
                             let setX = aktX
                             let setY = aktY - 1
                             randomSet.append(x: setX, y: setY)
                         }
-                    default:
-                        if aktY < gameSize - 1 && tempGameArray![aktX, aktY + 1]!.color == .Unknown {
+                    default: //down
+                        if aktY < gameSize - 1 && tempGameArray![aktX, aktY + 1]!.color == .Unknown && tempGameArray![aktX, aktY + 1]!.areaNumber == areaNr && (aktX != blockedX || aktY + 1 != blockedY) {
                             let setX = aktX
                             let setY = aktY + 1
                             randomSet.append(x: setX, y: setY)}
@@ -236,41 +308,76 @@ class GameBoard {
                     }
                 }
                 
-                
+                blockedX = gameSize  //entBlocking
+                blockedY = gameSize
                 if randomSet.count == 0 {
                     lineLength = line.length
                 } else {
-                    (aktX, aktY) = randomSet[random(0, max: randomSet.count - 1)]
+                    (aktX, aktY) = randomSet[random(0, max: randomSet.count - 1, comment: "wähle next Point in Line aus Randomset")]
+                    let oldAreasCount = areas.count
+                    var tooShortCount = 0
                     tempGameArray![aktX, aktY]!.color = color
-                    tempGameArray![aktX, aktY]!.inLinePoint = true
-                    line.point2 = Point(column: aktX, row: aktY, type: color, originalPoint: false, inLinePoint: true, size:gameSize, delegate: checkDirections )
-                    println("color: \(color), line.count: \(line.length), aktX: \(aktX), aktY:\(aktY)")
-                    line.addPoint(tempGameArray![aktX, aktY]!)
+                    if areas.count != oldAreasCount {
+                        for ind in 0..<areas.count {
+                            if areas[ind]!.points.count < 3 || areas[ind]!.countEndPoints == 3  {
+                                tooShortCount++
+                            }
+                        }
+                    }
+                    if tooShortCount == 1 {
+                        lineLength = line.length + areas[areaNr]!.points.count + 1
+                    }
+                    if tooShortCount > 1 {
+                        tempGameArray![aktX, aktY]!.color = .Unknown
+                        if tempGameArray![aktX, aktY]!.directions.countDirections > 1 {
+                            blockedX = aktX // wenn mehrere Richtungen, dann wähle andere Richtung
+                            blockedY = aktY
+                            aktX = line.lastPoint().column
+                            aktY = line.lastPoint().row
+                        } else {
+                            tempGameArray![aktX, aktY]!.color = color // Problem anders lösen
+                        }
+                    }
+                    if blockedX == gameSize {
+                        tempGameArray![aktX, aktY]!.inLinePoint = true
+                        line.point2 = Point(column: aktX, row: aktY, type: color, originalPoint: false, inLinePoint: true, size:gameSize, delegate: checkDirections )
+                        //println("color: \(color), line.count: \(line.length), aktX: \(aktX), aktY:\(aktY)")
+                        line.addPoint(tempGameArray![aktX, aktY]!)
+                        //printGameboard()
+                        self.numEmptyPoints = countEmptyPoints()
+                    }
                 }
             }
-            for ind in 0..<line.length {
+            /*
+            for ind in 1..<line.length{
                 line.points[ind].originalPoint = false
+                let x = line.points[ind].column
+                let y = line.points[ind].row
+                
+                tempGameArray![x, y]!.originalPoint = false
             }
-            
+            */
             line.point2!.originalPoint = true
             let x2 = line.point2!.column
             let y2 = line.point2!.row
             line.firstPoint().originalPoint = true
             line.lastPoint().originalPoint = true
             tempGameArray![x2, x2]!.originalPoint = true
-            println("point1: \(line.point1), point2: \(line.point2)")
-            //printGameboard()
+            //println("point1: \(line.point1), point2: \(line.point2), countEmptyPoints: \(self.countEmptyPoints)")
+            printGameboard()
+/*
             for ind in 0..<areas.count {
                 if areas[ind]!.points.count < 3 || areas[ind]!.countEndPoints == 3  {//> 2 && areas[ind]!.points.count < 6) { //zu kurze Area or zu viele EndPoints --> line weglöschen!
                     while line.points.count > 2 {
                         let x = line.lastPoint().column
                         let y = line.lastPoint().row
-                        tempGameArray![x, y]!.color = .Unknown
+                        tempGameArray![x, y]!.clearPoint()
                         line.removeLastPoint()
                         //printGameboard()
                     }
                 }
             }
+*/
         }
         
         lines[color] = line
@@ -278,7 +385,32 @@ class GameBoard {
         return lines[color]!
     }
     
+    func deleteLineIfRequired(color: LineType) -> Bool {
+        printFunction("deleteLineIfRequired(color: \(color))")
+        let line = lines[color]!
+        var toDelete = false
+        for ind in 0..<areas.count {
+            if areas[ind]!.points.count < 3 || areas[ind]!.countEndPoints == 3  {//> 2 && areas[ind]!.points.count < 6) { //zu kurze Area or zu viele EndPoints --> line weglöschen!
+                toDelete = true
+            }
+        }
+        if toDelete {
+            while line.points.count > 0 {
+                let x = line.lastPoint().column
+                let y = line.lastPoint().row
+                tempGameArray![x, y]!.clearPoint()
+                line.removeLastPoint()
+                analyzeGameboard()
+                printGameboard()
+            }
+            lines.removeValueForKey(color)
+        }
+        numEmptyPoints = countEmptyPoints()
+        return toDelete
+
+    }
     func printGameboard() {
+        printFunction("printGameboard()")
         var lineString = "+"
         for i in 0..<gameSize {lineString += "---+"}
         println (lineString)
@@ -288,18 +420,20 @@ class GameBoard {
                 var p: String
                 switch tempGameArray![x, y]!.color {
                     case .Unknown: p = "\(tempGameArray![x, y]!.areaNumber)"
-                    case .Red: p = "R"
-                    case .Green: p = "G"
-                    case .Blue: p = "B"
-                    case .Magenta: p = "M"
-                    case .Yellow: p = "Y"
-                    case .Purple: p = "P"
-                    case .Orange: p = "O"
-                    case .Cyan: p = "C"
-                    case .Brown: p = "K"
+                    case .Red: p = "r"
+                    case .Green: p = "g"
+                    case .Blue: p = "b"
+                    case .Magenta: p = "m"
+                    case .Yellow: p = "y"
+                    case .Purple: p = "p"
+                    case .Orange: p = "o"
+                    case .Cyan: p = "c"
+                    case .Brown: p = "k"
                     default: p = " "
                 }
-                if !tempGameArray![x, y]!.originalPoint {p = p.lowercaseString}
+                if tempGameArray![x, y]!.originalPoint {
+                    p = p.uppercaseString
+                }
                 printString += p + " | "
             }
             println("\(printString)")
@@ -308,6 +442,8 @@ class GameBoard {
     }
     
     func analyzeGameboard() {
+        let startTime = NSDate()
+        printFunction("analyzeGameboard()")
         self.areas = [Int:Area]()
         var area = Area()
         for x in 0..<gameSize {
@@ -377,17 +513,71 @@ class GameBoard {
                         minAreaLength = area.points.count
                         self.areaNr = areaNumber
                     }
+                    //printGameboard()
                     area = Area()
                     areaNumber++
                 }
                 
             }
         }
+        let currentTime = NSDate()
+        let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
+        println("analyzeGameboard elapsedTime:\(elapsedTime) ms")
+    }
+
+    func checkDirections(x: Int, y: Int) {
+        printFunction("checkDirections(x: \(x), y: \(y))")
+        checkDirections()
+
+        var startTime = NSDate()
+        var pointer = lowCountDirections.count
+        if let point = tempGameArray![x, y] {
+            if point.color == .Unknown {
+                checkDirections()
+            } else {
+                var columnLeft: Int = x - 1
+                tempGameArray![x, y]!.clearDirections()
+                while columnLeft >= 0 && tempGameArray![columnLeft, y]!.color == .Unknown {
+                    tempGameArray![columnLeft, y]!.directions.right = x - columnLeft - 1
+                    tempGameArray![columnLeft, y]!.countDirections()
+                    columnLeft--
+                }
+                var columnRight = x + 1
+                tempGameArray![x, y]!.directions.right = 0
+                while columnRight < gameSize && tempGameArray![columnRight, y]!.color == .Unknown {
+                    tempGameArray![columnRight, y]!.directions.left = columnRight - x - 1
+                    tempGameArray![columnRight, y]!.countDirections()
+                    columnRight++
+                }
+                var rowUp = y - 1
+                tempGameArray![x, y]!.directions.up = 0
+                while rowUp >= 0 && tempGameArray![x, rowUp]!.color == .Unknown {
+                    tempGameArray![x, rowUp]!.directions.down = y - rowUp - 1
+                    tempGameArray![x, rowUp]!.countDirections()
+                    rowUp--
+                }
+                var rowDown = y + 1
+                tempGameArray![x, y]!.directions.down = 0
+                while rowDown < gameSize && tempGameArray![x, rowDown]!.color == .Unknown {
+                    tempGameArray![x, rowDown]!.directions.up = rowDown - y - 1
+                    tempGameArray![rowDown, y]!.countDirections()
+                    rowDown++
+                }
+                analyzeGameboard()
+                printGameboard()
+            }
+        }
+        let currentTime = NSDate()
+        let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
+        println("checkDirections elapsedTime:\(elapsedTime) ms")
+
     }
     
     func checkDirections() {
-        if let point = tempGameArray![0, 0] { 
-            var lowCountDir = Array<(Int, Int)>()
+        printFunction("checkDirections()")
+        var startTime = NSDate()
+        if let point = tempGameArray![0, 0] {
+            var lowCountDir = Array<(x:Int, y:Int)>()
             for x in 0..<gameSize {
                 for y in 0..<gameSize {
                     var dir = Directions()
@@ -431,7 +621,7 @@ class GameBoard {
                         dir.countDirections += dir.up > 0 ? 1 : 0
                         dir.countDirections += dir.down > 0 ? 1 : 0
                         if dir.countDirections < 2 {
-                            lowCountDir.append(x, y)
+                            lowCountDir.append(x: x, y: y)
                         }
                         tempGameArray![x, y]!.directions = dir
                     }
@@ -440,7 +630,34 @@ class GameBoard {
             self.lowCountDirections = lowCountDir
             analyzeGameboard()
         }
+        let currentTime = NSDate()
+        let elapsedTime = currentTime.timeIntervalSinceDate(startTime)
+        //println("elapsedTime:\(elapsedTime)")
+
+
     }
-    
+
+    func countEmptyPoints() -> Int {
+        printFunction("countEmptyPoints()")
+        var count = 0
+        for x in 0..<gameSize {
+            for y in 0..<gameSize {
+                if tempGameArray![x, y]!.color == .Unknown {
+                    count++
+                }
+            }
+        }
+        return count
+    }
+    func printFunction(funcName:String) {
+        println("Function: \(funcName)")
+    }
 }
+
+
+func ==(lhs: (x: Int, y: Int), rhs: (x:Int, y:Int)) -> Bool {
+    return lhs.x == rhs.x && lhs.y == rhs.y
+}
+
+
 
