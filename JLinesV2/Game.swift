@@ -14,6 +14,14 @@ enum Choosed: Int{
     case Unknown = 0, Right, Left, Settings, Restart
 }
 
+struct GlobalVariables {
+    static var touchPoint = CGPointZero
+    static var gameSize = 5
+    static var rectSize: CGFloat = 0
+    static var lines = [LineType:Line]()
+    static let multiplicator:CGFloat = 0.90
+}
+
 
 class Game: UIView, Printable {
     let multiplicator:CGFloat = 0.90
@@ -24,7 +32,7 @@ class Game: UIView, Printable {
     var maxNumber: Int
     var number: Int
     var volumeNr: Int
-    var gameSize: Int
+    //var gameSize: Int
     var firstPoint: CGPoint?
     var vBounds: CGRect?
     //var rectSize: CGFloat?
@@ -52,7 +60,7 @@ class Game: UIView, Printable {
         self.volumeNr = volumeNr
         self.package = package
         self.volumeNr = volumeNr
-        gameSize = package.getGameSize(volumeNr)
+        GlobalVariables.gameSize = package.getGameSize(volumeNr)
         //moveCount = 0
         self.parent = parent
         
@@ -71,10 +79,10 @@ class Game: UIView, Printable {
         //rectSize = vSize!.width / CGFloat(gameSize)
         
         gameContainer = UIView(frame: CGRect(origin: vOrigin!, size: vSize!))
-        gameContainer!.backgroundColor = UIColor.blackColor()
+        gameContainer!.backgroundColor = UIColor.clearColor()
         
-        firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: vSize!), gameSize: gameSize, gameNumber: self.number, package: package, volumeNr: volumeNr, parent: parent, gameEnded: nextAction)
-        firstGameView!.backgroundColor = UIColor.blackColor()
+        firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: vSize!), gameNumber: self.number, package: package, volumeNr: volumeNr, parent: parent, gameEnded: nextAction)
+        firstGameView!.backgroundColor = UIColor.clearColor()
         //firstGameView.initialisation(gameSize, gameNumber: self.number++, package: package, volumeNr: volumeNr)
         
         
@@ -137,11 +145,11 @@ class Game: UIView, Printable {
         }
         
         if adder != 0 {
-            UIView.transitionWithView(self.gameContainer!, duration: 0.8, options: transitionOptions, animations: {
+            UIView.transitionWithView(self.gameContainer!, duration: 0.5, options: transitionOptions, animations: {
                 self.firstGameView!.removeFromSuperview()
                 self.firstGameView = nil
                 self.number += adder
-                self.firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: self.vSize!), gameSize: self.gameSize, gameNumber: self.number, package: self.package!, volumeNr: self.volumeNr, parent: self.parent, gameEnded:self.nextAction)
+                self.firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: self.vSize!), gameNumber: self.number, package: self.package!, volumeNr: self.volumeNr, parent: self.parent, gameEnded:self.nextAction)
                 self.backgroundColor = UIColor.whiteColor()
                 self.gameContainer!.addSubview(self.firstGameView!)
                             }, completion: {finisched in})

@@ -38,6 +38,7 @@
 		2009B0DF1AB30F9A00452C4C /* auswahl2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2009B0DA1AB30F9A00452C4C /* auswahl2.png */; };
 		20C6EAC71AC0A68A00A074F6 /* auswahl3.png in Resources */ = {isa = PBXBuildFile; fileRef = 20C6EAC51AC0A68A00A074F6 /* auswahl3.png */; };
 		20C6EAC81AC0A68A00A074F6 /* auswahl4.png in Resources */ = {isa = PBXBuildFile; fileRef = 20C6EAC61AC0A68A00A074F6 /* auswahl4.png */; };
+		20D85AF91AC95E370020D25A /* MyLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D85AF81AC95E370020D25A /* MyLayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		2009B0DA1AB30F9A00452C4C /* auswahl2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auswahl2.png; sourceTree = "<group>"; };
 		20C6EAC51AC0A68A00A074F6 /* auswahl3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auswahl3.png; sourceTree = "<group>"; };
 		20C6EAC61AC0A68A00A074F6 /* auswahl4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auswahl4.png; sourceTree = "<group>"; };
+		20D85AF81AC95E370020D25A /* MyLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 				2009B0B61AB30F7700452C4C /* MyScrollView.swift */,
 				2009B0B71AB30F7700452C4C /* Game.swift */,
 				2009B0B81AB30F7700452C4C /* MyGameView.swift */,
+				20D85AF81AC95E370020D25A /* MyLayer.swift */,
 				2009B0B91AB30F7700452C4C /* GameBoard.swift */,
 				2009B0BC1AB30F7700452C4C /* Line.swift */,
 				2009B0BA1AB30F7700452C4C /* Point.swift */,
@@ -312,6 +315,7 @@
 				2009B0C91AB30F7800452C4C /* Line.swift in Sources */,
 				2009B0CB1AB30F7800452C4C /* Package.swift in Sources */,
 				2009B0CA1AB30F7800452C4C /* SettingsViewController.swift in Sources */,
+				20D85AF91AC95E370020D25A /* MyLayer.swift in Sources */,
 				2009B0CD1AB30F7800452C4C /* Array2D.swift in Sources */,
 				2009B0CE1AB30F7800452C4C /* Extensions.swift in Sources */,
 				2009B0C81AB30F7800452C4C /* Set.swift in Sources */,

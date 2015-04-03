@@ -44,18 +44,16 @@ class Point: Printable, Hashable {
     
     var inLinePoint: Bool
     var earlierColor: LineType
-    var gameSize: Int
     var areaNumber: Int
     var directions: Directions
     
-    init(column: Int, row: Int, type: LineType, originalPoint: Bool, inLinePoint: Bool, size: Int, delegate: (Int, Int)->()) {
+    init(column: Int, row: Int, type: LineType, originalPoint: Bool, inLinePoint: Bool, delegate: (Int, Int)->()) {
         self.column = column
         self.row = row
         self.color = type
         self.originalPoint = originalPoint
         self.inLinePoint = inLinePoint
         self.earlierColor = LineType.Unknown
-        self.gameSize = size
         self.checkDirections = delegate
         self.areaNumber = -1
         self.directions = Directions()

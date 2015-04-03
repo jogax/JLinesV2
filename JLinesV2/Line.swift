@@ -11,7 +11,7 @@ import UIKit
 
 enum LineType: Int, Printable {
     case Unknown = 0, Red, Green, Blue, Magenta, Yellow, Purple, Orange, Cyan, Brown, LightGrayColor, DarkGreyColor, LastColor
-    
+
     var colorName: String {
         let colorNames = [
             "none",
@@ -32,7 +32,7 @@ enum LineType: Int, Printable {
         return colorNames[rawValue]
     }
         
-    var color: CGColor {
+    var cgColor: CGColor {
         let colorTypes = [
             UIColor.clearColor().CGColor,
             UIColor.redColor().CGColor,
@@ -51,7 +51,27 @@ enum LineType: Int, Printable {
         
         return colorTypes[rawValue]
     }
-    
+
+    var uiColor: UIColor {
+        let uiColorTypes = [
+            UIColor.clearColor(),
+            UIColor.redColor(),
+            UIColor.greenColor(),
+            UIColor.blueColor(),
+            UIColor.magentaColor(),
+            UIColor.yellowColor(),
+            UIColor.purpleColor(),
+            UIColor.orangeColor(),
+            UIColor.cyanColor(),
+            UIColor.brownColor(),
+            UIColor.lightGrayColor(),
+            UIColor.darkGrayColor(),
+            UIColor.blackColor()
+        ]
+        
+        return uiColorTypes[rawValue]
+    }
+
     var description: String {
         return colorName
     }
@@ -78,7 +98,7 @@ class Line: Hashable, Printable {
     
     func addPoint(point: Point) {
         points.append(point)
-        //lineEnded = pointInLine(point1!) && pointInLine(point2!)
+        lineEnded = pointInLine(point1!) && pointInLine(point2!)
         cnt = points.count
     }
     

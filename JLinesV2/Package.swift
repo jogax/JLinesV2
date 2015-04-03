@@ -94,7 +94,7 @@ class Package {
         for row in 0..<squereSize {
             for column in 0..<squereSize {
                 let num = json!["packageVolume"][volumeNr]["games"][number]["points"][row][column].int
-                let point = Point(column: column, row: row, type: LineType(rawValue: num!)!, originalPoint: false, inLinePoint: false, size: squereSize, delegate: checkDirections)
+                let point = Point(column: column, row: row, type: LineType(rawValue: num!)!, originalPoint: false, inLinePoint: false, delegate: checkDirections)
                 numColors = max(num!, numColors)
                 spielArray[column, row] = point
                 if point.color != .Unknown {
