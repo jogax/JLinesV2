@@ -105,17 +105,9 @@ class MyLayer: CALayer {
                         let coordY = self.bounds.origin.y + (CGFloat(pointY) * rectSize) + rectSize / 2
                         let size = rectSize / 64
                         //if GlobalVariables.lines[color]!.point1 == GlobalVariables.lines[color]!.points[index] {
-                            println("bounds.width: \(self.bounds.width), color: \(color.colorName), coordX: \(coordX), coordY: \(coordY), width: \(size), heigth: \(size)")
+                            //println("bounds.width: \(self.bounds.width), color: \(color.colorName), coordX: \(coordX), coordY: \(coordY), width: \(size), heigth: \(size)")
                             CGContextStrokeRect(ctx, CGRect(x: coordX, y: coordY, width: size, height: size))
                         //}
-/*
-                        
-                        if index == 0 {
-                            CGContextMoveToPoint(ctx,coordX, coordY)
-                        } else {
-                            CGContextAddLineToPoint(ctx, coordX, coordY)
-                        }
-*/
                     }
                     //CGContextStrokePath(ctx)
                     

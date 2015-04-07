@@ -41,35 +41,49 @@ extension Dictionary {
 }
 
 
-extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int)
-    {
-        let newRed = CGFloat(red)/255
-        let newGreen = CGFloat(green)/255
-        let newBlue = CGFloat(blue)/255
-        
-        self.init(red: newRed, green: newGreen, blue: newBlue, alpha: 1.0)
+extension String {
+    
+    subscript (i: Int) -> Character {
+        return self[advance(self.startIndex, i)]
     }
-}
-
-extension Array {
-    func find<T: Equatable> (item: T) -> Int? {
-        for (idx, element) in enumerate(self) {
-            if element as T == item {
-                return idx
+    
+    subscript (i: Int) -> String {
+        return String(self[i] as Character)
+    }
+    
+    subscript (r: Range<Int>) -> String {
+        return substringWithRange(Range(start: advance(startIndex, r.startIndex), end: advance(startIndex, r.endIndex)))
+    }
+/*
+    func characterAtIndex(index: Int) -> Character? {
+        var cur = 0
+        for char in self {
+            if cur == index {
+                return char
             }
+            cur++
         }
         return nil
     }
-
-    mutating func remove <T: Equatable> (item: T) {
-        if let index = find(item) {
-            removeAtIndex(index)
-        }
-
+*/    
+    func characterAtIndex(index:Int) -> unichar
+    {
+        return self.utf16[index]
+    }
+    
+    // Allows us to use String[index] notation
+    subscript(index:Int) -> unichar
+        {
+            return characterAtIndex(index)
     }
 
+
+
 }
+
+
+
+
 
 
 

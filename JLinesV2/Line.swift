@@ -10,12 +10,14 @@ import Foundation
 import UIKit
 
 enum LineType: Int, Printable {
-    case Unknown = 0, Red, Green, Blue, Magenta, Yellow, Purple, Orange, Cyan, Brown, LightGrayColor, DarkGreyColor, LastColor
+    case Unknown = 0, Red, Gold, Pink, Green, Blue, Magenta, Yellow, Purple, Orange, Cyan, Brown, LightGrayColor, DarkGreyColor, LastColor
 
     var colorName: String {
         let colorNames = [
             "none",
             "Red",
+            "Gold",
+            "Pink",
             "Green",
             "Blue",
             "Magenta",
@@ -32,10 +34,34 @@ enum LineType: Int, Printable {
         return colorNames[rawValue]
     }
         
+    var colorAbbr: String {
+        let colorAbbrs = [
+            " ",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            " "
+        ]
+        
+        return colorAbbrs[rawValue]
+    }
+
     var cgColor: CGColor {
         let colorTypes = [
             UIColor.clearColor().CGColor,
             UIColor.redColor().CGColor,
+            UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1).CGColor, // Gold
+            UIColor(red: 255/255, green: 105/255, blue: 150/255, alpha: 1).CGColor, // Pink
             UIColor.greenColor().CGColor,
             UIColor.blueColor().CGColor,
             UIColor.magentaColor().CGColor,
@@ -56,6 +82,8 @@ enum LineType: Int, Printable {
         let uiColorTypes = [
             UIColor.clearColor(),
             UIColor.redColor(),
+            UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1), // Gold
+            UIColor(red: 255/255, green: 105/255, blue: 150/255, alpha: 1), // Pink
             UIColor.greenColor(),
             UIColor.blueColor(),
             UIColor.magentaColor(),

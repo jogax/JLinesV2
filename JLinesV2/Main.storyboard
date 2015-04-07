@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Hyj-Ga-5PZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Hyj-Ga-5PZ">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <scenes>
         <!--Table View Controller-->
@@ -94,16 +94,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I5o-iY-OyC">
-                                <rect key="frame" x="148" y="104" width="92" height="30"/>
+                                <rect key="frame" x="148" y="104" width="65" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Regular Pack">
+                                <state key="normal" title="FirstPack">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="23" y="87" width="268" height="30"/>
                                 </variation>
                                 <connections>
-                                    <segue destination="oJI-Nc-9f0" kind="presentation" identifier="RegularPack" id="9ey-kR-ETX"/>
+                                    <segue destination="oJI-Nc-9f0" kind="presentation" identifier="FirstPack" id="9ey-kR-ETX"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1xC-mz-eCg">
@@ -171,7 +171,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="psW-b4-6bt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="625.5" y="-568.5"/>
+            <point key="canvasLocation" x="681" y="-569"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="aag-7j-dil">
@@ -231,6 +231,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="yqm-f2-kiT"/>
-        <segue reference="hnj-bY-QcQ"/>
+        <segue reference="9ey-kR-ETX"/>
     </inferredMetricsTieBreakers>
 </document>

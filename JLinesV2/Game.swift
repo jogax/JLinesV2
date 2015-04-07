@@ -17,6 +17,7 @@ enum Choosed: Int{
 struct GlobalVariables {
     static var touchPoint = CGPointZero
     static var gameSize = 5
+    static var gameNr = 0
     static var rectSize: CGFloat = 0
     static var lines = [LineType:Line]()
     static let multiplicator:CGFloat = 0.90
@@ -54,7 +55,7 @@ class Game: UIView, Printable {
 
     init (frame: CGRect, package: Package, volumeNr: Int, number: Int, parent: UIViewController) {
         self.number = number
-        //(gameboard, error, lines) = package.getGame(volumeNr, numberIn: number - 1)
+        //(gameboard, error, lines) = package.getGameNew(volumeNr, numberIn: number - 1)
         self.number = number
         self.maxNumber = package.getMaxNumber(volumeNr)
         self.volumeNr = volumeNr
@@ -64,6 +65,7 @@ class Game: UIView, Printable {
         //moveCount = 0
         self.parent = parent
         
+        GlobalVariables.gameNr = 1
         super.init(frame: frame)
         self.backgroundColor = UIColor.redColor()
         self.hidden = false

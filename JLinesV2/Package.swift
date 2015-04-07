@@ -72,16 +72,15 @@ class Package {
         var number: Int = 1
         var testWert: Int?
         do {
-            testWert = json!["packageVolume"][volumeNr]["games"][number++]["points"][0][0].int
+            testWert = json!["packageVolume"][volumeNr]["games"][number++]["lineCount"].int
         } while testWert != nil
         return number - 1
     }
-    
     func getGame (volumeNr: Int, numberIn: Int) -> (Bool, Int, Array2D<Point>, String, [LineType:Line]) {
         var number = numberIn
         let squereSize = json!["packageVolume"][volumeNr]["size"].int!
         var numColors = 0
-
+        
         var spielArray =  Array2D<Point>(columns:squereSize, rows: squereSize)
         
         var error = ""
@@ -125,6 +124,64 @@ class Package {
         //println("spielArray: \(spielArray)")
         //println("lines: \(lines)")
         return (true, numColors, spielArray, error, lines)
+    }
+    
+    func getGameNew (volumeNr: Int, numberIn: Int) -> (Bool, Int, Array2D<Point>, String, [LineType:Line]) {
+        var number = numberIn
+        let squereSize = json!["packageVolume"][volumeNr]["size"].int!
+
+        var spielArray =  Array2D<Point>(columns:squereSize, rows: squereSize)
+        for column in 0..<squereSize {
+            for row in 0..<squereSize {
+                let point = Point(column: column, row: row, type: .Unknown, originalPoint: false, inLinePoint: false, delegate: checkDirections)
+                spielArray[column, row] = point
+            }
+        }
+        
+        var error = ""
+        
+        //var lineArray = [Line](count: squereSize, repeatedValue: nil)
+        var lines = [LineType:Line]()
+
+        let testWert = json!["packageVolume"][volumeNr]["games"][number]["lineCount"].int
+        if testWert == nil {return (false, 0, spielArray, error, lines)}
+        let lineCount = testWert!
+        for lineIndex in 0..<lineCount {
+            let p1 = json!["packageVolume"][volumeNr]["games"][number]["lines"][lineIndex]["P1"].int
+            let p2 = json!["packageVolume"][volumeNr]["games"][number]["lines"][lineIndex]["P2"].int
+            let row1 = p1! / squereSize
+            let column1 = p1! % squereSize
+            let row2 = p2! / squereSize
+            let column2 = p2! % squereSize
+            
+            spielArray[column1, row1]!.color = LineType(rawValue: lineIndex + 1)!
+            spielArray[column2, row2]!.color = LineType(rawValue: lineIndex + 1)!
+            spielArray[column1, row1]!.originalPoint = true
+            spielArray[column2, row2]!.originalPoint = true
+            
+            let point1 = Point(column: column1, row: row1, type: LineType(rawValue: lineIndex + 1)!, originalPoint: true, inLinePoint: false, delegate: checkDirections)
+            let point2 = Point(column: column2, row: row2, type: LineType(rawValue: lineIndex + 1)!, originalPoint: true, inLinePoint: false, delegate: checkDirections)
+
+            let color = LineType(rawValue: lineIndex + 1)
+            
+            lines[color!] = Line(lineType: color!)
+            lines[color!]!.point1 = point1
+            lines[color!]!.point2 = point2
+            lines[color!]!.cnt = 2
+        }
+        for index in 1...lines.count {
+            let color = LineType(rawValue: index)!
+            if lines[color]!.cnt > 2 {
+                if error == "" {
+                    error = "The color \(color) \(lines[color]!.cnt) times!"
+                } else {
+                    error = error + ", \(color) \(lines[color]!.cnt) times!"
+                }
+            }
+        }
+        //println("spielArray: \(spielArray)")
+        //println("lines: \(lines)")
+        return (true, lineCount, spielArray, error, lines)
     }
     func checkDirections (Int, Int) {
         

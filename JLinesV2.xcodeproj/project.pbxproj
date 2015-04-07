@@ -39,6 +39,8 @@
 		20C6EAC71AC0A68A00A074F6 /* auswahl3.png in Resources */ = {isa = PBXBuildFile; fileRef = 20C6EAC51AC0A68A00A074F6 /* auswahl3.png */; };
 		20C6EAC81AC0A68A00A074F6 /* auswahl4.png in Resources */ = {isa = PBXBuildFile; fileRef = 20C6EAC61AC0A68A00A074F6 /* auswahl4.png */; };
 		20D85AF91AC95E370020D25A /* MyLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D85AF81AC95E370020D25A /* MyLayer.swift */; };
+		20E27A8F1AD4067B00EA4BC1 /* games.txt in Resources */ = {isa = PBXBuildFile; fileRef = 20E27A8E1AD4067B00EA4BC1 /* games.txt */; };
+		20E27AC61AD4147700EA4BC1 /* FirstPack.json in Resources */ = {isa = PBXBuildFile; fileRef = 20E27AC51AD4147700EA4BC1 /* FirstPack.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +91,8 @@
 		20C6EAC51AC0A68A00A074F6 /* auswahl3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auswahl3.png; sourceTree = "<group>"; };
 		20C6EAC61AC0A68A00A074F6 /* auswahl4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auswahl4.png; sourceTree = "<group>"; };
 		20D85AF81AC95E370020D25A /* MyLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyLayer.swift; sourceTree = "<group>"; };
+		20E27A8E1AD4067B00EA4BC1 /* games.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = games.txt; sourceTree = "<group>"; };
+		20E27AC51AD4147700EA4BC1 /* FirstPack.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FirstPack.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +152,7 @@
 				2009B0C01AB30F7700452C4C /* Array2D.swift */,
 				2009B0C11AB30F7700452C4C /* Extensions.swift */,
 				2009B0B11AB30F5200452C4C /* Main.storyboard */,
+				20E27AC51AD4147700EA4BC1 /* FirstPack.json */,
 				2009B0CF1AB30F8500452C4C /* RegularPack.json */,
 				2009B0D01AB30F8500452C4C /* BonusPack.json */,
 				2009B0D11AB30F8500452C4C /* GreenPack.json */,
@@ -164,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				2009B08D1AB30EAD00452C4C /* Info.plist */,
+				20E27A8E1AD4067B00EA4BC1 /* games.txt */,
 				2009B0D61AB30F9A00452C4C /* pfeillinks.png */,
 				2009B0D71AB30F9A00452C4C /* pfeilrechts.png */,
 				2009B0D81AB30F9A00452C4C /* auswahl0.png */,
@@ -284,6 +290,8 @@
 				2009B0DE1AB30F9A00452C4C /* auswahl1.png in Resources */,
 				2009B0DD1AB30F9A00452C4C /* auswahl0.png in Resources */,
 				20C6EAC81AC0A68A00A074F6 /* auswahl4.png in Resources */,
+				20E27A8F1AD4067B00EA4BC1 /* games.txt in Resources */,
+				20E27AC61AD4147700EA4BC1 /* FirstPack.json in Resources */,
 				2009B0D41AB30F8500452C4C /* BonusPack.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

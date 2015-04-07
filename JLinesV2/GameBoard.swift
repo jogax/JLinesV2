@@ -63,6 +63,7 @@ class GameBoard {
     var countMoves: Int = 0
     var areas = [Int:Area]()
     var areaNr = 0
+
     
     
     init (gameArray: Array2D<Point>, lines: [LineType:Line],  numColors: Int) {
@@ -94,7 +95,7 @@ class GameBoard {
         (gameArray, GlobalVariables.lines) = generateGameArray()
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000 / 1000
-        println("Time für Generierung von Gameboard:\(elapsedTime) sec")
+        //println("Time für Generierung von Gameboard:\(elapsedTime) sec")
 
     }
 
@@ -146,13 +147,16 @@ class GameBoard {
         
             let currentTime = NSDate()
             let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000 / 1000
-            println("laufTime:\(elapsedTime) sec für \(color)")
+            //println("laufTime:\(elapsedTime) sec für \(color)")
             ind++
             toContinue = (ind < self.numColors && self.numEmptyPoints != 0) || self.numEmptyPoints != 0
         } while toContinue
-        
-        
-        for (color,line) in lines {
+
+        print ("{\"lineCount\": \(lines.count), \"lines\":[")
+        for index in 0..<lines.count
+        {
+            let color = LineType(rawValue: (LineType.Red.rawValue + index))!
+            let line = lines[color]!
             while line.points.count > 0 {
                 let x = line.lastPoint().column
                 let y = line.lastPoint().row
@@ -165,14 +169,16 @@ class GameBoard {
             }
             line.point1!.inLinePoint = false
             line.point2!.inLinePoint = false
-            //tempGameArray![line.point1!.column, line.point1!.row] = line.point1
-            //tempGameArray![line.point2!.column, line.point1!.row] = line.point2
-            
-            //line.addPoint(line.point1!)
-            //line.addPoint(line.point2!)
-            
+            //   {"lineCount":5, "lines":[{"P1":23, "P2":03},{"P1":24, "P2":04},{"P1":12, "P2":22},{"P1":10, "P2":02},{"P1":7, "P2":15}
+            let pos1 = line.point1!.row * GlobalVariables.gameSize + line.point1!.column
+            let pos2 = line.point2!.row * GlobalVariables.gameSize + line.point2!.column
+            if index > 0 {print(",")}
+            print("{\"P1\":\(pos1),\"P2\":\(pos2)}")
  
         }
+        print("]},")
+        println()
+        GlobalVariables.gameNr++
         return (tempGameArray!, lines)
         
     }
@@ -212,12 +218,12 @@ class GameBoard {
         }
         */
         let line = Line(lineType: color)
-        let left = 0
-        let up = 1
+        let left =  0
+        let up =    1
         let right = 2
-        let down = 3
+        let down =  3
         
-        var leftUpRightDown = random(left, max: down, comment: "wähle Direction")
+        var leftUpRightDown = random(Int(left), max: Int(down), comment: "wähle Direction")
         var blockedX = GlobalVariables.gameSize
         var blockedY = GlobalVariables.gameSize
         

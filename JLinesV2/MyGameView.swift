@@ -46,7 +46,7 @@ class MyGameView: UIView {
         var numColors = 0
         let maxGameNumber = package.getMaxNumber(volumeNr)
         if gameNumber <= maxGameNumber {
-            (OK, numColors, gameboard, error, lines) = package.getGame(volumeNr, numberIn: gameNumber - 1)
+            (OK, numColors, gameboard, error, lines) = package.getGameNew(volumeNr, numberIn: gameNumber - 1)
             if OK {
                 self.gameboard = GameBoard(gameArray: gameboard, lines: lines, numColors: numColors)
                 //self.gameboard!.gameArray = gameboard
@@ -190,7 +190,7 @@ class MyGameView: UIView {
             if checkIfGameEnded() {
                 nextLevel = false
                 alertNotReady = true
-                println("Game ended!!!")
+                //println("Game ended!!!")
                 
                 var gameEndAlert:UIAlertController?
                 var messageTxt = String("")
