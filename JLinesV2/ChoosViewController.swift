@@ -10,11 +10,22 @@ import UIKit
 
 
 class ChoosViewController: UIViewController {
-
+/*
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+*/
+    @IBOutlet weak var firstPackButton: UIButton?
+    @IBOutlet weak var bonusPackButton: UIButton!
+    @IBOutlet weak var greenPackButton: UIButton!
+    
     @IBAction func returned(segue: UIStoryboardSegue) {
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        GlobalVariables.language.callBackWhenNewLanguage(updateLanguage)
+
 
         // Do any additional setup after loading the view.
     }
@@ -28,10 +39,16 @@ class ChoosViewController: UIViewController {
 
 
         if segue.identifier != nil {
-            let destination = segue.destinationViewController as PagedViewController
+            let destination = segue.destinationViewController as! PagedViewController
             destination.packageName = segue.identifier
         }
 
+    }
+
+    func updateLanguage() {
+        firstPackButton!.setTitle(GlobalVariables.language.getText("firstPackButton"), forState: .Normal)
+        bonusPackButton!.setTitle(GlobalVariables.language.getText("bonusPackButton"), forState: .Normal)
+        greenPackButton!.setTitle(GlobalVariables.language.getText("greenPackButton"), forState: .Normal)
     }
 
     /*

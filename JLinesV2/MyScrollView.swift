@@ -24,9 +24,9 @@ class MyScrollView: UIScrollView, UIScrollViewDelegate {
         // Drawing code
     }
 */    
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touchCount = touches.count
-        let touch = touches.anyObject() as UITouch
+        let touch = touches.first as! UITouch
         let point = touch.locationInView(self)
         let (number, volumeNr) = convertLocationInViewToNum(point)
         let firstPage = CGRect(origin: CGPointZero, size: bounds.size)

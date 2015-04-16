@@ -5,8 +5,8 @@
 //  Created by Jozsef Romhanyi on 22.01.15.
 //  Copyright (c) 2015 Jozsef Romhanyi. All rights reserved.
 //
-
-struct Set<T: Hashable>: SequenceType, Printable {
+/*
+struct MySet<T: Hashable>: SequenceType, Printable {
     private var dictionary = Dictionary<T, Bool>()
     
     mutating func addElement (newElement: T) {
@@ -51,3 +51,4 @@ struct Set<T: Hashable>: SequenceType, Printable {
         return dictionary.description
     }
 }
+*/

@@ -8,6 +8,6 @@
         <attribute name="gameNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
     <elements>
-        <element name="GameStatus" positionX="-54" positionY="-9" width="128" height="120"/>
+        <element name="GameStatus" positionX="-5076" positionY="-1161" width="99" height="118"/>
     </elements>
 </model>

@@ -10,13 +10,14 @@ import Foundation
 import UIKit
 
 enum LineType: Int, Printable {
-    case Unknown = 0, Red, Gold, Pink, Green, Blue, Magenta, Yellow, Purple, Orange, Cyan, Brown, LightGrayColor, DarkGreyColor, LastColor
+    case Unknown = 0, Red, Gold, Springgreen, Pink, Green, Blue, Magenta, Yellow, Purple, Orange, Cyan, Brown, LightGrayColor, DarkGreyColor, LastColor
 
     var colorName: String {
         let colorNames = [
             "none",
             "Red",
             "Gold",
+            "Springgreen",
             "Pink",
             "Green",
             "Blue",
@@ -50,6 +51,7 @@ enum LineType: Int, Printable {
             "K",
             "L",
             "M",
+            "N",
             " "
         ]
         
@@ -59,10 +61,11 @@ enum LineType: Int, Printable {
     var cgColor: CGColor {
         let colorTypes = [
             UIColor.clearColor().CGColor,
-            UIColor.redColor().CGColor,
+            UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1).CGColor, // Red
             UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1).CGColor, // Gold
-            UIColor(red: 255/255, green: 105/255, blue: 150/255, alpha: 1).CGColor, // Pink
-            UIColor.greenColor().CGColor,
+            UIColor(red: 0/255, green: 255/255, blue: 127/255, alpha: 1).CGColor, // Springgreen
+            UIColor(red: 255/255, green: 105/255, blue: 180/255, alpha: 1).CGColor, // HotPink
+            UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1).CGColor, // green
             UIColor.blueColor().CGColor,
             UIColor.magentaColor().CGColor,
             UIColor.yellowColor().CGColor,
@@ -81,10 +84,11 @@ enum LineType: Int, Printable {
     var uiColor: UIColor {
         let uiColorTypes = [
             UIColor.clearColor(),
-            UIColor.redColor(),
+            UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1), // Red
             UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1), // Gold
-            UIColor(red: 255/255, green: 105/255, blue: 150/255, alpha: 1), // Pink
-            UIColor.greenColor(),
+            UIColor(red: 0/255, green: 255/255, blue: 127/255, alpha: 1), // Springgreen
+            UIColor(red: 255/255, green: 105/255, blue: 180/255, alpha: 1), // HotPink
+            UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1), // green
             UIColor.blueColor(),
             UIColor.magentaColor(),
             UIColor.yellowColor(),

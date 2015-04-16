@@ -7,7 +7,7 @@
         <!--Table View Controller-->
         <scene sceneID="hKE-E7-izC">
             <objects>
-                <tableViewController id="P7e-3A-A4M" sceneMemberID="viewController">
+                <tableViewController id="P7e-3A-A4M" customClass="TableViewController" customModule="JLinesV2" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="D43-5Q-eKE">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -22,8 +22,8 @@
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Free Play" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8kS-NC-gfO">
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -39,8 +39,8 @@
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Time Limit" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Rp3-oE-nDu">
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -56,14 +56,14 @@
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Settings" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NqB-Vw-qDC">
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="8Sz-Ni-XSQ" kind="show" id="wiK-SH-GSl"/>
+                                            <segue destination="8Sz-Ni-XSQ" kind="show" identifier="segueToSettings" id="wiK-SH-GSl"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -76,10 +76,15 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="umU-CL-rcu"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="freePlayCell" destination="cvE-iy-JTh" id="mWG-nr-d4Q"/>
+                        <outlet property="settingsCell" destination="74U-4V-ejC" id="nvI-lp-05q"/>
+                        <outlet property="timeLimitCell" destination="r20-fE-qX5" id="HLc-V4-UdC"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cFW-QY-ABE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-256.5" y="-568.5"/>
+            <point key="canvasLocation" x="-376" y="-569"/>
         </scene>
         <!--Choos View Controller-->
         <scene sceneID="c8r-bc-fcf">
@@ -94,8 +99,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I5o-iY-OyC">
-                                <rect key="frame" x="148" y="104" width="65" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <rect key="frame" x="16" y="106" width="288" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="FirstPack">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -107,8 +112,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1xC-mz-eCg">
-                                <rect key="frame" x="153" y="157" width="83" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <rect key="frame" x="19" y="157" width="283" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="Bonus Pack">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -120,8 +125,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cpg-dg-jMC">
-                                <rect key="frame" x="154" y="206" width="80" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <rect key="frame" x="24" y="210" width="273" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="Green Pack">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -138,10 +143,15 @@
                     <navigationItem key="navigationItem" id="rcX-8l-TLO"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="bonusPackButton" destination="1xC-mz-eCg" id="FOQ-Md-IM8"/>
+                        <outlet property="firstPackButton" destination="I5o-iY-OyC" id="YMf-yx-xLB"/>
+                        <outlet property="greenPackButton" destination="cpg-dg-jMC" id="PVF-Un-6e7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H6h-Be-sY3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="273" y="-568.5"/>
+            <point key="canvasLocation" x="273" y="-569"/>
         </scene>
         <!--Paged View Controller-->
         <scene sceneID="BbG-nj-fdf">
@@ -167,6 +177,7 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
                         <outlet property="pageControl" destination="BVr-u8-7SX" id="4X6-73-hgb"/>
+                        <segue destination="8Sz-Ni-XSQ" kind="show" identifier="segueToSettings" id="O0h-eR-n88"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="psW-b4-6bt" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -181,30 +192,44 @@
                         <viewControllerLayoutGuide type="top" id="HZd-BB-kqY"/>
                         <viewControllerLayoutGuide type="bottom" id="ztZ-gu-SQh"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="jBx-lo-hF7">
+                    <view key="view" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="jBx-lo-hF7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kc6-KX-QcM">
-                                <rect key="frame" x="16" y="28" width="46" height="30"/>
-                                <state key="normal" backgroundImage="pfeil.png">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ME-ip-irw">
+                                <rect key="frame" x="6" y="85" width="309" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <size key="titleShadowOffset" width="2" height="2"/>
+                                <state key="normal" title="choose language">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="qxn-TL-D0S" kind="unwind" unwindAction="returned:" id="G49-9U-qqX"/>
+                                    <action selector="chooseLanguage" destination="8Sz-Ni-XSQ" eventType="touchUpInside" id="Au0-r0-FHN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kc6-KX-QcM">
+                                <rect key="frame" x="16" y="20" width="42" height="24"/>
+                                <state key="normal" image="pfeillinks.jpg">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="qxn-TL-D0S" kind="unwind" unwindAction="returned:" id="sAq-aU-Muw"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.82252248159999997" green="0.88466173540000004" blue="0.86491184229999996" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="1" green="0.4452725535" blue="0.946006864" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="z46-8e-vXs"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="languageButton" destination="6ME-ip-irw" id="h9A-Ko-UdM"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BjN-EU-v4A" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="qxn-TL-D0S" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-256.5" y="-79.5"/>
+            <point key="canvasLocation" x="-376" y="149"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Yhl-mk-QP6">
@@ -227,10 +252,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="pfeil.png" width="50" height="50"/>
+        <image name="pfeillinks.jpg" width="180" height="180"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="yqm-f2-kiT"/>
         <segue reference="9ey-kR-ETX"/>
+        <segue reference="O0h-eR-n88"/>
     </inferredMetricsTieBreakers>
 </document>

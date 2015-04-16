@@ -65,7 +65,8 @@ extension String {
         }
         return nil
     }
-*/    
+*/
+    /*
     func characterAtIndex(index:Int) -> unichar
     {
         return self.utf16[index]
@@ -76,7 +77,7 @@ extension String {
         {
             return characterAtIndex(index)
     }
-
+*/
 
 
 }

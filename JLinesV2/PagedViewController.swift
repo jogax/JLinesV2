@@ -9,7 +9,6 @@
 import UIKit
 
 
-
 class PagedViewController: UIViewController, UIScrollViewDelegate {
 
     
@@ -17,7 +16,6 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
     var scrollView: MyScrollView?
     @IBOutlet var pageControl: UIPageControl!
     
-
 
     var packageName: String?
     var package: Package?
@@ -28,6 +26,8 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
     let TableNumColumns = 5
     let TableNumRows = 6
     let multiplicator = 0.8
+    
+    var gameName: String?
 
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     
@@ -39,6 +39,7 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         scrollView!.parent = self
         scrollView!.delegate = self
         scrollView!.pagingEnabled = true
+
 
         view.addSubview(scrollView!)
         
@@ -159,17 +160,19 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
 
         
         for pageNr in 0..<pageCount {
-            let gameName = package?.getVolumeName(pageNr)
+            gameName = (package?.getVolumeName(pageNr) as! String)
             
-            //let image = drawCustomImage(gameName!)
-            let name = "auswahl\(pageNr).png"
-            let image = UIImage(named: "auswahl\(pageNr).png")
-            pageImages.append(image!)
+            let image = drawCustomImage(gameName!, pageNr: pageNr)
+            //let name = "auswahl\(pageNr).png"
+            //let image = UIImage(named: "auswahl\(pageNr).png")
+            pageImages.append(image)
         }
     }
     
-    func drawCustomImage(volumeName: NSString) -> UIImage {
+    func drawCustomImage(volumeName: NSString, pageNr: Int) -> UIImage {
         // Setup our context
+        
+        let maxNumber = package!.getMaxNumber(pageNr)
         let opaque = false
         let scale: CGFloat = 0
         let multiplicator: CGFloat = 0.9
@@ -179,15 +182,13 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         let vSizeWidth:CGFloat = size.width * multiplicator
         let Gap: CGFloat = vSizeWidth / CGFloat(30)
         let rectSize: CGFloat = (vSizeWidth - (CGFloat(TableNumColumns) + 1) * Gap) / CGFloat(TableNumColumns)
-        
         let vSize = CGSizeMake( (rectSize + Gap) * CGFloat(TableNumColumns) + Gap,
                                 (rectSize + Gap) * CGFloat(TableNumRows) + Gap)
-        let vOrigin = CGPointMake((size.width - vSize.width) / 2, (size.height - vSize.height) / 3)
+        let vOrigin = CGPointMake((size.width - vSize.width) / 2, (size.height - vSize.height) / 2)
         
         let vBounds = CGRectMake(vOrigin.x, vOrigin.y, vSize.width, vSize.height)
         
         scrollView!.vBounds = vBounds
-        
         
         let fontName = "HelveticaNeue-Bold"
         let helveticaBold = UIFont(name: fontName, size: 30.0)
@@ -215,8 +216,15 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         
         //CGContextSetStrokeColorWithColor(context, UIColor.redColor().CGColor)
         //CGContextStrokeRect(context, view.bounds)
+        
+        let textStyle = NSMutableParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        textStyle.alignment = NSTextAlignment.Center
 
-        volumeName.drawInRect(CGRect(x: 15, y: 30, width: 200, height: 40), withAttributes: attributes)
+        let textFontAttributes = [
+            NSFontAttributeName: font,
+            NSForegroundColorAttributeName: textColor,
+            NSParagraphStyleAttributeName: textStyle
+        ]
 
         
         CGContextBeginPath(context)
@@ -226,12 +234,9 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
                 
                 let x = vOrigin.x + Gap + CGFloat(column) * (rectSize + Gap)
                 let y = vOrigin.y + Gap + CGFloat(row) * (rectSize + Gap)
-                let textStyle = NSMutableParagraphStyle.defaultParagraphStyle().mutableCopy() as NSMutableParagraphStyle
-                textStyle.alignment = NSTextAlignment.Center
-                
+                let gameNr = row * TableNumColumns + column
                 
                 let rectOrigin: CGPoint = CGPointMake(x, y)
-                
                 let Nr = row * TableNumColumns + column + 1
                 let rectText = CGRect(
                         x: x,
@@ -246,28 +251,34 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
                     height: rectSize
                 )
                 
+                if gameNr < maxNumber {
+                    let lineCount = package?.getLineCount(pageNr, numberIn: gameNr)
+                    let dataStore = DataStore(gameName: gameName!, gameNumber: gameNr + 1, countLines: lineCount!)
+                    let (countMoves, countSeconds) = dataStore.getData()
+                    if countMoves > 0 {
+                        //println("column: \(column), row: \(row), pageNr:\(pageNr), gameNr:\(gameNr + 1), lineCount:\(lineCount),countMoves:\(countMoves), countSeconds:\(countSeconds)")
+                        CGContextSetFillColorWithColor(context, UIColor.greenColor().CGColor);
+                        CGContextFillRect(context, rect);
+                    }
+                }
+                
+                
                 
 
                 let stringNr = Nr.description
  
-                let textFontAttributes = [
-                    NSFontAttributeName: font,
-                    NSForegroundColorAttributeName: textColor,
-                    NSParagraphStyleAttributeName: textStyle
-                ]
-                    
-                stringNr.drawInRect(rectText, withAttributes: textFontAttributes)
-                //let attributedString = NSAttributedString(string:  stringNr, attributes: attributes)
-                //attributedString.drawAtPoint(rectOrigin)
-                //stringNr.drawAtPoint(rectOrigin, withAttributes: attributes)
-
-                //println("column: \(column), row: \(row), Nr: \(stringNr)")
                 
+                stringNr.drawInRect(rectText, withAttributes: textFontAttributes)
                 CGContextStrokeRect(context, rect)
             }
         }
        
         CGContextStrokePath(context)
+        
+        let name = GlobalVariables.language.getText(volumeName as String)
+        textStyle.alignment = NSTextAlignment.Left
+        
+        name.drawInRect(CGRect(x: vOrigin.x, y: vOrigin.y - 50, width: 500, height: 40), withAttributes: textFontAttributes)
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         
@@ -280,10 +291,10 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         //performSegueWithIdentifier("GoToGameView", sender: nil)
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         
     }
-    func scrollViewDidScroll(scrollView: UIScrollView!) {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
         // Load the pages that are now on screen
         loadVisiblePages()
     }
@@ -293,6 +304,6 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
 
 }

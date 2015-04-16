@@ -1,0 +1,214 @@
+{
+"languages":
+[
+    {
+        "HU": "Magyar",
+        "RU": "Венгерский",
+        "DE": "Ungarisch",
+        "EN": "Hungarian"
+    },
+    {
+        "HU": "Orosz",
+        "RU": "Русский",
+        "DE": "Russisch",
+        "EN": "Russian"
+    },
+    {
+        "HU": "Német",
+        "RU": "Немецкий",
+        "DE": "Deutsch",
+        "EN": "German"
+    },
+    {
+        "HU": "Angol",
+        "RU": "Английский",
+        "DE": "Englisch",
+        "EN": "English"
+    }
+],
+
+"Magyar"    : "HU" ,
+"Венгерский": "HU",
+"Ungarisch" : "HU",
+"Hungarian" : "HU",
+"Orosz"     : "RU",
+"Русский"   : "RU",
+"Russisch"  : "RU",
+"Russian"   : "RU",
+"Német"     : "DE",
+"Немецкий"  : "DE",
+"Deutsch"   : "DE",
+"German"    : "DE",
+"Angol"     : "EN",
+"Английский": "EN",
+"Englisch"  : "EN",
+"English"   : "EN",
+
+"language":
+    {
+        "HU": "Nyelv kiválasztása",
+        "RU": "Выбор языка",
+        "DE": "Sprache wählen",
+        "EN": "Choose language"
+    },
+"gameNumber":
+    {
+        "HU": "Játék sorszáma: %1!",
+        "RU": "Номер игры: %1!",
+        "DE": "Spielnummer: %1!",
+        "EN": "Number of game: %1!"
+    },
+
+"lines":
+    {
+        "HU": "vonal",
+        "RU": "линия",
+        "DE": "Linie",
+        "EN": "line"
+    },
+
+"steps":
+    {
+        "HU": "lépés",
+        "RU": "шаги",
+        "DE": "Schritte",
+        "EN": "steps"
+    },
+"target":
+    {
+        "HU": "cél",
+        "RU": "цель",
+        "DE": "Ziel",
+        "EN": "target"
+    },
+"restart":
+    {
+        "HU": "A játék újra indul",
+        "RU": "Игра начнется снова",
+        "DE": "Das Spiel beginnt erneut",
+        "EN": "The game will start again"
+    },
+"timeout":
+    {
+        "HU": "Kifutottál az idöböl! ",
+        "RU": "время кончилось!",
+        "DE": "Zeit ist abgelaufen",
+        "EN": "Yor time is out!"
+    },
+    
+"task completed":
+    {
+        "HU": "Feladat befejezve!",
+        "RU": "задача выполнена!",
+        "DE": "Auftrag ausgeführt",
+        "EN": "task completed"
+    },
+"congratulations":
+    {
+        "HU": "Gratulálok!!!!\n",
+        "RU": "Поздравляю!!!!\n",
+        "DE": "Herzliches Glückwunsch!!!!\n",
+        "EN": "Congratulations !!!!\n"
+    },
+"task solved":
+    {
+        "HU": "%1! lépésben oldottad meg a feladatot!",
+        "RU": "Вы решили задачу в минимальных %1! шагах!",
+        "DE": "Sie haben das Problem in %1! Schritten gelöst!",
+        "EN": "You completed the level in %1! moves!"
+    },
+"next level":
+    {
+        "HU": "Következö szint",
+        "RU": "следующий уровень",
+        "DE": "Nächste Stufe",
+        "EN": "next level"
+    },
+"Stop":
+    {
+        "HU": "Stop",
+        "RU": "стоп",
+        "DE": "Stop",
+        "EN": "Stop"
+    },
+"not found":
+    {
+        "HU": "nem találom a szöveget",
+        "RU": "текст не найден",
+        "DE": "Text nicht gefunden",
+        "EN": "text not found"
+    },
+"freePlayCell": {
+        "HU": "Edző játék",
+        "RU": "Тренировочная игра",
+        "DE": "Training Spiel",
+        "EN": "training game"
+    },
+"timeLimitCell": {
+        "HU": "Játék időre",
+        "RU": "Игра на время",
+        "DE": "Spiel mit Zeitlimit",
+        "EN": "game with timelimit"
+    },
+"settingsCell": {
+        "HU": "beállitások",
+        "RU": "Настройки",
+        "DE": "Einstellungen",
+        "EN": "Settings"
+    },
+"firstPackButton": {
+        "HU": "első csomag",
+        "RU": "Первый пакет",
+        "DE": "Erste Paket",
+        "EN": "first package"
+    },
+"bonusPackButton": {
+        "HU": "Ajándék csomag",
+        "RU": "Подарочный пакет",
+        "DE": "Gratis Paket",
+        "EN": "bonus pack"
+    },
+"greenPackButton": {
+        "HU": "Zöld csomag",
+        "RU": "Зелёный пакет",
+        "DE": "Grünpaket",
+        "EN": "green pack"
+    },
+"5 x 5": {
+        "HU": "5 x 5 könnyü",
+        "RU": "5 x 5 лёгкий",
+        "DE": "5 x 5 einfach",
+        "EN": "5 x 5 easy"
+    },
+"6 x 6": {
+        "HU": "6 x 6 közepes",
+        "RU": "6 x 6 средней сложности",
+        "DE": "6 x 6 mittelschwer",
+        "EN": "6 x 6 medium"
+    },
+"7 x 7": {
+        "HU": "7 x 7 nehéz",
+        "RU": "7 x 7 тежёлый",
+        "DE": "7 x 7 schwer",
+        "EN": "7 x 7 hard"
+    },
+"8 x 8": {
+        "HU": "8 x 8 nagyon nehéz",
+        "RU": "8 x 8 очень тежёлый",
+        "DE": "8 x 8 sehr schwer",
+        "EN": "8 x 8 very hard"
+    },
+"9 x 9": {
+        "HU": "9 x 9 extrém nehéz",
+        "RU": "9 x 9 чертовски тежёлый",
+        "DE": "9 x 9 teuflisch schwer",
+        "EN": "9 x 9 very very hard"
+    }
+
+
+
+
+
+
+
+}

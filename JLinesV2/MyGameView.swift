@@ -25,7 +25,7 @@ class MyGameView: UIView {
     var nextLevel: Bool?
     var alertNotReady: Bool?
     var rectSize: CGFloat?
-    var moveCount: Int = 0
+    //var moveCount: Int = 0
     var parent: UIViewController    //var gameEnded: ()->()?
     var gameEnded: (Bool)->()
     var lastColor = LineType.Unknown
@@ -33,6 +33,7 @@ class MyGameView: UIView {
     var bgLayer = MyLayer()
     var lineLayers = [LineType:MyLayer]()
     var pointLayer: MyLayer?
+    var dataStore: DataStore
     
 
     init(frame: CGRect, gameNumber: Int, package: Package, volumeNr: Int, parent: UIViewController, gameEnded: (Bool)->()) {
@@ -59,6 +60,8 @@ class MyGameView: UIView {
             //self.gameboard!.gameArray = gameboard
             //self.gameboard!.lines = lines
         }
+        
+        dataStore = DataStore(gameName: package.getVolumeName(volumeNr) as String, gameNumber: gameNumber, countLines: numColors)
         super.init(frame: frame)
         
         bgLayer.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
@@ -84,13 +87,37 @@ class MyGameView: UIView {
         
 
     }
+    
+    func restart() {
+        for index in 0..<GlobalVariables.lines.count
+        {
+            let color = LineType(rawValue: (LineType.Red.rawValue + index))!
+            let line = GlobalVariables.lines[color]!
+            while line.points.count > 0 {
+                let x = line.lastPoint().column
+                let y = line.lastPoint().row
+                if line.lastPoint() != line.point1 && line.lastPoint() != line.point2 {
+                    gameboard!.gameArray[x, y]!.color = .Unknown
+                    gameboard!.gameArray[x, y]!.originalPoint = false
+                }
+                gameboard!.gameArray[x, y]!.inLinePoint = false
+                line.removeLastPoint()
+            }
+            line.point1!.inLinePoint = false
+            line.point2!.inLinePoint = false            
+            lineLayers[color]!.setNeedsDisplay()
+        }
+        GlobalVariables.lineCount = 0
+        GlobalVariables.moveCount = 0
+    }
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touchCount = touches.count
-        let touch = touches.anyObject() as UITouch
+        let touch = touches.first as! UITouch
         
         let (OK, x, y) = getXYPositionInGrid(touch.locationInView(self))
         if (OK && (gameboard!.gameArray[x, y]!.originalPoint || gameboard!.gameArray[x, y]!.inLinePoint)) {
@@ -99,9 +126,11 @@ class MyGameView: UIView {
             startPointY = y
             aktColor = gameboard!.gameArray[x, y]!.color
             if aktColor != lastColor {
-                moveCount++
                 lastColor = aktColor
             }
+            
+            GlobalVariables.lineCount = getEndedLinesCount()
+            GlobalVariables.lineCountLabel.text = "\(GlobalVariables.lineCount) / \(GlobalVariables.lines.count) vonal"
             
             pointLayer = MyLayer()
             pointLayer!.name = "point"
@@ -123,6 +152,7 @@ class MyGameView: UIView {
                 line.addPoint(point) // add actuelle Point
             } else {
                 deleteEndLine(point, line: line, calledFrom: "touchesBegan")
+
                 line.addPoint(point)
                 //setNeedsDisplay()
                 //drawGame(self.frame, inBoard: gameboard, lines: lines)
@@ -135,9 +165,9 @@ class MyGameView: UIView {
         lineLayers[aktColor]!.setNeedsDisplay()
     }
     
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touchCount = touches.count
-        let touch = touches.anyObject() as UITouch
+        let touch = touches.first as! UITouch
         let (OK, x, y) = getXYPositionInGrid(touch.locationInView(self))
         if OK && startPointX != nil && startPointY != nil {
             
@@ -154,7 +184,7 @@ class MyGameView: UIView {
                 if !((point.originalPoint && point.color != aktColor) || abs(x - startPointX!) > 1 || abs(y - startPointY!) > 1) {  // can be moved here
                     
                     if point.color != .Unknown && point.color != aktColor  {  // here another line
-                        println("point.color: \(point.color), aktColor: \(aktColor)")
+                        //println("point.color: \(point.color), aktColor: \(aktColor)")
                         point.earlierColor = point.color
                         deleteEndLine(point,line: GlobalVariables.lines[point.color]!, calledFrom: "touchesMoved1")  // delete endpart of line, inclusive point
                     }
@@ -179,39 +209,43 @@ class MyGameView: UIView {
         }
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touchCount = touches.count
-        let touch = touches.anyObject() as UITouch
+        let touch = touches.first as! UITouch
         let point = touch.locationInView(self)
         let (OK, x, y) = getXYPositionInGrid(point)
         if OK && startPointX != nil && startPointY != nil {
             pointLayer!.removeFromSuperlayer()
             pointLayer = nil
+            GlobalVariables.lineCount = getEndedLinesCount()
+            GlobalVariables.moveCount++
+            dataStore.update(GlobalVariables.moveCount, countSeconds: GlobalVariables.timeCount)
+
             if checkIfGameEnded() {
+                GlobalVariables.timeAdder = 0
                 nextLevel = false
                 alertNotReady = true
                 //println("Game ended!!!")
                 
                 var gameEndAlert:UIAlertController?
-                var messageTxt = String("")
-                if moveCount > GlobalVariables.lines.count {
-                    messageTxt = "You have completed the level in \(moveCount) moves"
-                } else {
-                    messageTxt = "Congratulations!!!! \nYou have completed the level in \(moveCount) moves"
+                var messageTxt = ""
+                if GlobalVariables.lineCount == GlobalVariables.lines.count {
+                    messageTxt = GlobalVariables.language.getText("congratulations")
                 }
-                
-                gameEndAlert = UIAlertController(title: "Level complete!",
+                messageTxt += GlobalVariables.language.getText("task solved",par:"\(GlobalVariables.lineCount)", "\(GlobalVariables.timeCount)")
+
+                gameEndAlert = UIAlertController(title: GlobalVariables.language.getText("task completed"),
                     message: messageTxt,
                     preferredStyle: .Alert)
                 
-                let firstAction = UIAlertAction(title: "next level",
+                let firstAction = UIAlertAction(title: GlobalVariables.language.getText("next level"),
                     style: UIAlertActionStyle.Default,
                     handler: {(paramAction:UIAlertAction!) in
                         self.gameEnded(true)
                     }
                 )
                 
-                let secondAction = UIAlertAction(title: "Stop",
+                let secondAction = UIAlertAction(title: GlobalVariables.language.getText("Stop"),
                     style: UIAlertActionStyle.Cancel,
                     handler: {(paramAction:UIAlertAction!) in
                         //self.gameEnded()
@@ -289,98 +323,15 @@ class MyGameView: UIView {
         }
         return true
     }
-/*
+    
+    func getEndedLinesCount() -> Int{
+        var count = 0
+        for index in 0..<GlobalVariables.lines.count {
+            count += GlobalVariables.lines[LineType(rawValue: (LineType.Red.rawValue + index))!]!.lineEnded ? 1 : 0
 
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-        let size = rect.size
-        let multiplicator:CGFloat = 0.90
-        let origin = rect.origin
-        
-        let context = UIGraphicsGetCurrentContext()
-        
-        // Setup complete, do drawing here
-        /*
-        CGContextSetStrokeColorWithColor(context, UIColor.redColor().CGColor)
-        CGContextSetLineWidth(context, 4.0)
-        CGContextStrokeRect(context, rect)
-        */
-        CGContextBeginPath(context)
-        
-        rectSize = rect.width / CGFloat(GlobalVariables.gameSize)
-        
-        let rad:CGFloat = (rectSize! * multiplicator * 0.8) / 2
-        let endAngle = CGFloat(2*M_PI)
-        
-        
-        //CGContextSetLineWidth(context, 2.0)
-        CGContextSetLineWidth(context, 0.5)
-/*
-
-        for ind in 1..<GlobalVariables.gameSize {
-            CGContextMoveToPoint(context, CGFloat(Int(rect.origin.x) + ind * Int(rectSize!)), rect.origin.y)
-            CGContextAddLineToPoint(context, CGFloat(Int(rect.origin.x) + ind * Int(rectSize!)), rect.origin.y + rect.size.height)
-            CGContextMoveToPoint(context, CGFloat(rect.origin.x), CGFloat(ind * Int(rectSize!) + Int(rect.origin.y)))
-            CGContextAddLineToPoint(context, CGFloat(rect.origin.x + rect.size.width), CGFloat(ind * Int(rectSize!) + Int(rect.origin.y)))
         }
-        CGContextStrokePath(context)
-*/
-        
-        for column in 0..<GlobalVariables.gameSize {
-            for row in 0..<GlobalVariables.gameSize {
-                let colortype = gameboard!.gameArray[column, row]!.color
-                if gameboard!.gameArray[column, row]!.color != .Unknown && gameboard!.gameArray[column, row]!.originalPoint {
-                    //println("\n row: \(row), cloumn:\(column), originalpoint: \(gameboard[row, column]!.originalPoint) \n")
-                    let color = colortype.color
-                    let xCent = rect.origin.x + CGFloat(column) * CGFloat(rectSize!) + CGFloat(rectSize!) / CGFloat(2)
-                    let yCent = rect.origin.y + CGFloat(row) * CGFloat(rectSize!) + CGFloat(rectSize!) / CGFloat(2)
-                    CGContextAddArc(context, xCent, yCent, rad, 0, endAngle, 1)
-                    
-                    CGContextSetFillColorWithColor(context, color)
-                    CGContextSetStrokeColorWithColor(context,color)
-                    //CGContextSetLineWidth(context, 4.0)
-                    CGContextDrawPath(context, kCGPathFillStroke);
-                    
-                    // draw the path
-                }
-            }
-        }
-
-
-        
-        let lineWidth = rad * 1.2
-        CGContextSetLineWidth(context, lineWidth)
-        
-        for (color, line) in gameboard!.lines {
-            for ind in 0..<line.points.count {
-                //println("color: \(color), count of points: \(line.points.count) \n")
-                
-                CGContextSetStrokeColorWithColor(context, color.color)
-                
-                let pointX = line.points[ind].column
-                let pointY = line.points[ind].row
-                
-                let coordX = rect.origin.x + CGFloat(pointX) * rectSize! + rectSize! / 2
-                let coordY = rect.origin.y + CGFloat(pointY) * rectSize! + rectSize! / 2
-                
-                if ind == 0 {
-                    CGContextMoveToPoint(context,coordX, coordY)
-                } else {
-                    CGContextAddLineToPoint(context, coordX, coordY)
-                }
-                
-            }
-            
-            CGContextStrokePath(context)
-        }
-        
-        
-        
-        
-        
-        
+       //println("aktColor: \(aktColor), count:\(count)")
+        return count
     }
-*/    
 
 }
