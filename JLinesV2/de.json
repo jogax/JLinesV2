@@ -24,9 +24,12 @@
     "English"   : "en",
     "language":         "Sprache wählen",
     "gameNumber":       "Spielnummer: %1!",
-    "lines":            "Linie",
+    "areYouSure":       "Sind Sie sicher?",
+    "yes":              "Ja",
+    "no":               "Nein",
+    "cleangame":        "Reset Spiel",
+    "lines":            "Linien",
     "steps":            "Schritte",
-    "target":           "Ziel",
     "restart":          "Das Spiel beginnt erneut",
     "timeout":          "Zeit ist abgelaufen",
     "task completed":   "Auftrag ausgeführt",
@@ -41,9 +44,11 @@
     "firstPackButton":  "Erste Paket",
     "bonusPackButton":  "Gratis Paket",
     "greenPackButton":  "Grünpaket",
-    "5 x 5":            "5 x 5 einfach",
-    "6 x 6":            "6 x 6 mittelschwer",
-    "7 x 7":            "7 x 7 schwer",
-    "8 x 8":            "8 x 8 sehr schwer",
-    "9 x 9":            "9 x 9 teuflisch schwer"
+    "5 x 5":            "5 x 5 sehr einfach",
+    "6 x 6":            "6 x 6 einfach",
+    "7 x 7":            "7 x 7 mittelschwer",
+    "8 x 8":            "8 x 8 schwer",
+    "9 x 9":            "9 x 9 tsehr schwer",
+    "errorBySaveData":  "Fehler bei der Sicherung"
+
 }

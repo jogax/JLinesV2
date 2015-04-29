@@ -70,8 +70,8 @@ class GameBoard {
         
         self.numColors = numColors
         self.gameArray = gameArray
-        GlobalVariables.lines = lines
-        self.numEmptyPoints = GlobalVariables.gameSize * GlobalVariables.gameSize
+        GV.lines = lines
+        self.numEmptyPoints = GV.gameSize * GV.gameSize
         
     }
     
@@ -83,16 +83,16 @@ class GameBoard {
             8:(6, 9),
             9:(6, 10)
         ]
-        var (minColorCount, maxColorCount) = minMaxColorCount[GlobalVariables.gameSize]!
-        self.gameArray =  Array2D<Point>(columns:GlobalVariables.gameSize, rows: GlobalVariables.gameSize)
-        //self.directions = Array2D<Directions>(columns:GlobalVariables.gameSize, rows: GlobalVariables.gameSize)
-        self.numEmptyPoints = GlobalVariables.gameSize * GlobalVariables.gameSize
+        var (minColorCount, maxColorCount) = minMaxColorCount[GV.gameSize]!
+        self.gameArray =  Array2D<Point>(columns:GV.gameSize, rows: GV.gameSize)
+        //self.directions = Array2D<Directions>(columns:GV.gameSize, rows: GV.gameSize)
+        self.numEmptyPoints = GV.gameSize * GV.gameSize
         
-        GlobalVariables.lines = [LineType:Line]()
+        GV.lines = [LineType:Line]()
         printFunction("GameBoard.init()")
         numColors = random(minColorCount, max: maxColorCount, comment: "wähle Anzahl colors")
         let startTime = NSDate()
-        (gameArray, GlobalVariables.lines) = generateGameArray()
+        (gameArray, GV.lines) = generateGameArray()
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000 / 1000
         //println("Time für Generierung von Gameboard:\(elapsedTime) sec")
@@ -104,11 +104,11 @@ class GameBoard {
         printFunction("generateGameArray()")
 
         //let countColors = LineType.LastColor.rawValue - 1
-        tempGameArray = Array2D<Point>(columns: GlobalVariables.gameSize, rows: GlobalVariables.gameSize)
-        //tempDirections = Array2D<Directions>(columns: GlobalVariables.gameSize, rows: GlobalVariables.gameSize)
+        tempGameArray = Array2D<Point>(columns: GV.gameSize, rows: GV.gameSize)
+        //tempDirections = Array2D<Directions>(columns: GV.gameSize, rows: GV.gameSize)
       
-        for column in 0..<GlobalVariables.gameSize {  // empty Array generieren
-            for row in 0..<GlobalVariables.gameSize {
+        for column in 0..<GV.gameSize {  // empty Array generieren
+            for row in 0..<GV.gameSize {
                 tempGameArray![column, row] = Point(column: column, row: row, type: LineType.Unknown, originalPoint: false, inLinePoint: false, delegate: checkDirections)
             }
         }
@@ -170,15 +170,15 @@ class GameBoard {
             line.point1!.inLinePoint = false
             line.point2!.inLinePoint = false
             //   {"lineCount":5, "lines":[{"P1":23, "P2":03},{"P1":24, "P2":04},{"P1":12, "P2":22},{"P1":10, "P2":02},{"P1":7, "P2":15}
-            let pos1 = line.point1!.row * GlobalVariables.gameSize + line.point1!.column
-            let pos2 = line.point2!.row * GlobalVariables.gameSize + line.point2!.column
+            let pos1 = line.point1!.row * GV.gameSize + line.point1!.column
+            let pos2 = line.point2!.row * GV.gameSize + line.point2!.column
             if index > 0 {print(",")}
             print("{\"P1\":\(pos1),\"P2\":\(pos2)}")
  
         }
         print("]},")
         println()
-        GlobalVariables.gameNr++
+        GV.gameNr++
         return (tempGameArray!, lines)
         
     }
@@ -224,11 +224,11 @@ class GameBoard {
         let down =  3
         
         var leftUpRightDown = random(Int(left), max: Int(down), comment: "wähle Direction")
-        var blockedX = GlobalVariables.gameSize
-        var blockedY = GlobalVariables.gameSize
+        var blockedX = GV.gameSize
+        var blockedY = GV.gameSize
         
         while line.length < 3 {
-            //let point = Point(column: x, row: y, type: color, originalPoint: true, inLinePoint: true, size:GlobalVariables.gameSize, delegate: checkDirections)
+            //let point = Point(column: x, row: y, type: color, originalPoint: true, inLinePoint: true, size:GV.gameSize, delegate: checkDirections)
             //line.point1 = point
             //line.point2 = point
             line.point1 = tempGameArray![x, y]!
@@ -242,7 +242,7 @@ class GameBoard {
             otherEmptyPointsCount = numEmptyPoints - emptyPointsCount
             
             var lineLength = 0
-            var restLinesCount = numColors - GlobalVariables.lines.count
+            var restLinesCount = numColors - GV.lines.count
             var areasCount = areas.count
             var averageLength = 0
             if restLinesCount > 0 {
@@ -286,7 +286,7 @@ class GameBoard {
                                 randomSet.append(x: setX, y: setY)
                         }
                     case right:
-                        if aktX < GlobalVariables.gameSize - 1 && tempGameArray![aktX + 1, aktY]!.color == .Unknown && tempGameArray![aktX + 1, aktY]!.areaNumber == areaNr  && (aktX + 1 != blockedX || aktY != blockedY) {
+                        if aktX < GV.gameSize - 1 && tempGameArray![aktX + 1, aktY]!.color == .Unknown && tempGameArray![aktX + 1, aktY]!.areaNumber == areaNr  && (aktX + 1 != blockedX || aktY != blockedY) {
                             let setX = aktX + 1
                             let setY = aktY
                             randomSet.append(x: setX, y: setY)
@@ -298,7 +298,7 @@ class GameBoard {
                             randomSet.append(x: setX, y: setY)
                         }
                     default: //down
-                        if aktY < GlobalVariables.gameSize - 1 && tempGameArray![aktX, aktY + 1]!.color == .Unknown && tempGameArray![aktX, aktY + 1]!.areaNumber == areaNr && (aktX != blockedX || aktY + 1 != blockedY) {
+                        if aktY < GV.gameSize - 1 && tempGameArray![aktX, aktY + 1]!.color == .Unknown && tempGameArray![aktX, aktY + 1]!.areaNumber == areaNr && (aktX != blockedX || aktY + 1 != blockedY) {
                             let setX = aktX
                             let setY = aktY + 1
                             randomSet.append(x: setX, y: setY)}
@@ -309,8 +309,8 @@ class GameBoard {
                     }
                 }
                 
-                blockedX = GlobalVariables.gameSize  //entBlocking
-                blockedY = GlobalVariables.gameSize
+                blockedX = GV.gameSize  //entBlocking
+                blockedY = GV.gameSize
                 if randomSet.count == 0 {
                     lineLength = line.length
                 } else {
@@ -339,7 +339,7 @@ class GameBoard {
                             tempGameArray![aktX, aktY]!.color = color // Problem anders lösen
                         }
                     }
-                    if blockedX == GlobalVariables.gameSize {
+                    if blockedX == GV.gameSize {
                         tempGameArray![aktX, aktY]!.inLinePoint = true
                         line.point2 = Point(column: aktX, row: aktY, type: color, originalPoint: false, inLinePoint: true, delegate: checkDirections )
                         //println("color: \(color), line.count: \(line.length), aktX: \(aktX), aktY:\(aktY)")
@@ -381,13 +381,13 @@ class GameBoard {
 */
         }
         
-        GlobalVariables.lines[color] = line
-        return GlobalVariables.lines[color]!
+        GV.lines[color] = line
+        return GV.lines[color]!
     }
     
     func deleteLineIfRequired(color: LineType) -> Bool {
         printFunction("deleteLineIfRequired(color: \(color))")
-        let line = GlobalVariables.lines[color]!
+        let line = GV.lines[color]!
         var toDelete = false
         for ind in 0..<areas.count {
             if areas[ind]!.points.count < 3 || areas[ind]!.countEndPoints == 3  {//> 2 && areas[ind]!.points.count < 6) { //zu kurze Area or zu viele EndPoints --> line weglöschen!
@@ -403,7 +403,7 @@ class GameBoard {
                 analyzeGameboard()
                 printGameboard()
             }
-            GlobalVariables.lines.removeValueForKey(color)
+            GV.lines.removeValueForKey(color)
         }
         numEmptyPoints = countEmptyPoints()
         return toDelete
@@ -413,11 +413,11 @@ class GameBoard {
         if debugging {
             printFunction("printGameboard()")
             var lineString = "+"
-            for i in 0..<GlobalVariables.gameSize {lineString += "---+"}
+            for i in 0..<GV.gameSize {lineString += "---+"}
             println (lineString)
-            for y in 0..<GlobalVariables.gameSize {
+            for y in 0..<GV.gameSize {
                 var printString = "| "
-                for x in 0..<GlobalVariables.gameSize {
+                for x in 0..<GV.gameSize {
                     var p: String
                     switch tempGameArray![x, y]!.color {
                         case .Unknown: p = "\(tempGameArray![x, y]!.areaNumber)"
@@ -450,15 +450,15 @@ class GameBoard {
         printFunction("analyzeGameboard()")
         self.areas = [Int:Area]()
         var area = Area()
-        for x in 0..<GlobalVariables.gameSize {
-            for y in 0..<GlobalVariables.gameSize {
+        for x in 0..<GV.gameSize {
+            for y in 0..<GV.gameSize {
                 tempGameArray![x, y]!.areaNumber = -1
             }
         }
         var areaNumber = 0
         var minAreaLength = 1000
-        for x in 0..<GlobalVariables.gameSize {
-            for y in 0..<GlobalVariables.gameSize {
+        for x in 0..<GV.gameSize {
+            for y in 0..<GV.gameSize {
                 if tempGameArray![x, y]!.color == .Unknown &&
                 tempGameArray![x, y]!.areaNumber == -1 {
                     area.points.append(Member(x: x, y: y, checked: false, endPoint: false))
@@ -548,7 +548,7 @@ class GameBoard {
                 }
                 var columnRight = x + 1
                 tempGameArray![x, y]!.directions.right = 0
-                while columnRight < GlobalVariables.gameSize && tempGameArray![columnRight, y]!.color == .Unknown {
+                while columnRight < GV.gameSize && tempGameArray![columnRight, y]!.color == .Unknown {
                     tempGameArray![columnRight, y]!.directions.left = columnRight - x - 1
                     tempGameArray![columnRight, y]!.countDirections()
                     columnRight++
@@ -562,7 +562,7 @@ class GameBoard {
                 }
                 var rowDown = y + 1
                 tempGameArray![x, y]!.directions.down = 0
-                while rowDown < GlobalVariables.gameSize && tempGameArray![x, rowDown]!.color == .Unknown {
+                while rowDown < GV.gameSize && tempGameArray![x, rowDown]!.color == .Unknown {
                     tempGameArray![x, rowDown]!.directions.up = rowDown - y - 1
                     tempGameArray![rowDown, y]!.countDirections()
                     rowDown++
@@ -582,8 +582,8 @@ class GameBoard {
         var startTime = NSDate()
         if let point = tempGameArray![0, 0] {
             var lowCountDir = Array<(x:Int, y:Int)>()
-            for x in 0..<GlobalVariables.gameSize {
-                for y in 0..<GlobalVariables.gameSize {
+            for x in 0..<GV.gameSize {
+                for y in 0..<GV.gameSize {
                     var dir = Directions()
                     if tempGameArray![x, y]!.color != .Unknown {
                         tempGameArray![x, y]!.directions = dir
@@ -596,9 +596,9 @@ class GameBoard {
                             }
                         }
                         
-                        if x < GlobalVariables.gameSize - 1 {
+                        if x < GV.gameSize - 1 {
                             var col = x + 1
-                            while col <= GlobalVariables.gameSize - 1 && tempGameArray![col, y]!.color == .Unknown {
+                            while col <= GV.gameSize - 1 && tempGameArray![col, y]!.color == .Unknown {
                                 col++
                                 dir.right++
                             }
@@ -612,9 +612,9 @@ class GameBoard {
                             }
                         }
 
-                        if y < GlobalVariables.gameSize - 1 {
+                        if y < GV.gameSize - 1 {
                             var row = y + 1
-                            while row <= GlobalVariables.gameSize - 1 && tempGameArray![x, row]!.color == .Unknown {
+                            while row <= GV.gameSize - 1 && tempGameArray![x, row]!.color == .Unknown {
                                 row++
                                 dir.down++
                             }
@@ -644,8 +644,8 @@ class GameBoard {
     func countEmptyPoints() -> Int {
         printFunction("countEmptyPoints()")
         var count = 0
-        for x in 0..<GlobalVariables.gameSize {
-            for y in 0..<GlobalVariables.gameSize {
+        for x in 0..<GV.gameSize {
+            for y in 0..<GV.gameSize {
                 if tempGameArray![x, y]!.color == .Unknown {
                     count++
                 }

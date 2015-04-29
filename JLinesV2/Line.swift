@@ -58,29 +58,6 @@ enum LineType: Int, Printable {
         return colorAbbrs[rawValue]
     }
 
-    var cgColor: CGColor {
-        let colorTypes = [
-            UIColor.clearColor().CGColor,
-            UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1).CGColor, // Red
-            UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1).CGColor, // Gold
-            UIColor(red: 0/255, green: 255/255, blue: 127/255, alpha: 1).CGColor, // Springgreen
-            UIColor(red: 255/255, green: 105/255, blue: 180/255, alpha: 1).CGColor, // HotPink
-            UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1).CGColor, // green
-            UIColor.blueColor().CGColor,
-            UIColor.magentaColor().CGColor,
-            UIColor.yellowColor().CGColor,
-            UIColor.purpleColor().CGColor,
-            UIColor.orangeColor().CGColor,
-            UIColor.cyanColor().CGColor,
-            UIColor.brownColor().CGColor,
-            UIColor.lightGrayColor().CGColor,
-            UIColor.darkGrayColor().CGColor,
-            UIColor.blackColor().CGColor
-        ]
-        
-        return colorTypes[rawValue]
-    }
-
     var uiColor: UIColor {
         let uiColorTypes = [
             UIColor.clearColor(),
@@ -91,7 +68,7 @@ enum LineType: Int, Printable {
             UIColor(red: 0/255, green: 128/255, blue: 0/255, alpha: 1), // green
             UIColor.blueColor(),
             UIColor.magentaColor(),
-            UIColor.yellowColor(),
+            UIColor(red: 255/255, green: 218/255, blue: 155/255, alpha: 1), // PeachPuff
             UIColor.purpleColor(),
             UIColor.orangeColor(),
             UIColor.cyanColor(),

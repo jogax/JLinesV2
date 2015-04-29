@@ -10,54 +10,18 @@ import Foundation
 import UIKit
 
 
-enum Choosed: Int{
-    case Unknown = 0, Right, Left, Settings, Restart
-}
-struct GlobalVariables {
-    static var touchPoint = CGPointZero
-    static var gameSize = 5
-    static var gameNr = 0
-    static var maxGameNr = 0
-    static var lineCount: Int = 0 {
-        didSet {
-            let lineString = GlobalVariables.language.getText("lines")
-            GlobalVariables.lineCountLabel.text = "\(GlobalVariables.lineCount) / \(GlobalVariables.lines.count) \(lineString))"
-        }
-    }
-    
-    static var moveCount: Int = 0 {
-        didSet {
-            let step = GlobalVariables.language.getText("steps")
-            let target = GlobalVariables.language.getText("target")
-            GlobalVariables.moveCountLabel.text = "\(GlobalVariables.moveCount) \(step) / \(GlobalVariables.lines.count) \(target)"
-        }
-    }
-    static var rectSize: CGFloat = 0
-    static var lines = [LineType:Line]()
-    static let multiplicator:CGFloat = 0.90
-    static var timeAdder = 1
-    static let language = Language()
-    static var timeCount: Int = 0
-    
-    
-    // globale Labels
-    
-    static let moveCountLabel = UILabel()
-    static let lineCountLabel = UILabel()
-    
-}
-
 
 
 class Game: UIView, Printable {
     let multiplicator:CGFloat = 0.90
     
+    let countdown = false
     //var gameboard: Array2D <Point>?
     //var lines: [LineType:Line]
     //var error: String
     //var maxNumber: Int
-    var number: Int
-    var volumeNr: Int
+    //var number: Int
+    //var volumeNr: Int
     //var gameSize: Int
     var firstPoint: CGPoint?
     var vBounds: CGRect?
@@ -81,36 +45,41 @@ class Game: UIView, Printable {
     let timeLeftOrig = 30
     var timerLabel      = UILabel()
     var gameNumber      = UILabel()
-    let forwardButton   = UIButton()
-    let backwardButton  = UIButton()
+    let forwardButton   = MyButton()
+    let backwardButton  = MyButton()
     let repeatButton    = UIButton()
     let settingsButton  = UIButton()
     let backButton      = UIButton()
     var settingsViewController: UIViewController?
+    //var gameID: Int
+    var timer: NSTimer?
+    var gameNrPar = ""
 
 
-    init (frame: CGRect, package: Package, volumeNr: Int, number: Int, parent: PagedViewController) {
-        self.number = number
+    init (frame: CGRect, package: Package, parent: PagedViewController) {
+        //gameID = Int(arc4random())%1000
+        //self.number = number
+        //GV.gameNr = number
         //(gameboard, error, lines) = package.getGameNew(volumeNr, numberIn: number - 1)
-        self.number = number
-        GlobalVariables.maxGameNr = package.getMaxNumber(volumeNr)
-        self.volumeNr = volumeNr
+        
+        //GV.maxGameNr = package.getMaxNumber(volumeNr)
+        //self.volumeNr = volumeNr
         self.package = package
-        self.volumeNr = volumeNr
-        GlobalVariables.gameSize = package.getGameSize(volumeNr)
+        //self.volumeNr = volumeNr
+        //GV.gameSize = package.getGameSize(volumeNr)
         //moveCount = 0
         self.parent = parent
         
-        GlobalVariables.gameNr = number
+        //GV.gameNr = number
         super.init(frame: frame)
         self.backgroundColor = UIColor.redColor()
         self.hidden = false
         let size = frame.size
         let origin = frame.origin
         
-        vSize = CGSize(width: size.width * multiplicator, height: size.width * multiplicator)
-        vOrigin = CGPoint(  x: origin.x + (size.width - vSize!.width) / 2,
-                            y: origin.y + (size.height - vSize!.height) / 3)
+        vSize = CGSize(width: GV.horNormWert * 38, height: GV.horNormWert * 38)
+        vOrigin = CGPoint(  x: GV.horNormWert,
+                            y: GV.vertNormWert * 8)
         
         
         vBounds = CGRect(origin: vOrigin!, size: vSize!)
@@ -118,7 +87,7 @@ class Game: UIView, Printable {
         gameContainer = UIView(frame: CGRect(origin: vOrigin!, size: vSize!))
         gameContainer!.backgroundColor = UIColor.clearColor()
         
-        firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: vSize!), gameNumber: self.number, package: package, volumeNr: volumeNr, parent: parent, gameEnded: nextAction)
+        firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: vSize!), package: package, parent: parent, gameEnded: nextAction)
         firstGameView!.backgroundColor = UIColor.clearColor()
 
         self.addSubview(gameContainer!)
@@ -131,69 +100,104 @@ class Game: UIView, Printable {
         let rechtsPfeil = UIImage(named: "pfeilrechts.jpg") as UIImage?
         let repeatPfeil = UIImage(named: "repeat.jpg") as UIImage?
         let settingsBild = UIImage(named: "settings.jpg") as UIImage?
+        let backBild = UIImage(named: "back.jpg") as UIImage?
         forwardButton.setImage(rechtsPfeil, forState: .Normal)
         backwardButton.setImage(linksPfeil, forState: .Normal)
         repeatButton.setImage(repeatPfeil, forState: .Normal)
         settingsButton.setImage(settingsBild, forState: .Normal)
+        backButton.setImage(backBild, forState: .Normal)
         
-        let normWert = bounds.size.width * 0.15
-        forwardButton.frame = CGRect(x: bounds.size.width - bounds.size.width * 0.1 - normWert, y: vOrigin!.y + vSize!.height * 1.1, width: normWert, height: normWert)
-        backwardButton.frame = CGRect(x: bounds.size.width * 0.1, y: vOrigin!.y + vSize!.height * 1.1, width: normWert, height: normWert)
-        settingsButton.frame = CGRect(x: bounds.size.width / 3, y: vOrigin!.y + vSize!.height * 1.1, width: normWert, height: normWert)
-        repeatButton.frame = CGRect(x: bounds.size.width * 2 / 3 - normWert, y: vOrigin!.y + vSize!.height * 1.1, width: normWert, height: normWert)
-
+        let buttonSize = GV.horNormWert * 3
+        let lowerButtonsY = GV.vertNormWert * 38
+        
+        forwardButton.frame = CGRect(x: GV.horNormWert * 33, y: lowerButtonsY, width: buttonSize, height: buttonSize)
+        backwardButton.frame = CGRect(x: GV.horNormWert * 4, y: lowerButtonsY, width: buttonSize, height: buttonSize)
+        settingsButton.frame = CGRect(x: GV.horNormWert * 14, y: lowerButtonsY, width: buttonSize, height: buttonSize)
+        repeatButton.frame   = CGRect(x: GV.horNormWert * 24, y: lowerButtonsY, width: buttonSize, height: buttonSize)
+        
+        backButton.frame = CGRect(x: GV.horNormWert * 36, y: GV.vertNormWert * 3, width: buttonSize, height: buttonSize)
+        timerLabel.frame = CGRect(x: GV.horNormWert * 36, y: GV.vertNormWert * 6, width: buttonSize, height: GV.horNormWert * 2)
+        GV.lineCountLabel.frame = CGRect(x: GV.horNormWert * 2, y: GV.vertNormWert * 6, width: GV.horNormWert * 14, height: GV.horNormWert * 2)
+        GV.moveCountLabel.frame = CGRect(x: GV.horNormWert * 18, y: GV.vertNormWert * 6, width: GV.horNormWert * 18, height: GV.horNormWert * 2)
+        gameNumber.frame = CGRect(x: GV.horNormWert * 2, y: GV.vertNormWert * 3, width: GV.horNormWert * 30, height: GV.horNormWert * 3)
+        
+        GV.language.callBackWhenNewLanguage(self.updateLanguage)
         
         forwardButton.backgroundColor = UIColor.whiteColor()
         backwardButton.backgroundColor = UIColor.whiteColor()
         repeatButton.backgroundColor = UIColor.whiteColor()
+        backButton.backgroundColor = UIColor.whiteColor()
 
         //button.setTitle("TestforwardButton", forState: UIControlState.Normal)
         forwardButton.addTarget(self, action: "nextButton:", forControlEvents: UIControlEvents.TouchUpInside)
         backwardButton.addTarget(self, action: "nextButton:", forControlEvents: UIControlEvents.TouchUpInside)
         repeatButton.addTarget(self, action: "repeatButton:", forControlEvents: UIControlEvents.TouchUpInside)
         settingsButton.addTarget(self, action: "settingsButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        backButton.addTarget(self, action: "backButton:", forControlEvents: UIControlEvents.TouchUpInside)
 
-        timerLabel.frame = CGRect(x: bounds.origin.x + bounds.size.width - 50, y: vOrigin!.y - 30, width: 40, height: 20)
-        timerLabel.text = "\(timeLeft)"
+        timerLabel.text = "\(self.timeLeft)"
+        if !countdown {
+            timerLabel.text = "\(GV.timeCount)"
+        }
         timerLabel.backgroundColor = UIColor.whiteColor()
         
-        gameNumber.frame = CGRect(x: bounds.origin.x + bounds.size.width / 2 - 40, y: vOrigin!.y - 70, width: 200, height: 20)
-        gameNumber.text =  GlobalVariables.language.getText("gameNumber",par: "\(GlobalVariables.gameNr)")//"Játék sorszáma: \(GlobalVariables.gameNr)"
+        let gameName = GV.package!.getVolumeName(GV.volumeNr)
+        gameNrPar = "\(GV.gameNr + 1)  \(gameName)"
+        gameNumber.text =  GV.language.getText("gameNumber", par: gameNrPar ) //"Játék sorszáma: \(GV.gameNr)"
+        gameNumber.font = UIFont(name: gameNumber.font.fontName, size: GV.vertNormWert * 1.5)
         
-        GlobalVariables.lineCountLabel.frame = CGRect(x: bounds.origin.x + 10, y: vOrigin!.y - 30, width: 100, height: 20)        
-        GlobalVariables.moveCountLabel.frame = CGRect(x: bounds.origin.x + bounds.size.width / 2 - 40, y: vOrigin!.y - 30, width: 150, height: 20)
-        GlobalVariables.lineCount = 0
-        GlobalVariables.moveCount = 0
+        GV.lineCount = 0
+        GV.moveCount = 0
 
-        backwardButton.hidden = true
+        if GV.volumeNr == 0 && GV.gameNr == 0 {backwardButton.hidden = true}
+        if GV.volumeNr == GV.maxVolumeNr - 1 && GV.gameNr == GV.maxGameNr - 1 {
+            forwardButton.hidden = true
+        }
         self.addSubview(forwardButton)
         self.addSubview(backwardButton)
         self.addSubview(repeatButton)
         self.addSubview(settingsButton)
+        self.addSubview(backButton)
         self.addSubview(timerLabel)
         self.addSubview(gameNumber)
-        self.addSubview(GlobalVariables.lineCountLabel)
-        self.addSubview(GlobalVariables.moveCountLabel)
-
-        var timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
+        self.addSubview(GV.lineCountLabel)
+        self.addSubview(GV.moveCountLabel)
+        GV.timeAdder = 1
+        GV.timeCount = 0
+        self.timeLeft = self.timeLeftOrig
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
 
 
     }
 
+    func updateLanguage() {
+        let step = GV.language.getText("steps")
+        let lineString = GV.language.getText("lines")
+        
+        GV.moveCountLabel.text = "\(GV.moveCount) / \(GV.lines.count) \(step)"
+        GV.lineCountLabel.text = "\(GV.lineCount) / \(GV.lines.count) \(lineString)"
+        gameNumber.text = GV.language.getText("gameNumber", par: gameNrPar)//"Játék sorszáma: \(GV.gameNr)"
+    }
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     
     func countDown () {
-        timeLeft -= GlobalVariables.timeAdder
-        GlobalVariables.timeCount += GlobalVariables.timeAdder
-        timerLabel.text = "\(timeLeft)"
-        if timeLeft == 0 {
-            GlobalVariables.timeAdder = 0
+        if countdown {timeLeft -= GV.timeAdder}
+        //println("timeLeft:\(timeLeft), timeAdder: \(GV.timeAdder), gameID: \(self.gameID)")
+        GV.timeCount += GV.timeAdder
+        if countdown {
+            timerLabel.text = "\(self.timeLeft)"
+        } else {
+            timerLabel.text = "\(GV.timeCount)"
+        }
+        if self.timeLeft == 0 {
+            GV.timeAdder = 0
             var timeEndAlert:UIAlertController?
-            var messageTxt = GlobalVariables.language.getText("restart")
-            timeEndAlert = UIAlertController(title: GlobalVariables.language.getText("timeout"),
+            var messageTxt = GV.language.getText("restart")
+            timeEndAlert = UIAlertController(title: GV.language.getText("timeout"),
                 message: messageTxt,
                 preferredStyle: .Alert)
             
@@ -202,13 +206,13 @@ class Game: UIView, Printable {
                 handler: {(paramAction:UIAlertAction!) in
                     self.firstGameView!.restart()
                     self.timeLeft = self.timeLeftOrig
-                    GlobalVariables.timeCount = 0
-                    GlobalVariables.timeAdder = 1
+                    GV.timeCount = 0
+                    GV.timeAdder = 1
                 }
             )
             
             
-            GlobalVariables.lineCount = 0
+            GV.lineCount = 0
             timeEndAlert!.addAction(OKAction)
             parent.presentViewController(timeEndAlert!,
                 animated:true,
@@ -222,12 +226,12 @@ class Game: UIView, Printable {
     {
         firstGameView!.restart()
         timeLeft = timeLeftOrig
-        GlobalVariables.timeCount = 0
+        GV.timeCount = 0
     }
 
     func settingsButton(sender:UIButton)
     {
-//        GlobalVariables.timeAdder = 0
+//        GV.timeAdder = 0
 //        parent.performSegueWithIdentifier("segueToSettings", sender:self)
         settingsViewController = SettingsViewController(callBack: continueAfterSetting)
         parent.presentViewController(settingsViewController!, animated: true, completion: {
@@ -235,7 +239,30 @@ class Game: UIView, Printable {
         })
     }
     
-
+    func backButton (sender: UIButton) {
+        self.removeFromSuperview()
+        for ind in 0..<parent.view.subviews.count {
+            //println("subview: \(ind) -> \((parent.view.subviews[ind] as! UIView).layer.name)")
+            timeLeft = timeLeftOrig
+            GV.timeAdder = 0
+            GV.timeCount = 0
+            if timer != nil {
+                timer!.invalidate()
+                timer = nil
+            }
+            if let name = (parent.view.subviews[ind]  as! UIView).layer.name {
+                if name == GV.scrollViewName {
+                    (parent.view.subviews[ind] as! UIView).hidden = false     // auswahl wieder anzeige
+                    parent.updateLayers()
+                    for pageNr in 0..<GV.maxVolumeNr {
+                        parent.makeLayers(pageNr)
+                    }
+                    GV.gameRectSize = 0
+                }
+            }
+        }
+    }
+    
     func continueAfterSetting () {
     }
 
@@ -244,44 +271,70 @@ class Game: UIView, Printable {
         let forwards = sender.frame.origin.x > self.bounds.size.width / 2
         nextAction(forwards)
         timeLeft = timeLeftOrig
-        GlobalVariables.timeCount = 0
+        GV.timeCount = 0
     }
     
     func nextAction(forwards: Bool) {
         var adder = forwards ? 1 : -1
-        if adder == -1 && number == 1 {adder = 0}
-        //if adder == 1 && number == maxNumber {adder = 0}
-        
-        //println("adder: \(adder), number: \(number)")
-
-        if GlobalVariables.gameNr > 0 {backwardButton.hidden = false}
-        if GlobalVariables.gameNr == GlobalVariables.maxGameNr - 1 {
-            forwardButton.hidden = true
+        if (adder == -1 && GV.gameNr == 0 && GV.volumeNr == 0) || (adder == 1 && GV.gameNr == GV.maxGameNr - 1 && GV.volumeNr == GV.maxVolumeNr - 1) {
+            adder = 0
         }
         
-        //println("maxGameNr:\(GlobalVariables.maxGameNr)")
+        
+        //println("maxGameNr:\(GV.maxGameNr)")
         var transitionOptions = UIViewAnimationOptions.TransitionFlipFromRight
         
         if forwards {
             transitionOptions = UIViewAnimationOptions.TransitionFlipFromLeft
         }
         
+        
+        
         if adder != 0 {
             UIView.transitionWithView(self.gameContainer!, duration: 0.5, options: transitionOptions, animations: {
                 self.firstGameView!.removeFromSuperview()
                 self.firstGameView = nil
-                self.number += adder
-                self.firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: self.vSize!), gameNumber: self.number, package: self.package!, volumeNr: self.volumeNr, parent: self.parent, gameEnded:self.nextAction )
+                GV.gameNr += adder
+                //self.number += adder
+                if GV.gameNr > GV.maxGameNr - 1 {
+                    if GV.volumeNr < GV.maxVolumeNr - 1 {
+                        GV.gameNr = 0
+                        GV.volumeNr++
+                        GV.gameRectSize = 0
+                    }
+                }
+                
+                if GV.gameNr == GV.maxGameNr - 1 && GV.volumeNr == GV.maxVolumeNr - 1 {
+                    self.forwardButton.hidden = true
+                }
+                if GV.gameNr < 0 {
+                    if GV.volumeNr > 0 {
+                        GV.volumeNr--
+                        GV.gameNr = GV.maxGameNr - 1
+                        GV.gameRectSize = 0
+                    }
+                }
+                self.firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: self.vSize!), package: self.package!, parent: self.parent, gameEnded:self.nextAction )
                 self.backgroundColor = UIColor.whiteColor()
                 self.gameContainer!.addSubview(self.firstGameView!)
-                            }, completion: {finisched in})
-           timeLeft = timeLeftOrig
-            GlobalVariables.timeCount = 0
-            GlobalVariables.timeAdder = 1
-            GlobalVariables.gameNr += adder
-            GlobalVariables.moveCount = 0
-            GlobalVariables.lineCount = 0
-            gameNumber.text = GlobalVariables.language.getText("gameNumber", par: "\(GlobalVariables.gameNr)")//"Játék sorszáma: \(GlobalVariables.gameNr)"
+            }, completion: {finisched in})
+            
+            //println("GV.gameNr: \(GV.gameNr), GV.maxGameNr: \(GV.maxGameNr), GV.volumeNr: \(GV.volumeNr), GV.maxVolumeNr: \(GV.maxVolumeNr)")
+            let hideBackwardButton = GV.gameNr == 0 && GV.volumeNr == 0
+            let hideForwardButton = GV.gameNr >= GV.maxGameNr - 1  && GV.volumeNr == GV.maxVolumeNr - 1
+            backwardButton.hidden = hideBackwardButton
+            forwardButton.hidden = hideForwardButton
+            //forwardButton.setNeedsDisplay()
+            //backwardButton.setNeedsDisplay()
+
+            timeLeft = timeLeftOrig
+            GV.timeCount = 0
+            GV.timeAdder = 1
+            GV.moveCount = 0
+            GV.lineCount = 0
+            let gameName = GV.package!.getVolumeName(GV.volumeNr)
+            gameNrPar  = "\(GV.gameNr + 1)  \(gameName)"
+            gameNumber.text = GV.language.getText("gameNumber", par: gameNrPar)//"Játék sorszáma: \(GV.gameNr)"
            // println("sender: \(sender)")
         }
     }

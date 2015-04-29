@@ -11,49 +11,53 @@ import UIKit
 class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate  {
 
     var backButton = UIButton()
-    var languageButton = UIButton()
+    var languageButton = MyButton()
+    var clearButton = MyButton()
     var pickerData: [[String]] = []
     let chooseView = UIPickerView()
     var goWhenEnd: ()->()
 
 
     init(callBack: ()->()) {
-       goWhenEnd = callBack
-       super.init(nibName: nil, bundle: nil)
+        goWhenEnd = callBack
+        super.init(nibName: nil, bundle: nil)
+        GV.language.callBackWhenNewLanguage(self.updateLanguage)
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-/*
-    @IBAction func returned() {
-        
-    }
-    
-    @IBAction func unwindToMainMenu(sender: UIStoryboardSegue)
-    {
-        let sourceViewController: AnyObject = sender.sourceViewController
-        // Pull any data from the view controller which initiated the unwind segue.
-    }
-*/
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = UIColor.whiteColor()
 
-        languageButton.frame = CGRect(x:100,y:100,width:200,height: 30)
-        languageButton.backgroundColor = UIColor.greenColor()
-        languageButton.setTitle(GlobalVariables.language.getText("language"), forState: .Normal)
+        languageButton.frame = CGRect(x:0,y:100,width:200,height: 30)
+        //languageButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        languageButton.setTitle(GV.language.getText("language"), forState: .Normal)
+        //languageButton.setTitleShadowColor(UIColor.blueColor(), forState: .Normal)
         languageButton.addTarget(self, action: "chooseLanguage:", forControlEvents: .TouchUpInside)
+        languageButton.setupDepression()
+        languageButton.moveToCenter(self.view.frame)
         
-        backButton.frame = CGRect(x: self.view.frame.origin.x, y: self.view.frame.origin.y + 40, width: 20, height: 20)
+        clearButton.frame = CGRect(x:0,y:150,width:200,height: 30)
+        //clearButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        clearButton.setTitle(GV.language.getText("cleangame"), forState: .Normal)
+        clearButton.addTarget(self, action: "clearGame:", forControlEvents: .TouchUpInside)
+        clearButton.moveToCenter(self.view.frame)
+        
+        let back = UIImage(named: "back.jpg") as UIImage?
+        backButton.frame = CGRect(x: self.view.frame.origin.x + self.view.frame.size.width - 20, y: self.view.frame.origin.y + 40, width: 20, height: 20)
+        backButton.setImage(back, forState: .Normal)
         backButton.backgroundColor = UIColor.lightGrayColor()
-        backButton.setTitle(GlobalVariables.language.getText("x"), forState: .Normal)
+        //backButton.setTitle(GV.language.getText("x"), forState: .Normal)
         backButton.addTarget(self, action: "endSettings:", forControlEvents: .TouchUpInside)
 
         chooseView.delegate = self
         chooseView.dataSource = self
         self.view.addSubview(languageButton)
+        self.view.addSubview(clearButton)
         self.view.addSubview(backButton)
 
         // Do any additional setup after loading the view.
@@ -74,8 +78,42 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         chooseView.frame.origin.y = self.view.frame.size.height / 2
         chooseView.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(chooseView)
-        pickerData.append(GlobalVariables.language.getLanguages())
+        pickerData.append(GV.language.getLanguages())
     }
+    
+    func clearGame(sender: UIButton) {
+        var clearGameAlert:UIAlertController
+        var messageTxt = GV.language.getText("areYouSure")
+
+        clearGameAlert = UIAlertController(title: GV.language.getText("cleangame"),
+            message: messageTxt,
+            preferredStyle: .Alert)
+        
+        let firstAction = UIAlertAction(title: GV.language.getText("yes"),
+            style: UIAlertActionStyle.Default,
+            handler: {(paramAction:UIAlertAction!) in
+                GV.dataStore.deleteAllRecords()
+                println("Anzahl Records:\(GV.dataStore.getCountRecords())")
+            }
+        )
+        
+        let secondAction = UIAlertAction(title: GV.language.getText("no"),
+            style: UIAlertActionStyle.Cancel,
+            handler: {(paramAction:UIAlertAction!) in
+                
+            }
+            
+        )
+        
+        clearGameAlert.addAction(firstAction)
+        clearGameAlert.addAction(secondAction)
+        presentViewController(clearGameAlert,
+            animated:true,
+            completion: nil)
+    }
+    
+
+
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return pickerData.count
     }
@@ -92,8 +130,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     
     func updateLabel(){
         let topping = pickerData[0][chooseView.selectedRowInComponent(0)]
-        GlobalVariables.language.setLanguage(topping)
-        languageButton.setTitle(GlobalVariables.language.getText("language"), forState: .Normal)
+        GV.language.setLanguage(topping)
 
     }
     func dummy () ->() {
@@ -101,6 +138,10 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     }
     func callBackWhenEnded(callBack: ()->()) {
         goWhenEnd = callBack
+    }
+    func updateLanguage() {
+        languageButton.setTitle(GV.language.getText("language"), forState: .Normal)
+        clearButton.setTitle(GV.language.getText("cleangame"), forState: .Normal)
     }
 
     /*

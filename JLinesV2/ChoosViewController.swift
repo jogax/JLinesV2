@@ -24,7 +24,7 @@ class ChoosViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        GlobalVariables.language.callBackWhenNewLanguage(updateLanguage)
+        GV.language.callBackWhenNewLanguage(updateLanguage)
 
 
         // Do any additional setup after loading the view.
@@ -46,9 +46,9 @@ class ChoosViewController: UIViewController {
     }
 
     func updateLanguage() {
-        firstPackButton!.setTitle(GlobalVariables.language.getText("firstPackButton"), forState: .Normal)
-        bonusPackButton!.setTitle(GlobalVariables.language.getText("bonusPackButton"), forState: .Normal)
-        greenPackButton!.setTitle(GlobalVariables.language.getText("greenPackButton"), forState: .Normal)
+        firstPackButton!.setTitle(GV.language.getText("firstPackButton"), forState: .Normal)
+        bonusPackButton!.setTitle(GV.language.getText("bonusPackButton"), forState: .Normal)
+        greenPackButton!.setTitle(GV.language.getText("greenPackButton"), forState: .Normal)
     }
 
     /*

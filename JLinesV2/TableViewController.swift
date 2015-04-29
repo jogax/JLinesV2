@@ -16,7 +16,7 @@ class TableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        GlobalVariables.language.callBackWhenNewLanguage(updateLanguage)
+        GV.language.callBackWhenNewLanguage(updateLanguage)
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -33,9 +33,9 @@ class TableViewController: UITableViewController {
     // MARK: - Table view data source
 
     func updateLanguage() {
-        freePlayCell.textLabel!.text = GlobalVariables.language.getText("freePlayCell")
-        timeLimitCell.textLabel!.text = GlobalVariables.language.getText("timeLimitCell")
-        settingsCell.textLabel!.text = GlobalVariables.language.getText("settingsCell")
+        freePlayCell.textLabel!.text = GV.language.getText("freePlayCell")
+        timeLimitCell.textLabel!.text = GV.language.getText("timeLimitCell")
+        settingsCell.textLabel!.text = GV.language.getText("settingsCell")
     }
     /*
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

@@ -25,10 +25,13 @@
     "English"   : "en",
     
     "language":         "Nyelv kiválasztása",
+    "cleangame":        "Alaphelyzetbe állítás",
+    "areYouSure":       "Biztos vagy benne?",
+    "yes":              "Igen",
+    "no":               "Mégsem",
     "gameNumber":       "Játék sorszáma: %1!",
     "lines":            "vonal",
     "steps":            "lépés",
-    "target":           "cél",
     "restart":          "A játék újra indul",
     "timeout":          "Kifutottál az idöböl! ",
     "task completed":   "Feladat befejezve!",
@@ -43,9 +46,10 @@
     "firstPackButton":  "első csomag",
     "bonusPackButton":  "Ajándék csomag",
     "greenPackButton":  "Zöld csomag",
-    "5 x 5":            "5 x 5 könnyü",
-    "6 x 6":            "6 x 6 közepes",
-    "7 x 7":            "7 x 7 nehéz",
-    "8 x 8":            "8 x 8 nagyon nehéz",
-    "9 x 9":            "9 x 9 extrém nehéz"
+    "5 x 5":            "5 x 5 nagyon könnyü",
+    "6 x 6":            "6 x 6 könnyü",
+    "7 x 7":            "7 x 7 közepes",
+    "8 x 8":            "8 x 8 nehéz",
+    "9 x 9":            "9 x 9 nagyon nehéz",
+    "errorBySaveData":  "Hiba adatmentés közben"
 }

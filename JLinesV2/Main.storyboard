@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Hyj-Ga-5PZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Hyj-Ga-5PZ">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
     </dependencies>
     <scenes>
         <!--Table View Controller-->
@@ -62,9 +62,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="8Sz-Ni-XSQ" kind="show" identifier="segueToSettings" id="wiK-SH-GSl"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -177,59 +174,11 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
                         <outlet property="pageControl" destination="BVr-u8-7SX" id="4X6-73-hgb"/>
-                        <segue destination="8Sz-Ni-XSQ" kind="show" identifier="segueToSettings" id="O0h-eR-n88"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="psW-b4-6bt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="681" y="-569"/>
-        </scene>
-        <!--Settings View Controller-->
-        <scene sceneID="aag-7j-dil">
-            <objects>
-                <viewController id="8Sz-Ni-XSQ" customClass="SettingsViewController" customModule="JLinesV2" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="HZd-BB-kqY"/>
-                        <viewControllerLayoutGuide type="bottom" id="ztZ-gu-SQh"/>
-                    </layoutGuides>
-                    <view key="view" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="jBx-lo-hF7">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ME-ip-irw">
-                                <rect key="frame" x="6" y="85" width="309" height="48"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <size key="titleShadowOffset" width="2" height="2"/>
-                                <state key="normal" title="choose language">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="chooseLanguage" destination="8Sz-Ni-XSQ" eventType="touchUpInside" id="Au0-r0-FHN"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kc6-KX-QcM">
-                                <rect key="frame" x="16" y="20" width="42" height="24"/>
-                                <state key="normal" image="pfeillinks.jpg">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="qxn-TL-D0S" kind="unwind" unwindAction="returned:" id="sAq-aU-Muw"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="tintColor" red="1" green="0.4452725535" blue="0.946006864" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-                    <connections>
-                        <outlet property="languageButton" destination="6ME-ip-irw" id="h9A-Ko-UdM"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="BjN-EU-v4A" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="qxn-TL-D0S" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="-376" y="149"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Yhl-mk-QP6">
@@ -251,12 +200,8 @@
             <point key="canvasLocation" x="-799.5" y="-568.5"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="pfeillinks.jpg" width="180" height="180"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="yqm-f2-kiT"/>
         <segue reference="9ey-kR-ETX"/>
-        <segue reference="O0h-eR-n88"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -21,7 +21,7 @@ class Package {
     var spiele: AnyObject?
     var aktSpiel: AnyObject?
     var packageVolumes: AnyObject?
-    var volumeCount: Int
+    
     var volumeName: String?
     var json: JSON?
     
@@ -36,7 +36,7 @@ class Package {
         time = 0
         squereSize = 0
         gameName = ""
-        volumeCount = 0
+        
 
 
 
@@ -48,15 +48,13 @@ class Package {
         }
         if json != nil {
             
-            volumeCount = (json!["volumeCount"].int)!
-            
+            GV.maxVolumeNr = (json!["volumeCount"].int)!
             packageVolumes = package!["packageVolume"]
+            
+            
         }
     }
     
-    func getVolumeCount () -> Int {
-        return json!["volumeCount"].int!
-    }
     
     func getVolumeName (volumeNumber: Int) -> NSString {
         let gameName = json!["packageVolume"][volumeNumber]["gameName"].string

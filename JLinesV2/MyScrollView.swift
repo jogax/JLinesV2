@@ -10,11 +10,9 @@ import UIKit
 
 class MyScrollView: UIScrollView, UIScrollViewDelegate {
 
-    var TableNumColumns: Int?
-    var TableNumRows: Int?
-    var vBounds: CGRect?
+    
     var page: Int?
-    var package: Package?
+    //var package: Package?
     var parent: PagedViewController?
     var game: Game?
 /*
@@ -30,7 +28,11 @@ class MyScrollView: UIScrollView, UIScrollViewDelegate {
         let point = touch.locationInView(self)
         let (number, volumeNr) = convertLocationInViewToNum(point)
         let firstPage = CGRect(origin: CGPointZero, size: bounds.size)
-        game = Game(frame: firstPage, package:package!, volumeNr: volumeNr, number: number, parent: parent!)
+        GV.volumeNr = volumeNr
+        GV.gameNr = number
+        GV.maxGameNr = GV.package!.getMaxNumber(volumeNr)
+        GV.gameSize = GV.package!.getGameSize(volumeNr)
+        game = Game(frame: firstPage, package:GV.package!, parent: parent!)
         //parent!.callSegue(game!)
         
         //self.addSubview(game!)
@@ -47,14 +49,15 @@ class MyScrollView: UIScrollView, UIScrollViewDelegate {
         
         let pointX = point.x % self.bounds.size.width
         let volumeNr = Int(point.x / self.bounds.size.width)
-        let pointY = point.y + (self.bounds.origin.y - vBounds!.origin.y)
+        let pointY = point.y + (self.bounds.origin.y - GV.vBounds.origin.y)
         
-        let rectSizeX = vBounds!.size.width / CGFloat(TableNumColumns!)
-        let rectSizeY = Int(vBounds!.size.height / CGFloat(TableNumRows!))
+        let rectSizeX = GV.vBounds.size.width / CGFloat(GV.TableNumColumns)
+        let rectSizeY = Int(GV.vBounds.size.height / CGFloat(GV.TableNumRows))
 
         let column = Int(pointX / rectSizeX)
         let row    = Int(pointY / CGFloat(rectSizeY))
-        let number = Int(TableNumColumns! * row + column + 1)
+        let number = Int(GV.TableNumColumns * row + column)
+        
         //println("pointX: \(pointX), pointY: \(pointY), rectSizeY: \(rectSizeY), column:\(column), row: \(row), number: \(number)")
         return (number, volumeNr)
     }
