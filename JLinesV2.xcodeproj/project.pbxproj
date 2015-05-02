@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		20031C331AE540E900F73E01 /* GameStatusX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20031C321AE540E900F73E01 /* GameStatusX.swift */; };
 		20031C381AE54AC900F73E01 /* CloudData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20031C371AE54AC900F73E01 /* CloudData.swift */; };
+		200348C31AF253AB004C4F76 /* pfeillinks.png in Resources */ = {isa = PBXBuildFile; fileRef = 200348C21AF253AB004C4F76 /* pfeillinks.png */; };
+		200348C51AF25730004C4F76 /* DrawImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200348C41AF25730004C4F76 /* DrawImages.swift */; };
 		2003C9311AE7E7E100537ED9 /* GameStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2003C9301AE7E7E100537ED9 /* GameStatus.swift */; };
 		20064CF71AE6C10200375D51 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20064CF61AE6C10200375D51 /* CloudKit.framework */; };
 		20079F341ADE9D8A006F2972 /* JLinesV2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 20079F321ADE9D8A006F2972 /* JLinesV2.xcdatamodeld */; };
@@ -69,6 +71,8 @@
 		20031C321AE540E900F73E01 /* GameStatusX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameStatusX.swift; sourceTree = "<group>"; };
 		20031C341AE5438500F73E01 /* JLinesV2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = JLinesV2.entitlements; sourceTree = "<group>"; };
 		20031C371AE54AC900F73E01 /* CloudData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudData.swift; sourceTree = "<group>"; };
+		200348C21AF253AB004C4F76 /* pfeillinks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pfeillinks.png; path = "../../../../../../Pictures/iPhoto-Mediathek.photolibrary/Masters/2015/04/30/20150430-141153/pfeillinks.png"; sourceTree = "<group>"; };
+		200348C41AF25730004C4F76 /* DrawImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawImages.swift; sourceTree = "<group>"; };
 		2003C9301AE7E7E100537ED9 /* GameStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameStatus.swift; path = JLinesV2.xcodeproj/../GameStatus.swift; sourceTree = SOURCE_ROOT; };
 		20064CF61AE6C10200375D51 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		20079F331ADE9D8A006F2972 /* JLinesV2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JLinesV2.xcdatamodel; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 				20D85AF81AC95E370020D25A /* MyLayer.swift */,
 				2007DFFC1AF0F532005DF578 /* MyButton.swift */,
 				2009B0B91AB30F7700452C4C /* GameBoard.swift */,
+				200348C41AF25730004C4F76 /* DrawImages.swift */,
 				2009B0BC1AB30F7700452C4C /* Line.swift */,
 				2009B0BA1AB30F7700452C4C /* Point.swift */,
 				2009B0BB1AB30F7700452C4C /* MySet.swift */,
@@ -209,6 +214,7 @@
 			children = (
 				20C6C2271AD94C0A00E8FFA7 /* Languages */,
 				2009B08D1AB30EAD00452C4C /* Info.plist */,
+				200348C21AF253AB004C4F76 /* pfeillinks.png */,
 				20EB5ECC1AD534000095963C /* repeat.jpg */,
 				20EB5ECD1AD534000095963C /* pfeillinks.jpg */,
 				20EB5ECE1AD534000095963C /* pfeilrechts.jpg */,
@@ -337,6 +343,7 @@
 				20E2EC511AD6C7FE00E710BC /* LanguageTest.json in Resources */,
 				20C6C2261AD94BF600E8FFA7 /* en.json in Resources */,
 				200AF4231AE299A00055D2D6 /* back.jpg in Resources */,
+				200348C31AF253AB004C4F76 /* pfeillinks.png in Resources */,
 				2009B09C1AB30EAD00452C4C /* LaunchScreen.xib in Resources */,
 				2009B0991AB30EAD00452C4C /* Images.xcassets in Resources */,
 				20EB5ED01AD534000095963C /* pfeillinks.jpg in Resources */,
@@ -392,6 +399,7 @@
 				2003C9311AE7E7E100537ED9 /* GameStatus.swift in Sources */,
 				2009B0C81AB30F7800452C4C /* MySet.swift in Sources */,
 				2009B0B41AB30F6100452C4C /* ChoosViewController.swift in Sources */,
+				200348C51AF25730004C4F76 /* DrawImages.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

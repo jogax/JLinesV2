@@ -49,13 +49,13 @@ class MyButton: UIButton {
 
 ///An extension to allow a depressing animation when touched down
 extension MyButton {
-    func setupDepression() {
+    override func setupDepression() {
         addTarget(self, action: "didTouchDown:", forControlEvents: .TouchDown)
         addTarget(self, action: "didTouchDragExit:", forControlEvents: .TouchDragExit)
         addTarget(self, action: "didTouchUp:", forControlEvents: .TouchUpInside)
     }
     
-    func didTouchDown(button:MyButton) {
+    override func didTouchDown(button:MyButton) {
         self.touch = "didTouchDown"
         UIView.animateWithDuration(0.07){
             self.transform = CGAffineTransformMakeScale(0.98, 0.98)
@@ -63,7 +63,7 @@ extension MyButton {
         }
     }
     
-    func didTouchDragExit(button:MyButton) {
+    override func didTouchDragExit(button:MyButton) {
         self.touch = "didTouchDragExit"
         UIView.animateWithDuration(0.07){
             self.transform = CGAffineTransformMakeScale(1.01, 1.01)
@@ -71,7 +71,7 @@ extension MyButton {
         }
     }
     
-    func didTouchUp(button:MyButton) {
+    override func didTouchUp(button:MyButton) {
         self.touch = "didTouchUp"
         UIView.animateWithDuration(0.07){
             self.transform = CGAffineTransformMakeScale(1, 1)
@@ -96,7 +96,7 @@ extension MyButton {
         return super.continueTrackingWithTouch(touch, withEvent: event)
     }
     
-    func moveToCenter(rect: CGRect) {
+    override func moveToCenter(rect: CGRect) {
         frame.origin.x = (rect.size.width - frame.size.width) / 2
     }
     

@@ -70,7 +70,7 @@ class MyGameView: UIView {
             //GV.dataStore.createRecord(gameData)
             
             bgLayer.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
-            bgLayer.backgroundColor = UIColor.whiteColor().CGColor
+            bgLayer.backgroundColor = GV.darkTurquoiseColor.CGColor
             bgLayer.color = .Unknown
             bgLayer.name = "background"
             
@@ -145,7 +145,7 @@ class MyGameView: UIView {
             let originY = touch.locationInView(self).y - CGFloat(GV.gameRectSize / 2)
             pointLayer!.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
         
-            pointLayer!.backgroundColor = UIColor.clearColor().CGColor
+            pointLayer!.backgroundColor = GV.darkTurquoiseColor.CGColor
             pointLayer!.color = aktColor
             self.layer.addSublayer(pointLayer)
             pointLayer!.setNeedsDisplay()

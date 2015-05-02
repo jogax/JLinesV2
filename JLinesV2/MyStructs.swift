@@ -61,6 +61,11 @@ struct GV {
     static let volumeNumber: [String:Int] = ["5 x 5":0, "6 x 6":1, "7 x 7":2, "8 x 8":3, "9 x 9":4]
     static var gameData = MyGames()
     static var sublayer = CALayer()
+    static let images = DrawImages()
+    
+    // Colors
+    static let lightSalmonColor = UIColor(red: 255/255, green: 160/255, blue: 122/255, alpha: 1)
+    static let darkTurquoiseColor = UIColor(red: 0/255, green: 206/255, blue: 209/255, alpha: 1)
     
     
     // globale Labels

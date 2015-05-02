@@ -16,23 +16,9 @@ class Game: UIView, Printable {
     let multiplicator:CGFloat = 0.90
     
     let countdown = false
-    //var gameboard: Array2D <Point>?
-    //var lines: [LineType:Line]
-    //var error: String
-    //var maxNumber: Int
-    //var number: Int
-    //var volumeNr: Int
-    //var gameSize: Int
     var firstPoint: CGPoint?
     var vBounds: CGRect?
-    //var rectSize: CGFloat?
-    //var startPointX: Int?
-    //var startPointY: Int?
-    //var aktColor: LineType?
-     //var moveCount: Int
     var parent: PagedViewController
-    //var nextLevel: Bool?
-    //var alertNotReady: Bool?
     var package: Package?
     var vOrigin: CGPoint?
     var vSize: CGSize?
@@ -45,34 +31,22 @@ class Game: UIView, Printable {
     let timeLeftOrig = 30
     var timerLabel      = UILabel()
     var gameNumber      = UILabel()
-    let forwardButton   = MyButton()
-    let backwardButton  = MyButton()
+    let forwardButton   = UIButton()
+    let backwardButton  = UIButton()
     let repeatButton    = UIButton()
     let settingsButton  = UIButton()
     let backButton      = UIButton()
     var settingsViewController: UIViewController?
-    //var gameID: Int
     var timer: NSTimer?
     var gameNrPar = ""
 
 
     init (frame: CGRect, package: Package, parent: PagedViewController) {
-        //gameID = Int(arc4random())%1000
-        //self.number = number
-        //GV.gameNr = number
-        //(gameboard, error, lines) = package.getGameNew(volumeNr, numberIn: number - 1)
-        
-        //GV.maxGameNr = package.getMaxNumber(volumeNr)
-        //self.volumeNr = volumeNr
         self.package = package
-        //self.volumeNr = volumeNr
-        //GV.gameSize = package.getGameSize(volumeNr)
-        //moveCount = 0
         self.parent = parent
         
-        //GV.gameNr = number
         super.init(frame: frame)
-        self.backgroundColor = UIColor.redColor()
+        self.backgroundColor = GV.lightSalmonColor
         self.hidden = false
         let size = frame.size
         let origin = frame.origin
@@ -85,10 +59,10 @@ class Game: UIView, Printable {
         vBounds = CGRect(origin: vOrigin!, size: vSize!)
         
         gameContainer = UIView(frame: CGRect(origin: vOrigin!, size: vSize!))
-        gameContainer!.backgroundColor = UIColor.clearColor()
+        gameContainer!.backgroundColor = GV.lightSalmonColor
         
         firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: vSize!), package: package, parent: parent, gameEnded: nextAction)
-        firstGameView!.backgroundColor = UIColor.clearColor()
+        firstGameView!.backgroundColor = GV.lightSalmonColor
 
         self.addSubview(gameContainer!)
         gameContainer!.addSubview(firstGameView!)
@@ -96,26 +70,29 @@ class Game: UIView, Printable {
         
         
         
-        let linksPfeil = UIImage(named: "pfeillinks.jpg") as UIImage?
-        let rechtsPfeil = UIImage(named: "pfeilrechts.jpg") as UIImage?
-        let repeatPfeil = UIImage(named: "repeat.jpg") as UIImage?
-        let settingsBild = UIImage(named: "settings.jpg") as UIImage?
+        //let linksPfeil = UIImage(named: "pfeillinks.jpg") as UIImage?
+        //let rechtsPfeil = UIImage(named: "pfeilrechts.jpg") as UIImage?
+        //let repeatPfeil = UIImage(named: "repeat.jpg") as UIImage?
+        //let settingsBild = UIImage(named: "settings.jpg") as UIImage?
         let backBild = UIImage(named: "back.jpg") as UIImage?
-        forwardButton.setImage(rechtsPfeil, forState: .Normal)
-        backwardButton.setImage(linksPfeil, forState: .Normal)
-        repeatButton.setImage(repeatPfeil, forState: .Normal)
-        settingsButton.setImage(settingsBild, forState: .Normal)
+        
+        forwardButton.setImage(GV.images.getPfeilrechts(), forState: .Normal)
+        forwardButton.setupDepression()
+        backwardButton.setImage(GV.images.getPfeillinks(), forState: .Normal)
+        backwardButton.setupDepression()
+        repeatButton.setImage(GV.images.getRestart(), forState: .Normal)
+        settingsButton.setImage(GV.images.getSettings(), forState: .Normal)
         backButton.setImage(backBild, forState: .Normal)
         
-        let buttonSize = GV.horNormWert * 3
-        let lowerButtonsY = GV.vertNormWert * 38
-        
+        let buttonSize = GV.horNormWert * 5
+        let lowerButtonsY = GV.vertNormWert * 37
+
         forwardButton.frame = CGRect(x: GV.horNormWert * 33, y: lowerButtonsY, width: buttonSize, height: buttonSize)
         backwardButton.frame = CGRect(x: GV.horNormWert * 4, y: lowerButtonsY, width: buttonSize, height: buttonSize)
         settingsButton.frame = CGRect(x: GV.horNormWert * 14, y: lowerButtonsY, width: buttonSize, height: buttonSize)
         repeatButton.frame   = CGRect(x: GV.horNormWert * 24, y: lowerButtonsY, width: buttonSize, height: buttonSize)
         
-        backButton.frame = CGRect(x: GV.horNormWert * 36, y: GV.vertNormWert * 3, width: buttonSize, height: buttonSize)
+        backButton.frame = CGRect(x: GV.horNormWert * 36, y: GV.vertNormWert * 3, width: buttonSize / 3, height: buttonSize / 3)
         timerLabel.frame = CGRect(x: GV.horNormWert * 36, y: GV.vertNormWert * 6, width: buttonSize, height: GV.horNormWert * 2)
         GV.lineCountLabel.frame = CGRect(x: GV.horNormWert * 2, y: GV.vertNormWert * 6, width: GV.horNormWert * 14, height: GV.horNormWert * 2)
         GV.moveCountLabel.frame = CGRect(x: GV.horNormWert * 18, y: GV.vertNormWert * 6, width: GV.horNormWert * 18, height: GV.horNormWert * 2)
@@ -123,10 +100,11 @@ class Game: UIView, Printable {
         
         GV.language.callBackWhenNewLanguage(self.updateLanguage)
         
-        forwardButton.backgroundColor = UIColor.whiteColor()
-        backwardButton.backgroundColor = UIColor.whiteColor()
-        repeatButton.backgroundColor = UIColor.whiteColor()
-        backButton.backgroundColor = UIColor.whiteColor()
+        forwardButton.backgroundColor = UIColor.clearColor()
+        //forwardButton.backgroundColor = GV.lightSalmonColor
+        //backwardButton.backgroundColor = GV.lightSalmonColor
+        repeatButton.backgroundColor = GV.lightSalmonColor
+        backButton.backgroundColor = GV.lightSalmonColor
 
         //button.setTitle("TestforwardButton", forState: UIControlState.Normal)
         forwardButton.addTarget(self, action: "nextButton:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -139,7 +117,7 @@ class Game: UIView, Printable {
         if !countdown {
             timerLabel.text = "\(GV.timeCount)"
         }
-        timerLabel.backgroundColor = UIColor.whiteColor()
+        timerLabel.backgroundColor = GV.lightSalmonColor
         
         let gameName = GV.package!.getVolumeName(GV.volumeNr)
         gameNrPar = "\(GV.gameNr + 1)  \(gameName)"
@@ -315,7 +293,7 @@ class Game: UIView, Printable {
                     }
                 }
                 self.firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: self.vSize!), package: self.package!, parent: self.parent, gameEnded:self.nextAction )
-                self.backgroundColor = UIColor.whiteColor()
+                self.backgroundColor = GV.lightSalmonColor
                 self.gameContainer!.addSubview(self.firstGameView!)
             }, completion: {finisched in})
             
