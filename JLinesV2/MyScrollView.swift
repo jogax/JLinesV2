@@ -37,6 +37,7 @@ class MyScrollView: UIScrollView, UIScrollViewDelegate {
         
         //self.addSubview(game!)
         parent!.view.addSubview(game!)
+        
         self.hidden = true
         game!.backgroundColor = GV.lightSalmonColor
         //self.addSubview(game)

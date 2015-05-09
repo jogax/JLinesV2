@@ -14,8 +14,8 @@ enum Choosed: Int{
 }
 struct GV {
     static var vBounds = CGRect(x: 0, y: 0, width: 0, height: 0)
-    static var horNormWert: CGFloat = 0 // Geräteabhängige Constante
-    static var vertNormWert: CGFloat = 0 // Geräteabhängige Constante
+    //static var horNormWert: CGFloat = 0 // Geräteabhängige Constante
+    //static var vertNormWert: CGFloat = 0 // Geräteabhängige Constante
     static var touchPoint = CGPointZero
     static var gameSize = 5
     static var gameNr = 0
@@ -64,14 +64,24 @@ struct GV {
     static let images = DrawImages()
     
     // Colors
-    static let lightSalmonColor = UIColor(red: 255/255, green: 160/255, blue: 122/255, alpha: 1)
-    static let darkTurquoiseColor = UIColor(red: 0/255, green: 206/255, blue: 209/255, alpha: 1)
+    static let lightSalmonColor     = UIColor(red: 255/255, green: 160/255, blue: 122/255, alpha: 1)
+    static let darkTurquoiseColor   = UIColor(red: 0/255,   green: 206/255, blue: 209/255, alpha: 1)
+    static let turquoiseColor       = UIColor(red: 64/255,  green: 224/255, blue: 208/255, alpha: 1)
+    static let darkBlueColor        = UIColor(red: 0/255,   green: 0/255,   blue: 139/255, alpha: 1)
+    static let springGreenColor     = UIColor(red: 0/255,   green: 255/255, blue: 127/255, alpha: 1)
+    static let khakiColor           = UIColor(red: 240/255, green: 230/255, blue: 140/255, alpha: 1)
+    static let PaleGoldenrodColor   = UIColor(red: 238/255, green: 232/255, blue: 170/255, alpha: 1)
+    static let PeachPuffColor       = UIColor(red: 255/255, green: 218/255, blue: 185/255, alpha: 1)
     
     
     // globale Labels
     
     static let moveCountLabel = UILabel()
     static let lineCountLabel = UILabel()
+    
+    
+    // Constraints
+    static let myDevice = MyDevice()
     
 }
 
@@ -94,7 +104,7 @@ struct GameData {
             }
         }
     }
-
+    
     var countSeconds: Int
     var timeStemp: NSDate
     var layer: CALayer

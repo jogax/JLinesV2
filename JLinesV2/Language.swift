@@ -77,6 +77,9 @@ class Language {
 
     }
 
+    func getAktLanguageIndex() -> Int {
+       return json!["languageIndex"].string!.toInt()!
+    }
     
 }
 

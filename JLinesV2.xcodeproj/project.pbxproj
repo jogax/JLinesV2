@@ -11,6 +11,7 @@
 		20031C381AE54AC900F73E01 /* CloudData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20031C371AE54AC900F73E01 /* CloudData.swift */; };
 		200348C31AF253AB004C4F76 /* pfeillinks.png in Resources */ = {isa = PBXBuildFile; fileRef = 200348C21AF253AB004C4F76 /* pfeillinks.png */; };
 		200348C51AF25730004C4F76 /* DrawImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200348C41AF25730004C4F76 /* DrawImages.swift */; };
+		200398511AF8D87600F95E7A /* MyDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200398501AF8D87600F95E7A /* MyDevice.swift */; };
 		2003C9311AE7E7E100537ED9 /* GameStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2003C9301AE7E7E100537ED9 /* GameStatus.swift */; };
 		20064CF71AE6C10200375D51 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20064CF61AE6C10200375D51 /* CloudKit.framework */; };
 		20079F341ADE9D8A006F2972 /* JLinesV2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 20079F321ADE9D8A006F2972 /* JLinesV2.xcdatamodeld */; };
@@ -73,6 +74,7 @@
 		20031C371AE54AC900F73E01 /* CloudData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudData.swift; sourceTree = "<group>"; };
 		200348C21AF253AB004C4F76 /* pfeillinks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pfeillinks.png; path = "../../../../../../Pictures/iPhoto-Mediathek.photolibrary/Masters/2015/04/30/20150430-141153/pfeillinks.png"; sourceTree = "<group>"; };
 		200348C41AF25730004C4F76 /* DrawImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawImages.swift; sourceTree = "<group>"; };
+		200398501AF8D87600F95E7A /* MyDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyDevice.swift; sourceTree = "<group>"; };
 		2003C9301AE7E7E100537ED9 /* GameStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameStatus.swift; path = JLinesV2.xcodeproj/../GameStatus.swift; sourceTree = SOURCE_ROOT; };
 		20064CF61AE6C10200375D51 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		20079F331ADE9D8A006F2972 /* JLinesV2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JLinesV2.xcdatamodel; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				2009B0B61AB30F7700452C4C /* MyScrollView.swift */,
 				2009B0B71AB30F7700452C4C /* Game.swift */,
 				200AF4201AE26CA00055D2D6 /* MyStructs.swift */,
+				200398501AF8D87600F95E7A /* MyDevice.swift */,
 				2009B0B81AB30F7700452C4C /* MyGameView.swift */,
 				20D85AF81AC95E370020D25A /* MyLayer.swift */,
 				2007DFFC1AF0F532005DF578 /* MyButton.swift */,
@@ -376,6 +379,7 @@
 				2009B0C21AB30F7700452C4C /* PagedViewController.swift in Sources */,
 				2009B0C61AB30F7700452C4C /* GameBoard.swift in Sources */,
 				2009B0C31AB30F7700452C4C /* MyScrollView.swift in Sources */,
+				200398511AF8D87600F95E7A /* MyDevice.swift in Sources */,
 				2007DFFD1AF0F532005DF578 /* MyButton.swift in Sources */,
 				20031C331AE540E900F73E01 /* GameStatusX.swift in Sources */,
 				20E7C3881AD7F6BE00E6DF7E /* TableViewController.swift in Sources */,

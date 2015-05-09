@@ -18,7 +18,7 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
     let delete = false
     @IBOutlet var pageControl: UIPageControl!
     
-    var back = UIButton()
+    var backButton = UIButton()
     var packageName: String?
     //var package: Package?
     
@@ -43,6 +43,7 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 */
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         GV.language.callBackWhenNewLanguage(self.updateLanguage)
@@ -54,17 +55,18 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         scrollView.pagingEnabled = true
         scrollView.layer.name = GV.scrollViewName
         
-        GV.horNormWert = self.view.frame.width / 40
-        GV.vertNormWert = self.view.frame.height / 40
+        //GV.horNormWert = self.view.frame.width / 40
+        //GV.vertNormWert = self.view.frame.height / 40
         
         view.addSubview(scrollView)
-        let backImage = UIImage(named: "back.jpg")
-        back.frame = CGRect(x: GV.horNormWert * 36, y: GV.vertNormWert * 1, width: GV.horNormWert * 2.5, height: GV.horNormWert * 2.5)
-        back.setImage(backImage, forState: .Normal)
-        back.backgroundColor = UIColor.blackColor()
-        back.addTarget(self, action: "backAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        
+        //back.frame = CGRect(x: GV.horNormWert * 36, y: GV.vertNormWert * 1, width: GV.horNormWert * 2, height: GV.horNormWert * 2)
+        backButton.setImage(GV.images.getBack(), forState: .Normal)
+        //back.backgroundColor = UIColor.blackColor()
+        backButton.addTarget(self, action: "backAction:", forControlEvents: UIControlEvents.TouchUpInside)
 
-        view.addSubview(back)
+        view.addSubview(backButton)
         
         GV.package = Package(packageName: packageName!)
         
@@ -96,9 +98,11 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         
         loadVisiblePages()
         
+        setupLayout()
         setLayers()
         
     }
+    
     
     func backAction(sender:UIButton) {
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -371,11 +375,30 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         for (ind, subview) in enumerate(scrollView.subviews) {
             if subview.layer.name != nil {
                 let name = subview.layer.name
-                println("subViewName: \(name)")
+                //println("subViewName: \(name)")
                 (subview as! UILabel).text = GV.language.getText(name)
             }
         }
         //languageButton.setTitle(GV.language.getText("language"), forState: .Normal)
     }
+
+    
+    func setupLayout() {
+        var constraintsArray = Array<NSObject>()
+        backButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        // backButton
+        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: NSLayoutAttribute.Right, relatedBy: .Equal, toItem: self.view, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -20.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 20.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 20.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 20.0))
+
+        
+        self.view.addConstraints(constraintsArray)
+    }
+
 
 }

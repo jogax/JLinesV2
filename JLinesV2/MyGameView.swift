@@ -37,6 +37,7 @@ class MyGameView: UIView {
 
     init(frame: CGRect, package: Package, parent: UIViewController, gameEnded: (Bool)->()) {
         self.parent = parent
+        
         //self.volumeNr = volumeNr
         //self.gameNumber = gameNumber
         self.gameEnded = gameEnded
@@ -69,6 +70,7 @@ class MyGameView: UIView {
             var gameData = GV.gameData.volumes[GV.volumeNr].games[GV.gameNr]
             //GV.dataStore.createRecord(gameData)
             
+            println("frame: \(self.frame), parent.frame: \(parent.view.frame)")
             bgLayer.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
             bgLayer.backgroundColor = GV.darkTurquoiseColor.CGColor
             bgLayer.color = .Unknown
@@ -92,7 +94,9 @@ class MyGameView: UIView {
         }
 
     }
+
     
+        
     func restart() {
         for index in 0..<GV.lines.count
         {
@@ -161,12 +165,12 @@ class MyGameView: UIView {
 
                 line.addPoint(point)
             }
+            lineLayers[aktColor]!.setNeedsDisplay()
         }
         else {
             startPointX = nil
             startPointY = nil
         }
-        lineLayers[aktColor]!.setNeedsDisplay()
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -234,10 +238,10 @@ class MyGameView: UIView {
                 
                 var gameEndAlert:UIAlertController?
                 var messageTxt = ""
-                if GV.lineCount == GV.lines.count {
+                if GV.moveCount == GV.lines.count {
                     messageTxt = GV.language.getText("congratulations")
                 }
-                messageTxt += GV.language.getText("task solved",par:"\(GV.lineCount)", "\(GV.timeCount)")
+                messageTxt += GV.language.getText("task solved",par:"\(GV.moveCount)", "\(GV.timeCount)")
 
                 gameEndAlert = UIAlertController(title: GV.language.getText("task completed"),
                     message: messageTxt,
