@@ -16,6 +16,7 @@ class MyGameView: UIView {
 
     //var gameboard: Array2D<Point>?
     var gameboard: GameBoard?
+    var createNewGame = false
     //var lines: [LineType:Line]?
 
     var error: String?
@@ -37,7 +38,8 @@ class MyGameView: UIView {
 
     init(frame: CGRect, package: Package, parent: UIViewController, gameEnded: (Bool)->()) {
         self.parent = parent
-        
+        var device = UIDevice.currentDevice()					//Get the device object
+
         //self.volumeNr = volumeNr
         //self.gameNumber = gameNumber
         self.gameEnded = gameEnded
@@ -51,9 +53,12 @@ class MyGameView: UIView {
         if GV.gameNr <= GV.maxGameNr {
             (OK, numColors, gameboard, error, lines) = package.getGameNew(GV.volumeNr, numberIn: GV.gameNr)
             if OK {
-                //self.gameboard = GameBoard()
-                self.gameboard = GameBoard(gameArray: gameboard, lines: lines, numColors: numColors)
-                //self.gameboard!.gameArray = gameboard
+                if createNewGame {
+                    self.gameboard = GameBoard()
+                } else {
+                    self.gameboard = GameBoard(gameArray: gameboard, lines: lines, numColors: numColors)
+                }
+        
                 GV.lines = lines
             }
             
@@ -65,6 +70,14 @@ class MyGameView: UIView {
         }
         
         super.init(frame: frame)
+/*
+        device.beginGeneratingDeviceOrientationNotifications()			//Tell it to start monitoring the accelerometer for orientation
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "orientationChanged:",
+            name: UIDeviceOrientationDidChangeNotification,
+            object: nil)
+*/        
         if GV.gameNr < GV.maxGameNr {
             println("GV.volumeNr: \(GV.volumeNr), GV.gameNr: \(GV.gameNr)")
             var gameData = GV.gameData.volumes[GV.volumeNr].games[GV.gameNr]
@@ -95,7 +108,9 @@ class MyGameView: UIView {
 
     }
 
-    
+    func orientationChanged () {
+        
+    }
         
     func restart() {
         for index in 0..<GV.lines.count
@@ -135,10 +150,11 @@ class MyGameView: UIView {
             startPointX = x
             startPointY = y
             aktColor = gameboard!.gameArray[x, y]!.color
+
             if aktColor != lastColor {
-                lastColor = aktColor
+                GV.moveCount++
             }
-            
+
             GV.lineCount = getEndedLinesCount()
             let lineString = GV.language.getText("lines")
             GV.lineCountLabel.text = "\(GV.lineCount) / \(GV.lines.count) \(lineString)"
@@ -149,7 +165,6 @@ class MyGameView: UIView {
             let originY = touch.locationInView(self).y - CGFloat(GV.gameRectSize / 2)
             pointLayer!.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
         
-            pointLayer!.backgroundColor = GV.darkTurquoiseColor.CGColor
             pointLayer!.color = aktColor
             self.layer.addSublayer(pointLayer)
             pointLayer!.setNeedsDisplay()
@@ -204,6 +219,7 @@ class MyGameView: UIView {
                     lineLayers[aktColor]!.setNeedsDisplay()
                     startPointX = x
                     startPointY = y
+                    GV.lines[aktColor]!.setEdgePoints()
                 }
             }
         }
@@ -213,12 +229,11 @@ class MyGameView: UIView {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         let point = touch.locationInView(self)
+        pointLayer!.removeFromSuperlayer()
+        pointLayer = nil
         let (OK, x, y) = getXYPositionInGrid(point)
         if OK && startPointX != nil && startPointY != nil {
-            pointLayer!.removeFromSuperlayer()
-            pointLayer = nil
             GV.lineCount = getEndedLinesCount()
-            GV.moveCount++
             
             //GV.dataStore.printRecords()
             if checkIfGameEnded() {
@@ -273,7 +288,10 @@ class MyGameView: UIView {
                     animated:true,
                     completion: nil)
             }
-            //println("Anzahl Records: \(GV.dataStore.getNumberRecords())")
+            if aktColor != lastColor {
+                lastColor = aktColor
+            }
+
         }
     }
     

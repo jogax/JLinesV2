@@ -46,6 +46,7 @@ class Point: Printable, Hashable {
     var earlierColor: LineType
     var areaNumber: Int
     var directions: Directions
+    var edge: Edge
     
     init(column: Int, row: Int, type: LineType, originalPoint: Bool, inLinePoint: Bool, delegate: (Int, Int)->()) {
         self.column = column
@@ -57,6 +58,7 @@ class Point: Printable, Hashable {
         self.checkDirections = delegate
         self.areaNumber = -1
         self.directions = Directions()
+        self.edge = .None
     }
     
     func clearDirections () {

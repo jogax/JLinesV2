@@ -14,6 +14,7 @@ import UIKit
 
 class Game: UIView, Printable {
     let multiplicator:CGFloat = 0.90
+    var constraintsArray = Array<NSObject>()
     
     let countdown = false
     var firstPoint: CGPoint?
@@ -51,20 +52,23 @@ class Game: UIView, Printable {
         self.hidden = false
         let size = frame.size
         let origin = frame.origin
-
+/*
         device.beginGeneratingDeviceOrientationNotifications()			//Tell it to start monitoring the accelerometer for orientation
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "orientationChanged:",
             name: UIDeviceOrientationDidChangeNotification,
             object: nil)
-        
+*/        
         
         //gameContainer = UIView()
         gameContainer.backgroundColor = GV.lightSalmonColor
         gameContainer.layer.name = "gameContainer"
         self.addSubview(gameContainer)
-        //gameContainer.frame = CGRect(x: 0,y: 0,width: 200,height: 200)
+        let width = self.frame.width * 0.99
+        let height = width
+        let y = self.frame.height / 2 - height / 2
+        gameContainer.frame = CGRect(x: 0,y: 0,width: width,height: height)
         //gameContainer.addSubview(secondGameView)
         
         self.addSubview(forwardButton)
@@ -148,11 +152,11 @@ class Game: UIView, Printable {
             timerLabel.text = "\(GV.timeCount)"
         }
         timerLabel.backgroundColor = GV.lightSalmonColor
-        
+        let font = UIFont(name: "TimesNewRoman", size: self.frame.width / 20)
         let gameName = GV.package!.getVolumeName(GV.volumeNr)
         gameNrPar = "\(GV.gameNr + 1)  \(gameName)"
         gameNumber.text =  GV.language.getText("gameNumber", par: gameNrPar ) //"Játék sorszáma: \(GV.gameNr)"
-        //gameNumber.font = UIFont(name: gameNumber.font.fontName, size: GV.vertNormWert * 1.5)
+        gameNumber.font = UIFont(name: gameNumber.font.fontName, size: 20)
         
         GV.lineCount = 0
         GV.moveCount = 0
@@ -229,11 +233,12 @@ class Game: UIView, Printable {
         firstGameView!.restart()
         timeLeft = timeLeftOrig
         GV.timeCount = 0
+        GV.timeAdder = 1
     }
 
     func settingsButton(sender:UIButton)
     {
-//        GV.timeAdder = 0
+        GV.timeAdder = 0
 //        parent.performSegueWithIdentifier("segueToSettings", sender:self)
         settingsViewController = SettingsViewController(callBack: continueAfterSetting)
         parent.presentViewController(settingsViewController!, animated: true, completion: {
@@ -266,6 +271,7 @@ class Game: UIView, Printable {
     }
     
     func continueAfterSetting () {
+        GV.timeAdder = 1
     }
 
     func nextButton(sender:UIButton)
@@ -348,7 +354,9 @@ class Game: UIView, Printable {
     }
 
     func setupLayout() {
-        var constraintsArray = Array<NSObject>()
+        
+        self.removeConstraints(constraintsArray)
+        constraintsArray.removeAll(keepCapacity: false)
         var portrait = false
         switch UIDevice.currentDevice().orientation {
             case .Portrait, .PortraitUpsideDown, .FaceUp, .FaceDown:
@@ -356,7 +364,9 @@ class Game: UIView, Printable {
             default:
                 portrait = false
         }
-        
+        let buttonSize: CGFloat = self.frame.width / 10
+        let buttonsDistance: CGFloat = (self.frame.width - (5 * buttonSize)) / 4.9
+        let distanceFromBottomLandscape: CGFloat = -50
         
         
         timerLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -371,53 +381,53 @@ class Game: UIView, Printable {
         GV.moveCountLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         // backButton
-        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: NSLayoutAttribute.Right, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: portrait ? -20.0 : -40))
+        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: NSLayoutAttribute.Right, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -10.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: portrait ? 20.0 :20))
+        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 20.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 10.0))
+        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 0.05, constant: 0.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 10.0))
+        constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Height , relatedBy: .Equal, toItem: backButton, attribute: .Width, multiplier: 1.0, constant: 0.0))
 
-        // settingsButton
-        constraintsArray.append(NSLayoutConstraint(item: settingsButton, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: -40.0))
-        
-        constraintsArray.append(NSLayoutConstraint(item: settingsButton, attribute: .Top, relatedBy: .Equal, toItem: gameContainer, attribute: .Bottom, multiplier: 1.0, constant: 10.0))
-        
-        constraintsArray.append(NSLayoutConstraint(item: settingsButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40.0))
-        
-        constraintsArray.append(NSLayoutConstraint(item: settingsButton, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40.0))
-        
-        // repeatButton
-        constraintsArray.append(NSLayoutConstraint(item: repeatButton, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 40.0))
-        
-        constraintsArray.append(NSLayoutConstraint(item: repeatButton, attribute: .Top, relatedBy: .Equal, toItem: gameContainer, attribute: .Bottom, multiplier: 1.0, constant: 10.0))
-        
-        constraintsArray.append(NSLayoutConstraint(item: repeatButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40.0))
-        
-        constraintsArray.append(NSLayoutConstraint(item: repeatButton, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40.0))
-        
         //backwardButton
-
-        constraintsArray.append(NSLayoutConstraint(item: backwardButton, attribute: NSLayoutAttribute.Right, relatedBy: .Equal, toItem: settingsButton, attribute: NSLayoutAttribute.Left, multiplier: 1.0, constant: -40.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: backwardButton, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: -(2 * buttonsDistance + buttonSize)))
         
         constraintsArray.append(NSLayoutConstraint(item: backwardButton, attribute: .Top, relatedBy: .Equal, toItem: gameContainer, attribute: .Bottom, multiplier: 1.0, constant: 10.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: backwardButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40.0))
+        constraintsArray.append(NSLayoutConstraint(item: backwardButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonSize))
         
         constraintsArray.append(NSLayoutConstraint(item: backwardButton, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier:
-            1.0, constant: 40.0))
+            1.0, constant: buttonSize))
+        
+        // settingsButton
+        constraintsArray.append(NSLayoutConstraint(item: settingsButton, attribute: NSLayoutAttribute.Left, relatedBy: .Equal, toItem: backwardButton, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: buttonsDistance))
+        
+        constraintsArray.append(NSLayoutConstraint(item: settingsButton, attribute: .Top, relatedBy: .Equal, toItem: gameContainer, attribute: .Bottom, multiplier: 1.0, constant: 10.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: settingsButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonSize))
+        
+        constraintsArray.append(NSLayoutConstraint(item: settingsButton, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonSize))
+        
+        // repeatButton
+        constraintsArray.append(NSLayoutConstraint(item: repeatButton, attribute: NSLayoutAttribute.Left, relatedBy: .Equal, toItem: settingsButton, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: buttonsDistance))
+        
+        constraintsArray.append(NSLayoutConstraint(item: repeatButton, attribute: .Top, relatedBy: .Equal, toItem: gameContainer, attribute: .Bottom, multiplier: 1.0, constant: 10.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: repeatButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonSize))
+        
+        constraintsArray.append(NSLayoutConstraint(item: repeatButton, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonSize))
         
         //forwardButton
         
-        constraintsArray.append(NSLayoutConstraint(item: forwardButton, attribute: NSLayoutAttribute.Left, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -60.0))
+        constraintsArray.append(NSLayoutConstraint(item: forwardButton, attribute: NSLayoutAttribute.Left, relatedBy: .Equal, toItem: repeatButton, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: buttonsDistance))
         
         constraintsArray.append(NSLayoutConstraint(item: forwardButton, attribute: .Top, relatedBy: .Equal, toItem: gameContainer, attribute: .Bottom, multiplier: 1.0, constant: 10.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: forwardButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 40.0))
+        constraintsArray.append(NSLayoutConstraint(item: forwardButton, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonSize))
         
         constraintsArray.append(NSLayoutConstraint(item: forwardButton, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier:
-            1.0, constant: 40.0))
+            1.0, constant: buttonSize))
         
         //timerLabel
         
@@ -464,26 +474,14 @@ class Game: UIView, Printable {
             1.0, constant: 30.0))
         
         //gameContainer
+        constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0.0))
         
-        if portrait {
-            constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: NSLayoutAttribute.Right, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -10))
-            
-            constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 110.0))
-            
-            constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 1.0, constant: -20.0))
-            
-            constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Height , relatedBy: .Equal, toItem: gameContainer, attribute: .Width, multiplier:
-                1.0, constant: 0))
-        } else {
-            constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: NSLayoutAttribute.Right, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -10))
-            
-            constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 10))
-            
-            constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Height, multiplier: 1.0, constant: -20.0))
-            
-            constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Height , relatedBy: .Equal, toItem: gameContainer, attribute: .Width, multiplier:
-            1.0, constant: 0))
-    }
+        constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: 0.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 0.99, constant: 0.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Height , relatedBy: .Equal, toItem: gameContainer, attribute: .Width, multiplier:
+            1.0, constant: 0.0))
     
         self.addConstraints(constraintsArray)
     }

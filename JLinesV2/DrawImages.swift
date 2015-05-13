@@ -116,10 +116,11 @@ class DrawImages {
         
         UIGraphicsBeginImageContextWithOptions(size, opaque, scale)
         let ctx = UIGraphicsGetCurrentContext()
+        CGContextSetStrokeColorWithColor(ctx, UIColor.blackColor().CGColor)
         
         CGContextBeginPath(ctx)
 
-        CGContextSetLineWidth(ctx, 0.5)
+        CGContextSetLineWidth(ctx, 4.0)
         let center = CGPoint(x: frame.width / 2, y: frame.height / 2)
         let radius = frame.width / 2 - 5
         CGContextAddArc(ctx, center.x, center.y, radius, CGFloat(0), CGFloat(2 * M_PI), 1)
@@ -139,7 +140,7 @@ class DrawImages {
         let oneGrad:CGFloat = CGFloat(M_PI) / 180
         let minAngle1 = 330 * oneGrad
         let maxAngle1 = 210 * oneGrad
-        println("1 Grad: \(oneGrad)")
+        //println("1 Grad: \(oneGrad)")
         
         let minAngle2 = 150 * oneGrad
         let maxAngle2 = 30 * oneGrad
