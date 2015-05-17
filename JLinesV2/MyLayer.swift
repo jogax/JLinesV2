@@ -49,6 +49,7 @@ class MyLayer: CALayer {
                 coordX = frame.origin.x + CGFloat(pointX) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2)
                 coordY = frame.origin.y + CGFloat(pointY) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2)
                 
+                
                 var layer = line.points[index].layer
                 let radius:CGFloat = GV.gameRectSize * 0.12
                 if index > 0 {
