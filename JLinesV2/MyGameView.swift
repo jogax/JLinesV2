@@ -292,6 +292,7 @@ class MyGameView: UIView {
         }
     }
     
+    
     func getXYPositionInGrid(point:CGPoint) -> (Bool, Int, Int) {
         GV.touchPoint = point
         let xPos = point.x - bounds.origin.x
