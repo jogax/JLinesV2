@@ -32,7 +32,7 @@ class CloudData {
         gameDataRecord.setValue(gameData.timeStemp, forKey: "timeStamp")
         privatDB.saveRecord(gameDataRecord, completionHandler: { returnRecord, error in
             if let err = error {
-                println("error: \(err)")
+                //println("error: \(err)")
             }
         })
     }

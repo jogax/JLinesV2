@@ -7,7 +7,7 @@
 //
 
 import Foundation
-/*
+
 struct LowValues: Hashable {
     var tuple: (x:Int, y:Int)
     var hashValue: Int {
@@ -28,7 +28,7 @@ struct Member: Hashable {
     }
 }
 
-func ==(lhs: MemberOrig, rhs: Member) -> Bool {
+func ==(lhs: Member, rhs: Member) -> Bool {
     return lhs.x == rhs.x && lhs.y == rhs.y
 }
 
@@ -664,6 +664,4 @@ class GameBoard {
 func ==(lhs: (x: Int, y: Int), rhs: (x:Int, y:Int)) -> Bool {
     return lhs.x == rhs.x && lhs.y == rhs.y
 }
-
-*/
 

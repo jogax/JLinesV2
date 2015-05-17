@@ -19,6 +19,62 @@ class MyLayer: CALayer {
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+
+    func makeLineFromLayer() {
+        var previousX = -1
+        var previousY = -1
+        var previousCoordX: CGFloat = -1.0
+        var previousCoordY: CGFloat = -1.0
+        var pointX = -1
+        var pointY = -1
+        var coordX: CGFloat = -1
+        var coordY: CGFloat = -1
+        var line = GV.lines[color]!
+        
+        if GV.lines[color]!.points.count > 0 {
+            for index in 0..<line.points.count {
+                
+                previousX = pointX
+                previousY = pointY
+                previousCoordX = coordX
+                previousCoordY = coordY
+                
+                pointX = line.points[index].column
+                pointY = line.points[index].row
+                
+                coordX = frame.origin.x + CGFloat(pointX) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2)
+                coordY = frame.origin.y + CGFloat(pointY) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2)
+                
+                var layer = line.points[index].layer
+                let radius:CGFloat = GV.gameRectSize * 0.12
+                if index > 0 {
+                        if layer.name == nil {
+                        layer.name = "Layer-\(pointX)-\(pointY)"
+                        println("layer.name: \(layer.name) jetzt generiert\n================\n")
+                        layer.backgroundColor = color.uiColor.CGColor
+                        layer.hidden = false
+                        layer.frame.origin.x = min(previousCoordX, coordX) - radius / 2.0
+                        layer.frame.origin.y = min(previousCoordY, coordY) - radius / 2.0
+                        if previousX == pointX {
+                            layer.frame.size.width = radius * 2
+                            layer.frame.size.height = GV.gameRectSize + 2 * radius
+                        } else {
+                            layer.frame.size.height = radius * 2
+                            layer.frame.size.width = GV.gameRectSize + 2 * radius
+                        }
+                        layer.cornerRadius = radius
+                        self.addSublayer(layer)
+                    }
+                    
+                }
+                
+            }
+        }
+    }
+    
+    
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func drawInContext(ctx: CGContext!) {
@@ -49,7 +105,7 @@ class MyLayer: CALayer {
 
         if self.name == "point" {
             //println("touchPointX: \(GV.touchPoint.x), touchPoointY: \(GV.touchPoint.y)")
-            self.opacity = 0.15
+            self.opacity = 0.20
             let rad = CGFloat(rectSize / 1.5)
             let xCent: CGFloat = CGFloat(GV.touchPoint.x)
             let yCent: CGFloat = CGFloat(GV.touchPoint.y)
@@ -69,8 +125,9 @@ class MyLayer: CALayer {
             
             let xPos1 = GV.lines[color]!.point1!.column * iRectSize
             let yPos1 = GV.lines[color]!.point1!.row * iRectSize
+            
             let xCent1: CGFloat = CGFloat(self.bounds.origin.x) + CGFloat(xPos1) + CGFloat(rectSize) / CGFloat(2)
-            var yCent1: CGFloat = CGFloat(self.bounds.origin.y) + CGFloat(yPos1) + CGFloat(rectSize) / CGFloat(2)
+            let yCent1: CGFloat = CGFloat(self.bounds.origin.y) + CGFloat(yPos1) + CGFloat(rectSize) / CGFloat(2)
             CGContextAddArc(ctx, xCent1, yCent1, rad, 0, endAngle, 1)
             CGContextSetFillColorWithColor(ctx, color.uiColor.CGColor)
             CGContextSetStrokeColorWithColor(ctx,color.uiColor.CGColor)
@@ -113,7 +170,7 @@ class MyLayer: CALayer {
                     
                 }
             }
-
+/*
             lineWidth = rad * 0.8
             
             CGContextSetLineWidth(ctx, lineWidth)
@@ -124,7 +181,7 @@ class MyLayer: CALayer {
             var oldPointX = -1
             var oldPointY = -1
             var center = CGPoint(x: 0,y: 0)
-            println("color: \(color)")
+            //println("color: \(color)")
             if GV.lines[color]!.points.count > 0 {
                 for index in 0..<GV.lines[color]!.points.count {
                             //println("color: \(color), count of points: \(line.points.count) \n")
@@ -212,7 +269,7 @@ class MyLayer: CALayer {
                 CGContextStrokePath(ctx)
 
             }
-           
+*/
         }
         
     }

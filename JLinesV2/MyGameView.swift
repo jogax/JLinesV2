@@ -20,8 +20,8 @@ class MyGameView: UIView {
     //var lines: [LineType:Line]?
 
     var error: String?
-    var startPointX: Int?
-    var startPointY: Int?
+    var startPointX: Int = -1
+    var startPointY: Int = -1
     var aktColor: LineType = .Unknown
     var nextLevel: Bool?
     var alertNotReady: Bool?
@@ -40,10 +40,8 @@ class MyGameView: UIView {
         self.parent = parent
         var device = UIDevice.currentDevice()					//Get the device object
 
-        //self.volumeNr = volumeNr
-        //self.gameNumber = gameNumber
         self.gameEnded = gameEnded
-        var gameboard: Array2D<Point>
+        var gameArray: Array2D<Point>
         var error: String
         var lines: [LineType:Line]
         //gameEnded = {return ()}
@@ -51,15 +49,13 @@ class MyGameView: UIView {
         var numColors = 0
         //var maxGameNumber = package.getMaxNumber(volumeNr)
         if GV.gameNr <= GV.maxGameNr {
-            (OK, numColors, gameboard, error, lines) = package.getGameNew(GV.volumeNr, numberIn: GV.gameNr)
+            (OK, numColors, gameArray, error, lines) = package.getGameNew(GV.volumeNr, numberIn: GV.gameNr)
             if OK {
                 if createNewGame {
                     self.gameboard = GameBoard()
                 } else {
-                    self.gameboard = GameBoard(gameArray: gameboard, lines: lines, numColors: numColors)
+                    self.gameboard = GameBoard(gameArray: gameArray, lines: lines, numColors: numColors)
                 }
-        
-                GV.lines = lines
             }
             
         } else {
@@ -70,20 +66,13 @@ class MyGameView: UIView {
         }
         
         super.init(frame: frame)
-/*
-        device.beginGeneratingDeviceOrientationNotifications()			//Tell it to start monitoring the accelerometer for orientation
-        NSNotificationCenter.defaultCenter().addObserver(
-            self,
-            selector: "orientationChanged:",
-            name: UIDeviceOrientationDidChangeNotification,
-            object: nil)
-*/        
+
         if GV.gameNr < GV.maxGameNr {
-            println("GV.volumeNr: \(GV.volumeNr), GV.gameNr: \(GV.gameNr)")
+            //println("GV.volumeNr: \(GV.volumeNr), GV.gameNr: \(GV.gameNr)")
             var gameData = GV.gameData.volumes[GV.volumeNr].games[GV.gameNr]
             //GV.dataStore.createRecord(gameData)
             
-            println("frame: \(self.frame), parent.frame: \(parent.view.frame)")
+            //println("frame: \(self.frame), parent.frame: \(parent.view.frame)")
             bgLayer.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
             bgLayer.backgroundColor = GV.darkTurquoiseColor.CGColor
             bgLayer.color = .Unknown
@@ -95,13 +84,7 @@ class MyGameView: UIView {
             let linesCount = GV.lines.count
             for index in 0..<linesCount {
                 let color = LineType(rawValue: (LineType.Red.rawValue + index))!
-                lineLayers[color] = MyLayer()
-                lineLayers[color]!.color = color
-                
-                lineLayers[color]!.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
-                lineLayers[color]!.name = "line"
-                self.layer.addSublayer(lineLayers[color])
-                lineLayers[color]!.setNeedsDisplay()
+                makeNewLayer(color)
             }
             
         }
@@ -111,7 +94,18 @@ class MyGameView: UIView {
     func orientationChanged () {
         
     }
+    
+    func makeNewLayer(color: LineType) {
+        lineLayers[color] = MyLayer()
+        lineLayers[color]!.color = color
         
+        lineLayers[color]!.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
+        lineLayers[color]!.name = "line"
+        self.layer.addSublayer(lineLayers[color])
+        GV.lines[color]!.lineEnded = false
+        lineLayers[color]!.setNeedsDisplay()
+    }
+    
     func restart() {
         for index in 0..<GV.lines.count
         {
@@ -128,8 +122,9 @@ class MyGameView: UIView {
                 line.removeLastPoint()
             }
             line.point1!.inLinePoint = false
-            line.point2!.inLinePoint = false            
-            lineLayers[color]!.setNeedsDisplay()
+            line.point2!.inLinePoint = false
+            lineLayers[color]!.removeFromSuperlayer()
+            makeNewLayer(color)
             line.lineEnded = false
         }
         GV.lineCount = 0
@@ -177,14 +172,13 @@ class MyGameView: UIView {
                 line.addPoint(point) // add actuelle Point
             } else {
                 deleteEndLine(point, line: line, calledFrom: "touchesBegan")
-
                 line.addPoint(point)
             }
             lineLayers[aktColor]!.setNeedsDisplay()
         }
         else {
-            startPointX = nil
-            startPointY = nil
+            startPointX = -1
+            startPointY = -1
         }
     }
     
@@ -192,7 +186,7 @@ class MyGameView: UIView {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         let (OK, x, y) = getXYPositionInGrid(touch.locationInView(self))
-        if OK && startPointX != nil && startPointY != nil {
+        if OK && startPointX != -1 && startPointY != -1 {
             
             let originX = touch.locationInView(self).x - CGFloat(GV.gameRectSize / 2)
             let originY = touch.locationInView(self).y - CGFloat(GV.gameRectSize / 2)
@@ -200,7 +194,7 @@ class MyGameView: UIView {
             
             if x != startPointX || y != startPointY {
                 let point: Point = gameboard!.gameArray[x, y]!
-                if !((point.originalPoint && point.color != aktColor) || abs(x - startPointX!) > 1 || abs(y - startPointY!) > 1) {  // can be moved here
+                if !((point.originalPoint && point.color != aktColor) || abs(x - startPointX) > 1 || abs(y - startPointY) > 1) {  // can be moved here
                     
                     if point.color != .Unknown && point.color != aktColor  {  // here another line
                         point.earlierColor = point.color
@@ -208,18 +202,19 @@ class MyGameView: UIView {
                     }
                     
                     if x != startPointX && y != startPointY {
-                        if !gameboard!.gameArray[x, startPointY!]!.originalPoint {
-                            moved(x, y: startPointY!)  // when diagonal, then 2 steps: first left/rigth
+                        if !gameboard!.gameArray[x, startPointY]!.originalPoint {
+                            moved(x, y: startPointY)  // when diagonal, then 2 steps: first left/rigth
                             moved(x, y:y)
                         }
                     } else {
+                        println("vor moved x: \(x), y: \(y)")
                         moved(x, y: y)
                     }
-
+                    lineLayers[aktColor]!.makeLineFromLayer()
                     lineLayers[aktColor]!.setNeedsDisplay()
                     startPointX = x
                     startPointY = y
-                    GV.lines[aktColor]!.setEdgePoints()
+                    //GV.lines[aktColor]!.setEdgePoints()
                 }
             }
         }
@@ -229,10 +224,12 @@ class MyGameView: UIView {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         let point = touch.locationInView(self)
-        pointLayer!.removeFromSuperlayer()
+        if pointLayer != nil {
+            pointLayer!.removeFromSuperlayer()
+        }
         pointLayer = nil
         let (OK, x, y) = getXYPositionInGrid(point)
-        if OK && startPointX != nil && startPointY != nil {
+        if OK && startPointX != -1 && startPointY != -1 {
             GV.lineCount = getEndedLinesCount()
             
             //GV.dataStore.printRecords()
@@ -319,25 +316,32 @@ class MyGameView: UIView {
             let tempY = line.lastPoint().row
             if !gameboard!.gameArray[tempX, tempY]!.originalPoint {gameboard!.gameArray[tempX, tempY]!.color = .Unknown}
             gameboard!.gameArray[tempX, tempY]!.inLinePoint = false
+            println("inLinePoint false at tempX: \(tempX), tempY: \(tempY)")
+            line.lastPoint().layer.removeFromSuperlayer()
+            line.lastPoint().layer = CALayer()
             line.removeLastPoint()
         }
-        gameboard!.gameArray[line.lastPoint().column, line.lastPoint().row]?.inLinePoint = false
+        //gameboard!.gameArray[line.lastPoint().column, line.lastPoint().row]?.inLinePoint = false
+        //println("inLinePoint false at line.lastPoint().column: \(line.lastPoint().column), line.lastPoint().row]: \(line.lastPoint().row)")
+        
         line.removeLastPoint()
     }
     
     func moved(x: Int, y:Int) {
-        //println("moved: x: \(x), y: \(y), index: \(x * gameSize + y)")
         let point = gameboard!.gameArray[x, y]!
         
         if GV.lines[aktColor]!.pointInLine(point) {
+            println("in moved: x: \(x), y: \(y) vor deleteEndLine")
             deleteEndLine(point, line: GV.lines[aktColor]!, calledFrom: "moved")
         }
         if !GV.lines[aktColor]!.lineEnded {
+            println("in moved: x: \(x), y: \(y) vor addNewPoint")
             gameboard!.gameArray[x, y]!.color = aktColor
             gameboard!.gameArray[x, y]!.inLinePoint = true
             GV.lines[aktColor]!.addPoint(gameboard!.gameArray[x, y]!)
             lineLayers[aktColor]!.setNeedsDisplay()
         }
+        println("at moved end: x: \(x), y: \(y)\n-------------------\n")
     }
     
     func checkIfGameEnded () -> Bool {

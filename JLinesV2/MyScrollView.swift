@@ -71,7 +71,7 @@ class MyScrollView: UIScrollView, UIScrollViewDelegate {
         }
         game = nil
         self.hidden = false
-        println("subViews.count: \(subViews.count)")
+        //println("subViews.count: \(subViews.count)")
     }
     
 

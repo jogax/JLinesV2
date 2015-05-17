@@ -5,7 +5,7 @@
 //  Created by Jozsef Romhanyi on 12.03.15.
 //  Copyright (c) 2015 Jozsef Romhanyi. All rights reserved.
 //
-
+/*
 import Foundation
 
 struct LowValues: Hashable {
@@ -63,6 +63,7 @@ class GameBoard {
     var countMoves: Int = 0
     var areas = [Int:Area]()
     var areaNr = 0
+    var minLength = 4
     
     
     
@@ -135,9 +136,9 @@ class GameBoard {
             let startTime = NSDate()
             
             
-            (x1, y1) = getRandomPoint()
-            
             do {
+                (x1, y1) = getRandomPoint()
+            
                 tempGameArray![x1, y1]!.color = color
                 tempGameArray![x1, y1]!.originalPoint = true
                 tempGameArray![x1, y1]!.inLinePoint = true
@@ -177,8 +178,8 @@ class GameBoard {
             
         }
         print("]},")
-        println()
-        GV.gameNr++
+        //println()
+        //GV.gameNr++
         return (tempGameArray!, lines)
         
     }
@@ -212,9 +213,9 @@ class GameBoard {
     func generateLineFromPoint(x: Int, y: Int, color:LineType) -> Line {
         printFunction("generateLineFromPoint(x: \(x), y: \(y), color:\(color))")
         /*
-        println("arrays:\(areas.count)")
+        //println("arrays:\(areas.count)")
         for ind in 0..<areas.count {
-        println("areas[ind].count:\(areas[ind]!.points.count)")
+        //println("areas[ind].count:\(areas[ind]!.points.count)")
         }
         */
         let line = Line(lineType: color)
@@ -227,7 +228,7 @@ class GameBoard {
         var blockedX = GV.gameSize
         var blockedY = GV.gameSize
         
-        while line.length < 3 {
+        while line.length < minLength {
             //let point = Point(column: x, row: y, type: color, originalPoint: true, inLinePoint: true, size:GV.gameSize, delegate: checkDirections)
             //line.point1 = point
             //line.point2 = point
@@ -248,14 +249,14 @@ class GameBoard {
             if restLinesCount > 0 {
                 averageLength = emptyPointsCount / restLinesCount
             } else {
-                averageLength = 3
+                averageLength = minLength
             }
             var possibleLengths = [Int]()
             for i in 0..<6 {
-                if averageLength - 3 + i > 2 {
-                    possibleLengths.append(averageLength - 3 + i)
-                    if i == 3 {
-                        possibleLengths.append(averageLength - 3 + i)
+                if averageLength - minLength + i > 2 {
+                    possibleLengths.append(averageLength - minLength + i)
+                    if i == minLength {
+                        possibleLengths.append(averageLength - minLength + i)
                     }
                 }
             }
@@ -267,7 +268,7 @@ class GameBoard {
                     //lineLength = random(3, max: emptyPointsCount - (restLinesCount - areasCount) * 3, comment: "wähle Linelenght")
                     lineLength = possibleLengths[random(0, max: possibleLengths.count - 1, comment: "wähle Linelenght")]
                 } else {
-                    lineLength = 3
+                    lineLength = minLength
                 }
             }
             var aktX: Int = x
@@ -277,7 +278,7 @@ class GameBoard {
                 var randomSet: [(x:Int, y:Int)]
                 randomSet = []
                 var cnt = 0
-                while randomSet.count == 0 && cnt <= 3 {
+                while randomSet.count == 0 && cnt <= minLength {
                     switch leftUpRightDown {
                     case left:
                         if aktX > 0 && tempGameArray![aktX - 1, aktY]!.color == .Unknown && tempGameArray![aktX - 1, aktY]!.areaNumber == areaNr && (aktX - 1 != blockedX || aktY != blockedY) {
@@ -390,10 +391,45 @@ class GameBoard {
         let line = GV.lines[color]!
         var toDelete = false
         for ind in 0..<areas.count {
-            if areas[ind]!.points.count < 3 || areas[ind]!.countEndPoints == 3  {//> 2 && areas[ind]!.points.count < 6) { //zu kurze Area or zu viele EndPoints --> line weglöschen!
+            if areas[ind]!.points.count < minLength || areas[ind]!.countEndPoints == 3 {//> 2 && areas[ind]!.points.count < 6) { //zu kurze Area or zu viele EndPoints --> line weglöschen!
                 toDelete = true
             }
         }
+        /*
+        if line.point1 == line.point2 {
+            toDelete = true
+        }
+        if line.point1!.column == line.point2!.column || line.point1!.row == line.point2!.row {
+            let countLines = GV.lines.count
+            let checkLineHor = line.point1!.row == line.point2!.row
+            let minColumn = min(line.point1!.column, line.point2!.column)
+            let maxColumn = max(line.point1!.column, line.point2!.column)
+            let minRow = min(line.point1!.row, line.point2!.row)
+            let maxRow = max(line.point1!.row, line.point2!.row)
+            var checkOK:Bool = false
+            var index = 0
+            while index < GV.lines.count && !checkOK {
+                let otherColor = LineType(rawValue: (index + 1))!
+                let otherMinColumn = min(GV.lines[otherColor]!.point1!.column, GV.lines[otherColor]!.point2!.column)
+                let othermaxColumn = max(GV.lines[otherColor]!.point1!.column, GV.lines[otherColor]!.point2!.column)
+                let otherMinRow = min(GV.lines[otherColor]!.point1!.row, GV.lines[otherColor]!.point2!.row)
+                let othermaxRow = max(GV.lines[otherColor]!.point1!.row, GV.lines[otherColor]!.point2!.row)
+                
+                if otherColor != color {
+                    if checkLineHor && otherMinRow <= minRow && othermaxRow >= maxRow && otherMinColumn >= minColumn && othermaxColumn <= maxColumn {
+                        checkOK = true
+                    }
+                    if !checkLineHor && otherMinColumn <= minColumn && othermaxColumn >= maxColumn && otherMinRow >= minRow && othermaxRow <= maxRow {
+                        checkOK = true
+                    }
+                }
+                index++
+            }
+            if !checkOK {
+                toDelete = true
+            }
+        }
+*/
         if toDelete {
             while line.points.count > 0 {
                 let x = line.lastPoint().column
@@ -414,7 +450,7 @@ class GameBoard {
             printFunction("printGameboard()")
             var lineString = "+"
             for i in 0..<GV.gameSize {lineString += "---+"}
-            println (lineString)
+            //println (lineString)
             for y in 0..<GV.gameSize {
                 var printString = "| "
                 for x in 0..<GV.gameSize {
@@ -439,8 +475,8 @@ class GameBoard {
                     }
                     printString += p + " | "
                 }
-                println("\(printString)")
-                println("\(lineString)")
+                //println("\(printString)")
+                //println("\(lineString)")
             }
         }
     }
@@ -526,7 +562,7 @@ class GameBoard {
         }
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
-        if debugging {println("analyzeGameboard elapsedTime:\(elapsedTime) ms")}
+        if debugging {//println("analyzeGameboard elapsedTime:\(elapsedTime) ms")}
     }
     
     func checkDirections(x: Int, y: Int) {
@@ -573,7 +609,7 @@ class GameBoard {
         }
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
-        if debugging {println("checkDirections elapsedTime:\(elapsedTime) ms")}
+        if debugging {//println("checkDirections elapsedTime:\(elapsedTime) ms")}
         
     }
     
@@ -655,7 +691,7 @@ class GameBoard {
     }
     func printFunction(funcName:String) {
         if debugging {
-            println("Function: \(funcName)")
+            //println("Function: \(funcName)")
         }
     }
 }
@@ -667,3 +703,4 @@ func ==(lhs: (x: Int, y: Int), rhs: (x:Int, y:Int)) -> Bool {
 
 
 
+*/

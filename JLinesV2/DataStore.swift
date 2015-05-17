@@ -38,7 +38,7 @@ class DataStore {
         if exists(gameData) {
             deleteRecords(gameData)
         }
-        println("\(gameData)")
+        //println("\(gameData)")
         gameEntity = GameStatus(entity:entityDescription!, insertIntoManagedObjectContext: managedObjectContext)
         updateRecord(gameData)
     }
@@ -59,7 +59,7 @@ class DataStore {
         managedObjectContext?.save(&error)
         if let err = error {
             let errorMessage = GV.language.getText("errorBySaveData",par:String(_cocoaString: err))
-            println("\(errorMessage)")
+            //println("\(errorMessage)")
         }
     }
    
@@ -72,7 +72,7 @@ class DataStore {
         request.predicate = NSCompoundPredicate.andPredicateWithSubpredicates([p1, p2])
         var results = managedObjectContext?.executeFetchRequest(request, error: &error)
         if error != nil {
-            println("err: \(error)")
+            //println("err: \(error)")
         }
         if let match = results?.first as? NSManagedObject {
             return true
@@ -98,12 +98,12 @@ class DataStore {
         request.entity = entityDescription
         
         var results = managedObjectContext!.executeFetchRequest(request, error: &error)
-        println("countResults: \(results!.count)")
+        //println("countResults: \(results!.count)")
         for (ind,result) in enumerate(results!) {
             managedObjectContext!.deleteObject(result as! NSManagedObject)
         }
         results = managedObjectContext!.executeFetchRequest(request, error: &error)
-        println("countResults: \(results!.count)")
+        //println("countResults: \(results!.count)")
     }
 
     
@@ -137,7 +137,7 @@ class DataStore {
         request.entity = entityDescription
         //var cloudArray = GV.cloudData.fetchAllRecords()
         var results = managedObjectContext?.executeFetchRequest(request, error: &error)
-        println("countResults: \(results!.count)")
+        //println("countResults: \(results!.count)")
         //var dataArray = cloudArray
     
         
@@ -180,7 +180,7 @@ class DataStore {
             let countMoves = match.valueForKey("countMoves")! as! NSInteger
             let countSeconds = match.valueForKey("countSeconds")! as! NSInteger
             
-            println("name: \(gameName), number: \(gameNumber), lines: \(countLines), moves:\(countMoves), seconds:\(countSeconds)")
+            //println("name: \(gameName), number: \(gameNumber), lines: \(countLines), moves:\(countMoves), seconds:\(countSeconds)")
 
         }
         

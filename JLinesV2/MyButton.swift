@@ -11,11 +11,15 @@ import UIKit
 class MyButton: UIButton {
     init() {
         super.init(frame:CGRect(x: 0, y: 0, width: 0, height: 0))
-        setTitleColor(UIColor.blackColor(), forState: .Normal)
-        //self.backgroundColor = GV.springGreenColor
+        //setTitleColor(UIColor.blackColor(), forState: .Normal)
         self.layer.cornerRadius = 8
-        //self.layerGradient()
-        setupDepression()
+        self.setupDepression()
+        self.layer.cornerRadius = 5
+        self.layer.shadowColor = UIColor.blackColor().CGColor
+        self.layer.shadowOffset = CGSizeMake(3, 3)
+        self.layer.shadowOpacity = 1.0
+        self.backgroundColor = GV.PeachPuffColor
+        self.setTitleColor(UIColor.blackColor(), forState: .Normal)
     }
 
     required init(coder aDecoder: NSCoder) {

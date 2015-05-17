@@ -11,13 +11,13 @@ import UIKit
 class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate  {
 
     var backButton = UIButton()
-    var languageButton = UIButton()
-    var clearButton = UIButton()
-    var returnButton = UIButton()
-    var gameModusButton = UIButton()
+    var languageButton = MyButton()
+    var clearButton = MyButton()
+    var returnButton = MyButton()
+    var gameModusButton = MyButton()
     var pickerData: [[String]] = []
     let chooseView = UIPickerView()
-    let chooseOKButton = UIButton()
+    let chooseOKButton = MyButton()
     let buttonsView = UIView()
     var goWhenEnd: ()->()
     var device = GV.myDevice
@@ -61,43 +61,25 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         gameModusButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         setupLayout()
+        
         buttonsView.backgroundColor = GV.darkTurquoiseColor
         buttonsView.layer.cornerRadius = 10
+        buttonsView.layer.shadowOpacity = 1.0
+        buttonsView.layer.shadowOffset = CGSizeMake(3, 3)
+        buttonsView.layer.shadowColor = UIColor.blackColor().CGColor
         
         languageButton.setTitle(GV.language.getText("language"), forState: .Normal)
         languageButton.addTarget(self, action: "chooseLanguage:", forControlEvents: .TouchUpInside)
-        languageButton.setupDepression()
-        languageButton.layer.cornerRadius = 5
-        //languageButton.moveToCenter(self.view.frame)
-        languageButton.backgroundColor = GV.PeachPuffColor
-        languageButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        
+
         gameModusButton.setTitle(GV.language.getText("gameModus"), forState: .Normal)
         gameModusButton.addTarget(self, action: "chooseGameModus:", forControlEvents: .TouchUpInside)
-        gameModusButton.setupDepression()
-        gameModusButton.layer.cornerRadius = 5
-        //gameModusButton.moveToCenter(self.view.frame)
-        gameModusButton.backgroundColor = GV.PeachPuffColor
-        gameModusButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         
         clearButton.setTitle(GV.language.getText("cleangame"), forState: .Normal)
-        clearButton.layer.cornerRadius = 5
         clearButton.addTarget(self, action: "clearGame:", forControlEvents: .TouchUpInside)
-        //clearButton.moveToCenter(self.view.frame)
-        clearButton.backgroundColor = GV.PeachPuffColor
-        clearButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         
         returnButton.setTitle(GV.language.getText("return"), forState: .Normal)
-        returnButton.layer.cornerRadius = 5
         returnButton.addTarget(self, action: "endSettings:", forControlEvents: .TouchUpInside)
-        //returnButton.moveToCenter(self.view.frame)
-        returnButton.backgroundColor = GV.PeachPuffColor
-        returnButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        
-        //clearButton.layerGradient(GV.springGreenColor.CGColor, endColor: GV.khakiColor.CGColor)
-        
-        
-        //backButton.frame = CGRect(x: self.view.frame.origin.x + self.view.frame.size.width - 40, y: self.view.frame.origin.y + 40, width: 20, height: 20)
+
         backButton.setImage(GV.images.getBack(), forState: .Normal)
         backButton.addTarget(self, action: "endSettings:", forControlEvents: .TouchUpInside)
 
@@ -129,10 +111,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     func chooseLanguage(sender: UIButton) {
         
         chooseOKButton.setTitle(GV.language.getText("OK"), forState: .Normal)
-        chooseOKButton.layer.cornerRadius = 5
         chooseOKButton.addTarget(self, action: "chooseOKFunc:", forControlEvents: .TouchUpInside)
-        chooseOKButton.backgroundColor = GV.PeachPuffColor
-        chooseOKButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         
         self.view.addSubview(chooseView)
         self.view.addSubview(chooseOKButton)
@@ -143,6 +122,9 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         
         pickerData.append(GV.language.getLanguages())
         chooseView.selectRow(GV.language.getAktLanguageIndex(), inComponent: 0, animated: true)
+        chooseView.layer.shadowColor = GV.BlackColor.CGColor
+        chooseView.layer.shadowOpacity = 1.0
+        chooseView.layer.shadowOffset = CGSizeMake(5, 5)
         
     }
     
@@ -163,7 +145,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
             style: UIAlertActionStyle.Default,
             handler: {(paramAction:UIAlertAction!) in
                 GV.dataStore.deleteAllRecords()
-                println("Anzahl Records:\(GV.dataStore.getCountRecords())")
+                //println("Anzahl Records:\(GV.dataStore.getCountRecords())")
             }
         )
         
@@ -211,6 +193,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     func updateLanguage() {
         languageButton.setTitle(GV.language.getText("language"), forState: .Normal)
         clearButton.setTitle(GV.language.getText("cleangame"), forState: .Normal)
+        gameModusButton.setTitle(GV.language.getText("gameModus"), forState: .Normal)
         returnButton.setTitle(GV.language.getText("return"), forState: .Normal)
     }
 
@@ -248,8 +231,8 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         var constraintsArray = Array<NSObject>()
         
         let countButtons: CGFloat = 4
-        let buttonsHeight = self.view.frame.height * 0.07
-        let buttonsGap = buttonsHeight / 2
+        let buttonsHeight = self.view.frame.height * 0.08
+        let buttonsGap = buttonsHeight / 5
         let buttonsViewHeight = countButtons * (buttonsHeight + buttonsGap) + buttonsGap
         
 
@@ -273,9 +256,9 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         
         constraintsArray.append(NSLayoutConstraint(item: languageButton, attribute: .CenterX, relatedBy: NSLayoutRelation.Equal, toItem: buttonsView, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: languageButton, attribute: .Top, relatedBy: .Equal, toItem: buttonsView, attribute: .Top, multiplier: 1.0, constant: 10.0))
+        constraintsArray.append(NSLayoutConstraint(item: languageButton, attribute: .Top, relatedBy: .Equal, toItem: buttonsView, attribute: .Top, multiplier: 1.0, constant: buttonsGap))
         
-        constraintsArray.append(NSLayoutConstraint(item: languageButton, attribute: .Width, relatedBy: .Equal, toItem: buttonsView, attribute: .Width, multiplier: 0.9, constant: 0))
+        constraintsArray.append(NSLayoutConstraint(item: languageButton, attribute: .Width, relatedBy: .Equal, toItem: buttonsView, attribute: .Width, multiplier: 0.95, constant: 0))
         
         constraintsArray.append(NSLayoutConstraint(item: languageButton, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonsHeight))
         

@@ -72,7 +72,10 @@ struct GV {
     static let khakiColor           = UIColor(red: 240/255, green: 230/255, blue: 140/255, alpha: 1)
     static let PaleGoldenrodColor   = UIColor(red: 238/255, green: 232/255, blue: 170/255, alpha: 1)
     static let PeachPuffColor       = UIColor(red: 255/255, green: 218/255, blue: 185/255, alpha: 1)
+    static let SilverColor          = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1)
+    static let BlackColor           = UIColor(red: 0/255,   green: 0/255,   blue: 0/255,    alpha: 1)
     
+   
     
     // globale Labels
     

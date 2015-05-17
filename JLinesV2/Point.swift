@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 struct Directions {
@@ -37,6 +38,13 @@ class Point: Printable, Hashable {
         didSet {
             if color != oldValue {
                 checkDirections(x: column, y: row)
+
+                if color == .Unknown {
+                    layer.name == nil
+                    layer.removeFromSuperlayer()
+                    layer = CALayer()
+                    //println("x: \(column), y: \(row)")
+                }
             }
         }
     }
@@ -45,6 +53,7 @@ class Point: Printable, Hashable {
     var inLinePoint: Bool
     var earlierColor: LineType
     var areaNumber: Int
+    var layer = CALayer()
     var directions: Directions
     var edge: Edge
     

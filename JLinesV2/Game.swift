@@ -32,11 +32,11 @@ class Game: UIView, Printable {
     var gameContainer   = UIView()
     var timerLabel      = UILabel()
     var gameNumber      = UILabel()
-    let forwardButton   = UIButton()
-    let backwardButton  = UIButton()
-    let repeatButton    = UIButton()
-    let settingsButton  = UIButton()
-    let backButton      = UIButton()
+    let forwardButton   = MyButton()
+    let backwardButton  = MyButton()
+    let repeatButton    = MyButton()
+    let settingsButton  = MyButton()
+    let backButton      = MyButton()
     var settingsViewController: UIViewController?
     var timer: NSTimer?
     var gameNrPar = ""
@@ -110,36 +110,24 @@ class Game: UIView, Printable {
         //let backBild = UIImage(named: "back.jpg") as UIImage?
         
         forwardButton.setImage(GV.images.getPfeilrechts(), forState: .Normal)
-        forwardButton.setupDepression()
         forwardButton.layer.name = "forwardButton"
         backwardButton.setImage(GV.images.getPfeillinks(), forState: .Normal)
-        backwardButton.setupDepression()
         backwardButton.layer.name = "backwardButton"
         repeatButton.setImage(GV.images.getRestart(), forState: .Normal)
-        repeatButton.setupDepression()
         settingsButton.setImage(GV.images.getSettings(), forState: .Normal)
         settingsButton.setupDepression()
+        
         backButton.setImage(GV.images.getBack(), forState: .Normal)
         backButton.setupDepression()
         
-        //let buttonSize = GV.horNormWert * 4
-        //let lowerButtonsY = GV.vertNormWert * 36
-
-        //forwardButton.frame = CGRect(x: GV.horNormWert * 33, y: lowerButtonsY, width: buttonSize, height: buttonSize)
-        //backwardButton.frame = CGRect(x: GV.horNormWert * 4, y: lowerButtonsY, width: buttonSize, height: buttonSize)
-        //settingsButton.frame = CGRect(x: GV.horNormWert * 14, y: lowerButtonsY, width: buttonSize, height: buttonSize)
-        //repeatButton.frame   = CGRect(x: GV.horNormWert * 24, y: lowerButtonsY, width: buttonSize, height: buttonSize)
-        //backButton.frame = CGRect(x: GV.horNormWert * 36, y: GV.vertNormWert * 3, width: buttonSize / 3, height: buttonSize / 3)
-        //timerLabel.frame = CGRect(x: GV.horNormWert * 36, y: GV.vertNormWert * 6, width: buttonSize, height: GV.horNormWert * 2)
-        //GV.lineCountLabel.frame = CGRect(x: GV.horNormWert * 2, y: GV.vertNormWert * 6, width: GV.horNormWert * 14, height: GV.horNormWert * 2)
-        //GV.moveCountLabel.frame = CGRect(x: GV.horNormWert * 18, y: GV.vertNormWert * 6, width: GV.horNormWert * 18, height: GV.horNormWert * 2)
-        //gameNumber.frame = CGRect(x: GV.horNormWert * 2, y: GV.vertNormWert * 3, width: GV.horNormWert * 30, height: GV.horNormWert * 3)
         
         GV.language.callBackWhenNewLanguage(self.updateLanguage)
         
         forwardButton.backgroundColor = UIColor.clearColor()
-        repeatButton.backgroundColor = GV.lightSalmonColor
-        backButton.backgroundColor = GV.lightSalmonColor
+        repeatButton.backgroundColor = UIColor.clearColor()
+        settingsButton.backgroundColor = UIColor.clearColor()
+        backwardButton.backgroundColor = UIColor.clearColor()
+        backButton.backgroundColor = UIColor.clearColor()
 
         forwardButton.addTarget(self, action: "nextButton:", forControlEvents: UIControlEvents.TouchUpInside)
         backwardButton.addTarget(self, action: "nextButton:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -157,6 +145,9 @@ class Game: UIView, Printable {
         gameNrPar = "\(GV.gameNr + 1)  \(gameName)"
         gameNumber.text =  GV.language.getText("gameNumber", par: gameNrPar ) //"Játék sorszáma: \(GV.gameNr)"
         gameNumber.font = UIFont(name: gameNumber.font.fontName, size: 20)
+        gameNumber.layer.shadowColor = UIColor.redColor().CGColor
+        gameNumber.layer.shadowOffset = CGSizeMake(2, 2)
+        gameNumber.layer.shadowOpacity = 1.0
         
         GV.lineCount = 0
         GV.moveCount = 0
@@ -285,7 +276,7 @@ class Game: UIView, Printable {
     func nextAction(forwards: Bool) {
         
         for ind in 0..<self.subviews.count {
-            println("ind: \(ind), viewName:\(self.subviews[ind].layer.name), frame: \(self.subviews[ind].layer.frame)")
+            //println("ind: \(ind), viewName:\(self.subviews[ind].layer.name), frame: \(self.subviews[ind].layer.frame)")
             
         }
         var adder = forwards ? 1 : -1
@@ -338,8 +329,6 @@ class Game: UIView, Printable {
             let hideForwardButton = GV.gameNr >= GV.maxGameNr - 1  && GV.volumeNr == GV.maxVolumeNr - 1
             backwardButton.hidden = hideBackwardButton
             forwardButton.hidden = hideForwardButton
-            //forwardButton.setNeedsDisplay()
-            //backwardButton.setNeedsDisplay()
 
             timeLeft = timeLeftOrig
             GV.timeCount = 0
@@ -349,7 +338,7 @@ class Game: UIView, Printable {
             let gameName = GV.package!.getVolumeName(GV.volumeNr)
             gameNrPar  = "\(GV.gameNr + 1)  \(gameName)"
             gameNumber.text = GV.language.getText("gameNumber", par: gameNrPar)//"Játék sorszáma: \(GV.gameNr)"
-           // println("sender: \(sender)")
+           // //println("sender: \(sender)")
         }
     }
 

@@ -82,7 +82,7 @@ class Package {
     func getGameNew (volumeNr: Int, numberIn: Int) -> (Bool, Int, Array2D<Point>, String, [LineType:Line]) {
         var number = numberIn
         let squereSize = json!["packageVolume"][volumeNr]["size"].int!
-
+        let colorCount = 3
         var spielArray =  Array2D<Point>(columns:squereSize, rows: squereSize)
         for column in 0..<squereSize {
             for row in 0..<squereSize {
@@ -95,7 +95,7 @@ class Package {
         
         //var lineArray = [Line](count: squereSize, repeatedValue: nil)
         var lines = [LineType:Line]()
-
+        
         let testWert = json!["packageVolume"][volumeNr]["games"][number]["lineCount"].int
         if testWert == nil {return (false, 0, spielArray, error, lines)}
         let lineCount = testWert!

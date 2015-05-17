@@ -36,7 +36,8 @@ class DrawImages {
         UIGraphicsBeginImageContextWithOptions(size, opaque, scale)
         let ctx = UIGraphicsGetCurrentContext()
         CGContextSetStrokeColorWithColor(ctx, UIColor.blackColor().CGColor)
-        
+
+        /*
         CGContextSetLineWidth(ctx, 0.5)
         let center1 = CGPoint(x: frame.width / 2, y: frame.height / 2)
         let radius1 = frame.width / 2 - 5
@@ -45,7 +46,7 @@ class DrawImages {
         //CGContextSetStrokeColorWithColor(ctx,GV.springGreenColor.CGColor)
         CGContextDrawPath(ctx, kCGPathFillStroke)
         CGContextStrokePath(ctx)
-        
+        */
         CGContextSetLineWidth(ctx, 4.0)
         CGContextBeginPath(ctx)
         
@@ -68,12 +69,12 @@ class DrawImages {
         //CGContextSetAlpha(ctx, 0)
         CGContextSetRGBFillColor(ctx, 0.5, 0.5, 0, 1)
         CGContextStrokePath(ctx)
-        
+        /*
         let center = CGPoint(x: frame.width / 2, y: frame.height / 2)
         let radius = frame.width / 2 - 5
         CGContextAddArc(ctx, center.x, center.y, radius, CGFloat(0), CGFloat(2 * M_PI), 1)
         CGContextStrokePath(ctx)
-
+        */
         let image = UIGraphicsGetImageFromCurrentImageContext()
         
         UIGraphicsEndImageContext()
@@ -119,7 +120,7 @@ class DrawImages {
         CGContextSetStrokeColorWithColor(ctx, UIColor.blackColor().CGColor)
         
         CGContextBeginPath(ctx)
-
+/*
         CGContextSetLineWidth(ctx, 4.0)
         let center = CGPoint(x: frame.width / 2, y: frame.height / 2)
         let radius = frame.width / 2 - 5
@@ -127,7 +128,7 @@ class DrawImages {
         CGContextSetFillColorWithColor(ctx, imageColor)
         CGContextDrawPath(ctx, kCGPathFillStroke)
         CGContextStrokePath(ctx)
-
+*/
         CGContextSetLineWidth(ctx, 4.0)
         
         let adder:CGFloat = frame.width / 20
@@ -189,7 +190,7 @@ class DrawImages {
         let ctx = UIGraphicsGetCurrentContext()
         CGContextBeginPath(ctx)
         
-        
+/*
         CGContextSetLineWidth(ctx, 0.5)
         let center1 = CGPoint(x: frame.width / 2, y: frame.height / 2)
         let radius1 = frame.width / 2 - 5
@@ -197,7 +198,7 @@ class DrawImages {
         CGContextSetFillColorWithColor(ctx, imageColor)
         CGContextDrawPath(ctx, kCGPathFillStroke)
         CGContextStrokePath(ctx)
-        
+*/
         CGContextSetLineWidth(ctx, 4.0)
         
         let adder:CGFloat = 10.0
@@ -240,11 +241,12 @@ class DrawImages {
         CGContextAddArc(ctx, center.x, center.y, r2, 0, endAngle, 1)
         CGContextStrokePath(ctx)
 
+        /*
         let center2 = CGPoint(x: frame.width / 2, y: frame.height / 2)
         let radius = frame.width / 2 - 5
         CGContextAddArc(ctx, center2.x, center2.y, radius, CGFloat(0), CGFloat(2 * M_PI), 1)
         CGContextStrokePath(ctx)
-        
+        */
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         

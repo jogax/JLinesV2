@@ -181,7 +181,7 @@ class Line: Hashable, Printable {
                 } else {
                     points[ind].edge = Edge.None
                 }
-                println("ind: \(ind), aktX: \(aktX), aktY: \(aktY), edge: \(points[ind].edge)")
+                //println("ind: \(ind), aktX: \(aktX), aktY: \(aktY), edge: \(points[ind].edge)")
             }
         }
     }

@@ -25,14 +25,14 @@ extension Dictionary {
                 if let dictionary = dictionary as? Dictionary<String, AnyObject> {
                     return (dictionary,data)
                 } else {
-                    println("Level file \(fileName) is not valid JSON: \(error!)")
+                    //println("Level file \(fileName) is not valid JSON: \(error!)")
                     return (nil,nil)
                 }
             } else {
-                println("Could not load level file: \(fileName), error: \(error!)")
+                //println("Could not load level file: \(fileName), error: \(error!)")
             }
         } else {
-            println("Could not find level file \(fileName)")
+            //println("Could not find level file \(fileName)")
             return (nil,nil)
         }
         return (nil,nil)
