@@ -14,6 +14,8 @@ class MyLayer: CALayer {
     
     override init() {
         super.init()
+        let dummy = CALayer()
+        self.addSublayer(dummy)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -71,6 +73,13 @@ class MyLayer: CALayer {
                 }
                 
             }
+        }
+        println("self.sublayers.count: \(self.sublayers.count)")
+        if color != .Unknown && self.sublayers.count > line.points.count {
+            
+        }
+        if color != .Unknown && self.sublayers.count < line.points.count {
+            
         }
     }
     

@@ -207,9 +207,9 @@ class MyGameView: UIView {
                             moved(x, y:y)
                         }
                     } else {
-                        println("vor moved x: \(x), y: \(y)")
                         moved(x, y: y)
                     }
+                    println("call makeLineFromLayer")
                     lineLayers[aktColor]!.makeLineFromLayer()
                     lineLayers[aktColor]!.setNeedsDisplay()
                     startPointX = x
@@ -310,39 +310,39 @@ class MyGameView: UIView {
     
     
     func deleteEndLine(aktPoint: Point, line: Line, calledFrom: String) {
-        //println("deleteEndLine: caller: \(calledFrom), pColor: \(aktPoint.type), lColor: \(line.lineType), aktColor: \(aktColor!)")
+        //println("deleteEndLine: caller: \(calledFrom), Color: \(aktPoint.color), lColor: \(line.color), aktColor: \(aktColor)")
         let point = (aktPoint.originalPoint && aktPoint != line.firstPoint()) ? line.firstPoint() : aktPoint
+        let lastPoint = line.lastPoint()
         while line.points.count != 0 && line.lastPoint() != point {
             let tempX = line.lastPoint().column
             let tempY = line.lastPoint().row
             if !gameboard!.gameArray[tempX, tempY]!.originalPoint {gameboard!.gameArray[tempX, tempY]!.color = .Unknown}
             gameboard!.gameArray[tempX, tempY]!.inLinePoint = false
-            println("inLinePoint false at tempX: \(tempX), tempY: \(tempY)")
             line.lastPoint().layer.removeFromSuperlayer()
             line.lastPoint().layer = CALayer()
+            line.lineEnded = false
             line.removeLastPoint()
         }
         //gameboard!.gameArray[line.lastPoint().column, line.lastPoint().row]?.inLinePoint = false
         //println("inLinePoint false at line.lastPoint().column: \(line.lastPoint().column), line.lastPoint().row]: \(line.lastPoint().row)")
         
-        line.removeLastPoint()
+        //line.removeLastPoint()
     }
     
     func moved(x: Int, y:Int) {
         let point = gameboard!.gameArray[x, y]!
-        
+        println("point.lineEnded:\(GV.lines[aktColor]!.lineEnded)")
         if GV.lines[aktColor]!.pointInLine(point) {
-            println("in moved: x: \(x), y: \(y) vor deleteEndLine")
             deleteEndLine(point, line: GV.lines[aktColor]!, calledFrom: "moved")
+            println("deletePoint: x-\(x), y-\(y)")
         }
         if !GV.lines[aktColor]!.lineEnded {
-            println("in moved: x: \(x), y: \(y) vor addNewPoint")
+            println("addPoint: x-\(x), y-\(y)")
             gameboard!.gameArray[x, y]!.color = aktColor
             gameboard!.gameArray[x, y]!.inLinePoint = true
             GV.lines[aktColor]!.addPoint(gameboard!.gameArray[x, y]!)
-            lineLayers[aktColor]!.setNeedsDisplay()
         }
-        println("at moved end: x: \(x), y: \(y)\n-------------------\n")
+        lineLayers[aktColor]!.setNeedsDisplay()
     }
     
     func checkIfGameEnded () -> Bool {
