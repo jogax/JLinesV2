@@ -46,7 +46,7 @@ class Point: Printable, Hashable {
     var inLinePoint: Bool {
         didSet {
             if !inLinePoint {
-                layer.name == nil
+                layer.name = nil
                 layer.removeFromSuperlayer()
                 layer = CALayer()
                 println("reset layer at point x: \(column), y: \(row)")
