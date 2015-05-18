@@ -22,9 +22,7 @@ class MyLayer: CALayer {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-
-    func makeLineFromLayer() {
+    func makeLineForLayer() {
         var previousX = -1
         var previousY = -1
         var previousCoordX: CGFloat = -1.0
@@ -34,7 +32,8 @@ class MyLayer: CALayer {
         var coordX: CGFloat = -1
         var coordY: CGFloat = -1
         var line = GV.lines[color]!
-        
+        let correction = GV.gameRectSize / 100
+        println("line length: \(line.points.count)")
         if GV.lines[color]!.points.count > 0 {
             for index in 0..<line.points.count {
                 
@@ -46,31 +45,33 @@ class MyLayer: CALayer {
                 pointX = line.points[index].column
                 pointY = line.points[index].row
                 
-                coordX = frame.origin.x + CGFloat(pointX) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2)
-                coordY = frame.origin.y + CGFloat(pointY) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2)
+                coordX = frame.origin.x + CGFloat(pointX) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2.25) - correction * CGFloat(pointX)
+                coordY = frame.origin.y + CGFloat(pointY) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2.25) - correction * CGFloat(pointY)
                 
                 
                 var layer = line.points[index].layer
                 let radius:CGFloat = GV.gameRectSize * 0.12
                 if index > 0 {
-                        if layer.name == nil {
+                    println("layer.name: \(layer.name)")
+                    if layer.name == nil && previousX >= 0  {
                         layer.name = "Layer-\(pointX)-\(pointY)"
-                        println("layer.name: \(layer.name) jetzt generiert\n================\n")
                         layer.backgroundColor = color.uiColor.CGColor
                         layer.hidden = false
-                        layer.frame.origin.x = min(previousCoordX, coordX) - radius / 2.0
-                        layer.frame.origin.y = min(previousCoordY, coordY) - radius / 2.0
-                        if previousX == pointX {
-                            layer.frame.size.width = radius * 2
-                            layer.frame.size.height = GV.gameRectSize + 2 * radius
-                        } else {
-                            layer.frame.size.height = radius * 2
-                            layer.frame.size.width = GV.gameRectSize + 2 * radius
+                        layer.frame.origin.x = min(previousCoordX, coordX) - radius / 2.25
+                        layer.frame.origin.y = min(previousCoordY, coordY) - radius / 2.25
+                        println("previousX: \(previousX), x: \(pointX), previousY: \(previousY), y: \(pointY), index: \(index), layer.name: \(layer.name) jetzt generiert\n================\n")
+                        if pointX != previousX || pointY != previousY {  // only when something changed!
+                            if previousX == pointX {
+                                layer.frame.size.width = radius * 2
+                                layer.frame.size.height = GV.gameRectSize + 2 * radius
+                            } else {
+                                layer.frame.size.height = radius * 2
+                                layer.frame.size.width = GV.gameRectSize + 2 * radius
+                            }
+                            layer.cornerRadius = radius
+                            self.addSublayer(layer)
                         }
-                        layer.cornerRadius = radius
-                        self.addSublayer(layer)
                     }
-                    
                 }
                 
             }
@@ -101,9 +102,7 @@ class MyLayer: CALayer {
             CGContextStrokeRect(ctx, self.bounds)
             CGContextSetLineWidth(ctx, 0.8)
             CGContextBeginPath(ctx)
-            let x1 = bounds.origin.x
-            let x2 = rectSize
-            
+             
             for ind in 1..<GV.gameSize {
                 CGContextMoveToPoint(ctx, CGFloat(Int(bounds.origin.x) + ind * Int(rectSize)), bounds.origin.y)
                 CGContextAddLineToPoint(ctx, CGFloat(Int(bounds.origin.x) + ind * Int(rectSize)), bounds.origin.y + bounds.size.height)

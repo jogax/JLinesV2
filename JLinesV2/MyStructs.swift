@@ -12,6 +12,9 @@ import UIKit
 enum Choosed: Int{
     case Unknown = 0, Right, Left, Settings, Restart
 }
+enum GameModus: Int {
+    case Basic = 0, JoyStick
+}
 struct GV {
     static var vBounds = CGRect(x: 0, y: 0, width: 0, height: 0)
     //static var horNormWert: CGFloat = 0 // Geräteabhängige Constante
@@ -42,6 +45,7 @@ struct GV {
             GV.moveCountLabel.text = "\(GV.moveCount) / \(GV.lines.count) \(step)"
         }
     }
+    static var gameModus = GameModus.Basic
     static var rectSize: CGFloat = 0 // rectSize in Choose Table
     static var gameRectSize: CGFloat = 0 // rectSize in gameboard
     static var lines = [LineType:Line]()

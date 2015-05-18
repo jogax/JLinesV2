@@ -192,7 +192,8 @@ class Line: Hashable, Printable {
 
     
     func removeLastPoint() {
-        println("at removeLastPoint")
+        lastPoint().inLinePoint = false
+        println("at removeLastPoint: x: \(lastPoint().column), y: \(lastPoint().row), inLinePoint: \(lastPoint().inLinePoint)")
         points.removeAtIndex(points.count - 1)
         cnt = points.count
     }

@@ -38,19 +38,21 @@ class Point: Printable, Hashable {
         didSet {
             if color != oldValue {
                 checkDirections(x: column, y: row)
-
-                if color == .Unknown {
-                    layer.name == nil
-                    layer.removeFromSuperlayer()
-                    layer = CALayer()
-                    //println("x: \(column), y: \(row)")
-                }
             }
         }
     }
     var originalPoint: Bool
     
-    var inLinePoint: Bool
+    var inLinePoint: Bool {
+        didSet {
+            if !inLinePoint {
+                layer.name == nil
+                layer.removeFromSuperlayer()
+                layer = CALayer()
+                println("reset layer at point x: \(column), y: \(row)")
+            }
+        }
+    }
     var earlierColor: LineType
     var areaNumber: Int
     var layer = CALayer()

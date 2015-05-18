@@ -114,9 +114,10 @@ class MyGameView: UIView {
             while line.points.count > 0 {
                 let x = line.lastPoint().column
                 let y = line.lastPoint().row
+                println("restart: removeLastPoint at x: \(x), y:\(y)")
                 if line.lastPoint() != line.point1 && line.lastPoint() != line.point2 {
                     gameboard!.gameArray[x, y]!.color = .Unknown
-                    gameboard!.gameArray[x, y]!.originalPoint = false
+                    //gameboard!.gameArray[x, y]!.originalPoint = false
                 }
                 gameboard!.gameArray[x, y]!.inLinePoint = false
                 line.removeLastPoint()
@@ -126,6 +127,7 @@ class MyGameView: UIView {
             lineLayers[color]!.removeFromSuperlayer()
             makeNewLayer(color)
             line.lineEnded = false
+            println("color: \(color), line.points.count: \(line.points.count), point1.layer.name: \(line.point1?.layer.name), point2.layer.name: \(line.point2?.layer.name)")
         }
         GV.lineCount = 0
         GV.moveCount = 0
@@ -195,9 +197,11 @@ class MyGameView: UIView {
             if x != startPointX || y != startPointY {
                 let point: Point = gameboard!.gameArray[x, y]!
                 if !((point.originalPoint && point.color != aktColor) || abs(x - startPointX) > 1 || abs(y - startPointY) > 1) {  // can be moved here
+                    println("touchesMoved for x:\(x), y:\(y)")
                     
                     if point.color != .Unknown && point.color != aktColor  {  // here another line
                         point.earlierColor = point.color
+                        println("deleteEndLine for x:\(x), y:\(y)")
                         deleteEndLine(point,line: GV.lines[point.color]!, calledFrom: "touchesMoved1")  // delete endpart of line, inclusive point
                     }
                     
@@ -209,8 +213,8 @@ class MyGameView: UIView {
                     } else {
                         moved(x, y: y)
                     }
-                    println("call makeLineFromLayer")
-                    lineLayers[aktColor]!.makeLineFromLayer()
+                    println("call makeLineForLayer")
+                    lineLayers[aktColor]!.makeLineForLayer()
                     lineLayers[aktColor]!.setNeedsDisplay()
                     startPointX = x
                     startPointY = y
@@ -326,7 +330,7 @@ class MyGameView: UIView {
         //gameboard!.gameArray[line.lastPoint().column, line.lastPoint().row]?.inLinePoint = false
         //println("inLinePoint false at line.lastPoint().column: \(line.lastPoint().column), line.lastPoint().row]: \(line.lastPoint().row)")
         
-        //line.removeLastPoint()
+        line.removeLastPoint()
     }
     
     func moved(x: Int, y:Int) {

@@ -17,10 +17,13 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     var gameModusButton = MyButton()
     var pickerData: [[String]] = []
     let chooseView = UIPickerView()
+    var gameModusVew = UISegmentedControl()
     let chooseOKButton = MyButton()
     let buttonsView = UIView()
     var goWhenEnd: ()->()
     var device = GV.myDevice
+    var topping: String = ""
+    var chooseLanguageOpen = false
     private var sizes = [String:AnyObject]()
     
     init(callBack: ()->()) {
@@ -86,12 +89,6 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         chooseView.delegate = self
         chooseView.dataSource = self
         
-        //self.view.addSubview(buttonsView)
-        //self.view.addSubview(languageButton)
-        //self.view.addSubview(clearButton)
-        //self.view.addSubview(backButton)
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -103,13 +100,41 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     func endSettings(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: {self.goWhenEnd()})
     }
-    
-    func chooseGameModus () {
+
+    func chooseGameModus (sender: UIButton) {
+        
+        let items = ["Basic", "Joystick", "Other"]
+        gameModusVew = UISegmentedControl(items: items)
+        gameModusVew.selectedSegmentIndex = 0
+        gameModusVew.addTarget(self, action: "changedModus:", forControlEvents:  .ValueChanged)
+        gameModusVew.backgroundColor = GV.PeachPuffColor
+        gameModusVew.layer.shadowColor = GV.BlackColor.CGColor
+        gameModusVew.layer.shadowOffset = CGSizeMake(3, 3)
+        gameModusVew.layer.shadowOpacity = 1.0
+        self.view.addSubview(gameModusVew)
+        setupGameModusView()
         
     }
     
+    func changedModus (sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            GV.gameModus = .Basic
+        case 1:
+            GV.gameModus = .JoyStick
+        default:
+            GV.gameModus = .Basic
+        }
+        gameModusVew.removeFromSuperview()
+    }    
+
     func chooseLanguage(sender: UIButton) {
         
+        languageButton.enabled = false
+        clearButton.enabled = false
+        gameModusButton.enabled = false
+        returnButton.enabled = false
+        chooseLanguageOpen = true
         chooseOKButton.setTitle(GV.language.getText("OK"), forState: .Normal)
         chooseOKButton.addTarget(self, action: "chooseOKFunc:", forControlEvents: .TouchUpInside)
         
@@ -131,6 +156,12 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     func chooseOKFunc(sender: UIButton) {
         chooseView.removeFromSuperview()
         chooseOKButton.removeFromSuperview()
+        GV.language.setLanguage(topping)
+        pickerData.removeAll(keepCapacity: false)
+        languageButton.enabled = true
+        clearButton.enabled = true
+        gameModusButton.enabled = true
+        returnButton.enabled = true
     }
     
     func clearGame(sender: UIButton) {
@@ -180,8 +211,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     }
     
     func updateLabel(){
-        let topping = pickerData[0][chooseView.selectedRowInComponent(0)]
-        GV.language.setLanguage(topping)
+        topping = pickerData[0][chooseView.selectedRowInComponent(0)]
 
     }
     func dummy () ->() {
@@ -197,6 +227,26 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         returnButton.setTitle(GV.language.getText("return"), forState: .Normal)
     }
 
+    func setupGameModusView() {
+        
+        gameModusVew.setTranslatesAutoresizingMaskIntoConstraints(false)
+        var constraintsArray = Array<NSObject>()
+        
+        // gameModusVew
+        
+        
+        constraintsArray.append(NSLayoutConstraint(item: gameModusVew, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: gameModusVew, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: -80.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: gameModusVew, attribute: .Width, relatedBy: .Equal, toItem: buttonsView, attribute: .Width, multiplier: 1.0, constant: 0.0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: gameModusVew, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 70.0))
+        
+      
+        self.view.addConstraints(constraintsArray)
+        
+    }
     func setupChooseLayout() {
         chooseView.setTranslatesAutoresizingMaskIntoConstraints(false)
         chooseOKButton.setTranslatesAutoresizingMaskIntoConstraints(false)
