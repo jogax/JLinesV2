@@ -19,6 +19,8 @@ struct GV {
     static var vBounds = CGRect(x: 0, y: 0, width: 0, height: 0)
     //static var horNormWert: CGFloat = 0 // Geräteabhängige Constante
     //static var vertNormWert: CGFloat = 0 // Geräteabhängige Constante
+    static var notificationCenter = NSNotificationCenter.defaultCenter()
+    static let gameModusChanged = "gameModusChanged"
     static var touchPoint = CGPointZero
     static var gameSize = 5
     static var gameNr = 0
@@ -46,6 +48,7 @@ struct GV {
         }
     }
     static var gameModus = GameModus.Basic
+    static var joyStickRadius: CGFloat = 0.0
     static var rectSize: CGFloat = 0 // rectSize in Choose Table
     static var gameRectSize: CGFloat = 0 // rectSize in gameboard
     static var lines = [LineType:Line]()

@@ -125,6 +125,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         default:
             GV.gameModus = .Basic
         }
+        GV.notificationCenter.postNotificationName(GV.gameModusChanged, object: nil)
         gameModusVew.removeFromSuperview()
     }    
 

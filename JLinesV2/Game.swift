@@ -37,6 +37,7 @@ class Game: UIView, Printable {
     let repeatButton    = MyButton()
     let settingsButton  = MyButton()
     let backButton      = MyButton()
+    let joyStick        = JoyStick()
     var settingsViewController: UIViewController?
     var timer: NSTimer?
     var gameNrPar = ""
@@ -48,10 +49,12 @@ class Game: UIView, Printable {
         var device = UIDevice.currentDevice()					//Get the device object
         
         super.init(frame: frame)
+        GV.joyStickRadius = self.frame.width / 8
         self.backgroundColor = GV.lightSalmonColor
         self.hidden = false
         let size = frame.size
         let origin = frame.origin
+        GV.notificationCenter.addObserver(self, selector: "handleGameModusChanging", name: GV.gameModusChanged, object: nil)
 /*
         device.beginGeneratingDeviceOrientationNotifications()			//Tell it to start monitoring the accelerometer for orientation
         NSNotificationCenter.defaultCenter().addObserver(
@@ -162,6 +165,18 @@ class Game: UIView, Printable {
         self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
     }
     
+    func handleGameModusChanging() {
+        if GV.gameModus == .Basic {
+            joyStick.hidden = true
+            joyStick.removeFromSuperview()
+        } else if GV.gameModus == .JoyStick {
+            self.addSubview(joyStick)
+            joyStick.hidden = false
+            joyStickSetupLayout()
+            joyStick.setJoyStickLayout()
+        }
+    }
+    
     func orientationChanged(notification: NSNotification){
         setupLayout()
     }
@@ -265,6 +280,7 @@ class Game: UIView, Printable {
         GV.timeAdder = 1
     }
 
+    
     func nextButton(sender:UIButton)
     {
         let forwards = sender.frame.origin.x > self.bounds.size.width / 2
@@ -342,6 +358,22 @@ class Game: UIView, Printable {
         }
     }
 
+    func joyStickSetupLayout() {
+        constraintsArray.removeAll(keepCapacity: false)
+        
+        joyStick.setTranslatesAutoresizingMaskIntoConstraints(false)
+        // joyStick
+        constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
+        
+        constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0,
+            constant:  -GV.joyStickRadius / 4))
+        
+        constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: GV.joyStickRadius * 1.2))
+        
+        constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: GV.joyStickRadius * 1.2))
+        self.addConstraints(constraintsArray)
+    }
+    
     func setupLayout() {
         
         self.removeConstraints(constraintsArray)
@@ -356,7 +388,6 @@ class Game: UIView, Printable {
         let buttonSize: CGFloat = self.frame.width / 10
         let buttonsDistance: CGFloat = (self.frame.width - (5 * buttonSize)) / 4.9
         let distanceFromBottomLandscape: CGFloat = -50
-        
         
         timerLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         gameNumber.setTranslatesAutoresizingMaskIntoConstraints(false)
