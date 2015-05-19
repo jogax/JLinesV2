@@ -358,6 +358,7 @@ class Game: UIView, Printable {
         }
     }
 
+    
     func joyStickSetupLayout() {
         constraintsArray.removeAll(keepCapacity: false)
         

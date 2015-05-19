@@ -38,7 +38,6 @@ class JoyStick: UIView {
         shadow.shadowOffset = CGSizeMake(5,5)
         shadow.shadowOpacity = 1.0
         shadow.backgroundColor = UIColor.whiteColor().CGColor
-        knopf.addSublayer(shadow)
-        
+        knopf.addSublayer(shadow)        
    }
 }

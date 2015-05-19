@@ -15,6 +15,7 @@ enum Choosed: Int{
 enum GameModus: Int {
     case Basic = 0, JoyStick
 }
+
 struct GV {
     static var vBounds = CGRect(x: 0, y: 0, width: 0, height: 0)
     //static var horNormWert: CGFloat = 0 // Geräteabhängige Constante
