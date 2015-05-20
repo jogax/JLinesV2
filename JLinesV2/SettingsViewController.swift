@@ -105,7 +105,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         
         let items = ["Basic", "Joystick", "Other"]
         gameModusVew = UISegmentedControl(items: items)
-        gameModusVew.selectedSegmentIndex = 0
+        gameModusVew.selectedSegmentIndex = GV.gameModus.rawValue
         gameModusVew.addTarget(self, action: "changedModus:", forControlEvents:  .ValueChanged)
         gameModusVew.backgroundColor = GV.PeachPuffColor
         gameModusVew.layer.shadowColor = GV.BlackColor.CGColor
@@ -125,7 +125,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         default:
             GV.gameModus = .Basic
         }
-        GV.notificationCenter.postNotificationName(GV.gameModusChanged, object: nil)
+        GV.notificationCenter.postNotificationName(GV.notificationGameModusChanged, object: nil)
         gameModusVew.removeFromSuperview()
     }    
 

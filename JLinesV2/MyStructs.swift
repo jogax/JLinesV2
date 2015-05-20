@@ -21,7 +21,7 @@ struct GV {
     //static var horNormWert: CGFloat = 0 // Geräteabhängige Constante
     //static var vertNormWert: CGFloat = 0 // Geräteabhängige Constante
     static var notificationCenter = NSNotificationCenter.defaultCenter()
-    static let gameModusChanged = "gameModusChanged"
+    static let notificationGameModusChanged = "gameModusChanged"
     static var touchPoint = CGPointZero
     static var gameSize = 5
     static var gameNr = 0

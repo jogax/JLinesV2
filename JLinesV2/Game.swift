@@ -54,7 +54,7 @@ class Game: UIView, Printable {
         self.hidden = false
         let size = frame.size
         let origin = frame.origin
-        GV.notificationCenter.addObserver(self, selector: "handleGameModusChanging", name: GV.gameModusChanged, object: nil)
+        GV.notificationCenter.addObserver(self, selector: "handleGameModusChanging", name: GV.notificationGameModusChanged, object: nil)
 /*
         device.beginGeneratingDeviceOrientationNotifications()			//Tell it to start monitoring the accelerometer for orientation
         NSNotificationCenter.defaultCenter().addObserver(
