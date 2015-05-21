@@ -57,6 +57,12 @@ class JoyStick: UIView {
         //knopf.layer.addSublayer(shadow)
    }
     
+    func setColor (color: LineType {
+         self.color = color
+         knopf.backgroundColor = color
+         knopf.setNeedsDisplay()
+    }
+
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
@@ -76,8 +82,7 @@ class JoyStick: UIView {
         aktTouchPoint = touch.locationInView(self)
         var distanceX = (aktTouchPoint.x - startTouchPoint.x) / 10
         var distanceY = (aktTouchPoint.y - startTouchPoint.y) / 10
-        //distanceX = abs(distanceX) > GV.joyStickRadius / 100 ? distanceX : 0 / 4
-        //distanceY = abs(distanceY) > GV.joyStickRadius / 100 ? distanceY : 0 / 4
+        
         var x: CGFloat = 0
         var y: CGFloat = 0
         //let maxX = self.bounds.midX - knopf.bounds.midX
@@ -91,8 +96,6 @@ class JoyStick: UIView {
             x = self.bounds.midX
             y = self.bounds.midY + distanceY
         }
-        //x = x - knopf.bounds.midX < self.bounds.minX ? self.bounds.minX : x
-        //x = x - knopf.bounds.midX > self.bounds.maxX ? self.bounds.maxX : x
         
         knopf.center.x = x
         knopf.center.y = y
