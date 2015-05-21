@@ -23,6 +23,7 @@ struct GV {
     static var notificationCenter = NSNotificationCenter.defaultCenter()
     static let notificationGameModusChanged = "gameModusChanged"
     static let notificationJoystickMoved = "joystickMoved"
+    static let notificationColorChanged = "colorChanged"
     static var touchPoint = CGPointZero
     static var gameSize = 5
     static var gameNr = 0
