@@ -17,7 +17,8 @@ class JoyStick: UIView {
     var color: UIColor
     var knopf = UIView()
     var shadow = CALayer()
-    var speed: CGFloat = 0.0
+    var speedX: CGFloat = 0.0
+    var speedY: CGFloat = 0.0
     var direction = JoystickDirections.None
     var startTouchPoint = CGPoint(x: 0, y: 0)
     var aktTouchPoint = CGPoint(x: 0, y: 0)
@@ -69,6 +70,7 @@ class JoyStick: UIView {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         startTouchPoint = touch.locationInView(self)
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("makeStep"), userInfo: nil, repeats: true)
     }
 
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -77,6 +79,8 @@ class JoyStick: UIView {
         knopf.center.x = self.bounds.midX
         knopf.center.y = self.bounds.midY
         speed = 0
+        self.timer!.invalidate()
+        self.timer = nil
     }
 
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -94,16 +98,22 @@ class JoyStick: UIView {
             distanceY = 0
             y = self.bounds.midY
             x = self.bounds.midX + distanceX
+            direction = distanceX > 0 ? .Right : . Left
         } else {
             distanceX = 0
             x = self.bounds.midX
             y = self.bounds.midY + distanceY
+            direction = distanceY > 0 ? .Up : . Down
         }
-        speed = abs(distanceX + distanceY)
+        speedX = distanceX
+        speedY = distanceY
+        
         knopf.center.x = x
         knopf.center.y = y
-        If speed == 0 {
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
-        }
+    }
 
+    func makeStep () {
+        let dX = speedX
+        let dY = speedY        
+    }
 }
