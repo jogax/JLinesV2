@@ -164,7 +164,7 @@ class MyGameView: UIView {
             if aktColor != lastColor {
                 GV.moveCount++
             }
-
+            GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil, userInfo: aktColor)
             GV.lineCount = getEndedLinesCount()
             let lineString = GV.language.getText("lines")
             GV.lineCountLabel.text = "\(GV.lineCount) / \(GV.lines.count) \(lineString)"
