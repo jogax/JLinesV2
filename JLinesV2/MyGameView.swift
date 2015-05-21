@@ -68,7 +68,7 @@ class MyGameView: UIView {
         
         
         super.init(frame: frame)
-        
+        GV.notificationCenter.addObserver(self, selector: "handleJoystickMoved", name: GV.notificationJoystickMoved, object: nil)
         if GV.gameNr < GV.maxGameNr {
             //println("GV.volumeNr: \(GV.volumeNr), GV.gameNr: \(GV.gameNr)")
             var gameData = GV.gameData.volumes[GV.volumeNr].games[GV.gameNr]
@@ -140,13 +140,23 @@ class MyGameView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func handleJoystickMoved(notification: NSNotification){
+  
+        if let offset = notification.userInfo as? CGSize {
+            let dX = offset.width
+            let dY = offset.height
+            let point = CGPintMake(GV.touchPoint.x + dX, GV.touchPoint.y + dY)
+            myTouchesMoved(point)
+        }
+
+    }
+
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         
         let (OK, x, y) = getXYPositionInGrid(touch.locationInView(self))
         if (OK && (gameboard!.gameArray[x, y]!.originalPoint || gameboard!.gameArray[x, y]!.inLinePoint)) {
-            
             startPointX = x
             startPointY = y
             aktColor = gameboard!.gameArray[x, y]!.color
@@ -188,9 +198,16 @@ class MyGameView: UIView {
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        let touchCount = touches.count
-        let touch = touches.first as! UITouch
-        let (OK, x, y) = getXYPositionInGrid(touch.locationInView(self))
+        if GV.gameModus != .Joystick {
+            let touchCount = touches.count
+            let touch = touches.first as! UITouch
+            myTouchesMoved(touch.locationInView(self))
+        }
+    }
+
+
+    func myTouchesMoved(point:CGPoint) {
+        let (OK, x, y) = getXYPositionInGrid(point))
         if OK && startPointX != -1 && startPointY != -1 {
             
             let originX = touch.locationInView(self).x - CGFloat(GV.gameRectSize / 2)
