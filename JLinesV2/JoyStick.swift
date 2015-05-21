@@ -114,6 +114,7 @@ class JoyStick: UIView {
 
     func makeStep () {
         let dX = speedX
-        let dY = speedY        
+        let dY = speedY
+        GV.notificationCenter.postNotificationName(GV.notificationJoystickMoved, object: self, userInfo: CGSizeMake(width: dX, height: dY)     
     }
 }
