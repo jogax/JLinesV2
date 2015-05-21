@@ -21,6 +21,8 @@ class JoyStick: UIView {
     var direction = JoystickDirections.None
     var startTouchPoint = CGPoint(x: 0, y: 0)
     var aktTouchPoint = CGPoint(x: 0, y: 0)
+    var timer: NSTimer?
+
     
     override init(frame: CGRect) {
         color = UIColor.clearColor()
@@ -57,7 +59,7 @@ class JoyStick: UIView {
         //knopf.layer.addSublayer(shadow)
    }
     
-    func setColor (color: LineType {
+    func setColor (color: LineType) {
          self.color = color
          knopf.backgroundColor = color
          knopf.setNeedsDisplay()
@@ -74,6 +76,7 @@ class JoyStick: UIView {
         let touch = touches.first as! UITouch
         knopf.center.x = self.bounds.midX
         knopf.center.y = self.bounds.midY
+        speed = 0
     }
 
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -96,9 +99,11 @@ class JoyStick: UIView {
             x = self.bounds.midX
             y = self.bounds.midY + distanceY
         }
-        
+        speed = abs(distanceX + distanceY)
         knopf.center.x = x
         knopf.center.y = y
-    }
+        If speed == 0 {
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
+        }
 
 }
