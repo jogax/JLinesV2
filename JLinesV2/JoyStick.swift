@@ -28,6 +28,7 @@ class JoyStick: UIView {
     override init(frame: CGRect) {
         color = UIColor.clearColor()
         super.init(frame: frame)
+        GV.notificationCenter.addObserver(self, selector: "setColor", name: GV.notificationColorChanged, object: nil)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -60,10 +61,11 @@ class JoyStick: UIView {
         //knopf.layer.addSublayer(shadow)
    }
     
-    func setColor (color: LineType) {
-         self.color = color
-         knopf.backgroundColor = color
-         knopf.setNeedsDisplay()
+    func setColor (notification:NSNotification) {
+        if let offset = notification.userInfo as? LineType {
+           self.color = color
+           knopf.backgroundColor = color
+           knopf.setNeedsDisplay()
     }
 
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
