@@ -38,7 +38,7 @@ class JoyStick: UIView {
         self.layer.borderWidth = 1.0
         //self.backgroundColor = color
 
-        self.backgroundColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 0.5)
+        self.backgroundColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 0.5)
         
         knopf.frame.size = CGSizeMake(GV.joyStickRadius / 1.2, GV.joyStickRadius / 1.2)
         
@@ -74,23 +74,26 @@ class JoyStick: UIView {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         aktTouchPoint = touch.locationInView(self)
-        var distanceX = (aktTouchPoint.x - startTouchPoint.x) / 5
-        var distanceY = (aktTouchPoint.y - startTouchPoint.y) / 5
-        distanceX = abs(distanceX) > GV.joyStickRadius / 100 ? distanceX : 0 / 4
-        distanceY = abs(distanceY) > GV.joyStickRadius / 100 ? distanceY : 0 / 4
+        var distanceX = (aktTouchPoint.x - startTouchPoint.x) / 10
+        var distanceY = (aktTouchPoint.y - startTouchPoint.y) / 10
+        //distanceX = abs(distanceX) > GV.joyStickRadius / 100 ? distanceX : 0 / 4
+        //distanceY = abs(distanceY) > GV.joyStickRadius / 100 ? distanceY : 0 / 4
         var x: CGFloat = 0
         var y: CGFloat = 0
-        let maxX = self.bounds.midX - knopf.bounds.midX
-        let maxY = self.bounds.midY - knopf.bounds.midY
+        //let maxX = self.bounds.midX - knopf.bounds.midX
+        //let maxY = self.bounds.midY - knopf.bounds.midY
         if abs(distanceX) > abs(distanceY) {
             distanceY = 0
             y = self.bounds.midY
-            x = self.bounds.midX + distanceX > maxX ? maxX : self.bounds.midX + distanceX
+            x = self.bounds.midX + distanceX
         } else {
             distanceX = 0
             x = self.bounds.midX
-            y = self.bounds.midY + distanceY > maxY ? maxY : self.bounds.midY + distanceY
+            y = self.bounds.midY + distanceY
         }
+        //x = x - knopf.bounds.midX < self.bounds.minX ? self.bounds.minX : x
+        //x = x - knopf.bounds.midX > self.bounds.maxX ? self.bounds.maxX : x
+        
         knopf.center.x = x
         knopf.center.y = y
     }
