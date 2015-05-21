@@ -47,7 +47,7 @@ class MyLayer: CALayer {
                 
                 coordX = frame.origin.x + CGFloat(pointX) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2.25) - correction * CGFloat(pointX)
                 coordY = frame.origin.y + CGFloat(pointY) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2.25) - correction * CGFloat(pointY)
-                
+                println("gameRectSize: \(GV.gameRectSize), x: \(pointX), y: \(pointY), coordX: \(coordX), coordY: \(coordY)")
                 
                 var layer = line.points[index].layer
                 let radius:CGFloat = GV.gameRectSize * 0.12
@@ -89,7 +89,7 @@ class MyLayer: CALayer {
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func drawInContext(ctx: CGContext!) {
-        GV.gameRectSize = self.bounds.width / CGFloat(GV.gameSize)
+        //GV.gameRectSize = self.bounds.width / CGFloat(GV.gameSize)
         var rectSize = GV.gameRectSize
         var iRectSize = Int(rectSize)
         let endAngle = CGFloat(2*M_PI)

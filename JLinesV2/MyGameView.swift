@@ -65,15 +65,18 @@ class MyGameView: UIView {
             //self.gameboard!.lines = lines
         }
         
+        
+        
         super.init(frame: frame)
-
+        
         if GV.gameNr < GV.maxGameNr {
             //println("GV.volumeNr: \(GV.volumeNr), GV.gameNr: \(GV.gameNr)")
             var gameData = GV.gameData.volumes[GV.volumeNr].games[GV.gameNr]
             //GV.dataStore.createRecord(gameData)
             
-            //println("frame: \(self.frame), parent.frame: \(parent.view.frame)")
-            bgLayer.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
+            GV.gameRectSize = self.frame.width * GV.gameSizeMultiplier / CGFloat(GV.gameSize)
+            
+            bgLayer.frame = CGRect(origin: self.frame.origin, size: CGSizeMake(self.frame.width * GV.gameSizeMultiplier, self.frame.height * GV.gameSizeMultiplier))
             bgLayer.backgroundColor = GV.darkTurquoiseColor.CGColor
             bgLayer.color = .Unknown
             bgLayer.name = "background"
@@ -99,7 +102,7 @@ class MyGameView: UIView {
         lineLayers[color] = MyLayer()
         lineLayers[color]!.color = color
         
-        lineLayers[color]!.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
+        lineLayers[color]!.frame = CGRect(origin: bgLayer.frame.origin, size: bgLayer.frame.size)
         lineLayers[color]!.name = "line"
         self.layer.addSublayer(lineLayers[color])
         GV.lines[color]!.lineEnded = false

@@ -25,9 +25,6 @@ class JoyStick: UIView {
     override init(frame: CGRect) {
         color = UIColor.clearColor()
         super.init(frame: frame)
-        /*
-        */
-        //self.hidden = true
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -35,21 +32,29 @@ class JoyStick: UIView {
     }
     
     func setJoyStickLayout () {
+
         self.layer.borderColor = UIColor.blackColor().CGColor
         self.layer.cornerRadius = GV.joyStickRadius / 1.7
         self.layer.borderWidth = 1.0
-        self.backgroundColor = color
-        knopf.backgroundColor = UIColor.redColor()
+        //self.backgroundColor = color
+
+        self.backgroundColor = UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 0.5)
+        
         knopf.frame.size = CGSizeMake(GV.joyStickRadius / 1.2, GV.joyStickRadius / 1.2)
-        knopf.center = self.center
+        
+        knopf.center.x = self.bounds.midX
+        knopf.center.y = self.bounds.midY
         knopf.layer.cornerRadius = GV.joyStickRadius / 2.4
+        knopf.backgroundColor = UIColor.redColor()
         knopf.hidden = false
+        
         self.addSubview(knopf)
+        
         shadow.shadowColor = UIColor.whiteColor().CGColor
         shadow.shadowOffset = CGSizeMake(5,5)
         shadow.shadowOpacity = 1.0
         shadow.backgroundColor = UIColor.whiteColor().CGColor
-        knopf.layer.addSublayer(shadow)
+        //knopf.layer.addSublayer(shadow)
    }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -61,32 +66,33 @@ class JoyStick: UIView {
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
-        knopf.center = self.center
+        knopf.center.x = self.bounds.midX
+        knopf.center.y = self.bounds.midY
     }
 
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         aktTouchPoint = touch.locationInView(self)
-        var distanceX = aktTouchPoint.x - startTouchPoint.x
-        var distanceY = aktTouchPoint.y - startTouchPoint.y
-        distanceX = abs(distanceX) > GV.joyStickRadius / 4 ? distanceX : 0 / 4
-        distanceY = abs(distanceY) > GV.joyStickRadius / 4 ? distanceY : 0 / 4
+        var distanceX = (aktTouchPoint.x - startTouchPoint.x) / 5
+        var distanceY = (aktTouchPoint.y - startTouchPoint.y) / 5
+        distanceX = abs(distanceX) > GV.joyStickRadius / 100 ? distanceX : 0 / 4
+        distanceY = abs(distanceY) > GV.joyStickRadius / 100 ? distanceY : 0 / 4
+        var x: CGFloat = 0
+        var y: CGFloat = 0
+        let maxX = self.bounds.midX - knopf.bounds.midX
+        let maxY = self.bounds.midY - knopf.bounds.midY
         if abs(distanceX) > abs(distanceY) {
             distanceY = 0
+            y = self.bounds.midY
+            x = self.bounds.midX + distanceX > maxX ? maxX : self.bounds.midX + distanceX
         } else {
             distanceX = 0
+            x = self.bounds.midX
+            y = self.bounds.midY + distanceY > maxY ? maxY : self.bounds.midY + distanceY
         }
-        
-        if distanceX != 0 || distanceY != 0 {
-            direction = abs(distanceX) > abs(distanceY) ?
-            distanceX > 0 ? JoystickDirections.Right:JoystickDirections.Left : distanceY > 0 ? JoystickDirections.Down : JoystickDirections.Up
-            if direction == .Right || direction == .Left {
-                knopf.center.x = GV.joyStickRadius / 4 + distanceX
-            } else {
-                knopf.center.y = GV.joyStickRadius / 4 + distanceY
-            }
-        }
+        knopf.center.x = x
+        knopf.center.y = y
     }
 
 }

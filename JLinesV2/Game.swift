@@ -47,13 +47,13 @@ class Game: UIView, Printable {
         self.package = package
         self.parent = parent
         var device = UIDevice.currentDevice()					//Get the device object
-        
         super.init(frame: frame)
         GV.joyStickRadius = self.frame.width / 8
         self.backgroundColor = GV.lightSalmonColor
         self.hidden = false
         let size = frame.size
         let origin = frame.origin
+        GV.gameSizeMultiplier = (self.frame.height / self.frame.width) / 1.8
         GV.notificationCenter.addObserver(self, selector: "handleGameModusChanging", name: GV.notificationGameModusChanged, object: nil)
 /*
         device.beginGeneratingDeviceOrientationNotifications()			//Tell it to start monitoring the accelerometer for orientation
@@ -84,6 +84,7 @@ class Game: UIView, Printable {
         self.addSubview(GV.lineCountLabel)
         self.addSubview(GV.moveCountLabel)
         
+        //println("self.frame:\(self.frame)")
         setupLayout()
         setNeedsLayout()
         setNeedsUpdateConstraints()
@@ -172,7 +173,9 @@ class Game: UIView, Printable {
         } else if GV.gameModus == .JoyStick {
             self.addSubview(joyStick)
             joyStick.hidden = false
-            joyStickSetupLayout()
+            //joyStickSetupLayout()
+            println("self.frame: \(self.frame), joyStickRadius: \(GV.joyStickRadius)")
+            joyStick.frame = CGRectMake(self.frame.midX - GV.joyStickRadius * 0.5, self.frame.maxY - GV.joyStickRadius * 1.8, GV.joyStickRadius * 1.2, GV.joyStickRadius * 1.2)
             joyStick.setJoyStickLayout()
         }
     }
@@ -334,7 +337,7 @@ class Game: UIView, Printable {
                         GV.gameRectSize = 0
                     }
                 }
-                self.vSize = self.gameContainer.frame.size
+                //self.vSize = self.gameContainer.frame.size
                 self.firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: self.vSize), package: self.package!, parent: self.parent, gameEnded:self.nextAction )
                 self.backgroundColor = GV.lightSalmonColor
                 self.gameContainer.addSubview(self.firstGameView!)
@@ -367,7 +370,7 @@ class Game: UIView, Printable {
         constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: NSLayoutAttribute.CenterX, relatedBy: .Equal, toItem: self, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
         
         constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0,
-            constant:  -GV.joyStickRadius / 4))
+            constant:  -GV.joyStickRadius / 2))
         
         constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: GV.joyStickRadius * 1.2))
         
@@ -499,11 +502,11 @@ class Game: UIView, Printable {
         
         constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .CenterY, relatedBy: .Equal, toItem: self, attribute: .CenterY, multiplier: 1.0, constant: 0.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: 0.99, constant: 0.0))
+        constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Width, relatedBy: .Equal, toItem: self, attribute: .Width, multiplier: GV.gameSizeMultiplier, constant: 0.0))
         
         constraintsArray.append(NSLayoutConstraint(item: gameContainer, attribute: .Height , relatedBy: .Equal, toItem: gameContainer, attribute: .Width, multiplier:
             1.0, constant: 0.0))
-    
+
         self.addConstraints(constraintsArray)
     }
 
