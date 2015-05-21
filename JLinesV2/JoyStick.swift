@@ -62,7 +62,7 @@ class JoyStick: UIView {
    }
     
     func setColor (notification:NSNotification) {
-        if let offset = notification.userInfo as? LineType {
+        if let color = notification.userInfo as? LineType {
            self.color = color
            knopf.backgroundColor = color
            knopf.setNeedsDisplay()
