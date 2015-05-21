@@ -22,6 +22,7 @@ struct GV {
     //static var vertNormWert: CGFloat = 0 // Geräteabhängige Constante
     static var notificationCenter = NSNotificationCenter.defaultCenter()
     static let notificationGameModusChanged = "gameModusChanged"
+    static let notificationJoystickMoved = "joystickMoved"
     static var touchPoint = CGPointZero
     static var gameSize = 5
     static var gameNr = 0
