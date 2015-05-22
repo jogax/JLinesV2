@@ -117,7 +117,6 @@ class MyGameView: UIView {
             while line.points.count > 0 {
                 let x = line.lastPoint().column
                 let y = line.lastPoint().row
-                println("restart: removeLastPoint at x: \(x), y:\(y)")
                 if line.lastPoint() != line.point1 && line.lastPoint() != line.point2 {
                     gameboard!.gameArray[x, y]!.color = .Unknown
                     //gameboard!.gameArray[x, y]!.originalPoint = false
@@ -140,14 +139,11 @@ class MyGameView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func handleJoystickMoved(notification: NSNotification){
+    
+    func handleJoystickMoved() {
   
-        if let offset = notification.userInfo as? CGSize {
-            let dX = offset.width
-            let dY = offset.height
-            let point = CGPintMake(GV.touchPoint.x + dX, GV.touchPoint.y + dY)
-            myTouchesMoved(point)
-        }
+        let point = CGPointMake(GV.touchPoint.x + GV.speed.width, GV.touchPoint.y + GV.speed.height)
+        myTouchesMoved(point)
 
     }
 
@@ -160,19 +156,21 @@ class MyGameView: UIView {
             startPointX = x
             startPointY = y
             aktColor = gameboard!.gameArray[x, y]!.color
-
+            GV.aktColor = aktColor
             if aktColor != lastColor {
                 GV.moveCount++
             }
-            GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil, userInfo: aktColor)
             GV.lineCount = getEndedLinesCount()
             let lineString = GV.language.getText("lines")
             GV.lineCountLabel.text = "\(GV.lineCount) / \(GV.lines.count) \(lineString)"
             
+            if pointLayer != nil {
+               pointLayer!.removeFromSuperlayer()
+            }
             pointLayer = MyLayer()
             pointLayer!.name = "point"
-            let originX = touch.locationInView(self).x - CGFloat(GV.gameRectSize / 2)
-            let originY = touch.locationInView(self).y - CGFloat(GV.gameRectSize / 2)
+            //let originX = touch.locationInView(self).x - CGFloat(GV.gameRectSize / 2)
+            //let originY = touch.locationInView(self).y - CGFloat(GV.gameRectSize / 2)
             pointLayer!.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
         
             pointLayer!.color = aktColor
@@ -190,6 +188,7 @@ class MyGameView: UIView {
                 line.addPoint(point)
             }
             lineLayers[aktColor]!.setNeedsDisplay()
+            GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil)
         }
         else {
             startPointX = -1
@@ -198,7 +197,7 @@ class MyGameView: UIView {
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if GV.gameModus != .Joystick {
+        if GV.gameModus != .JoyStick {
             let touchCount = touches.count
             let touch = touches.first as! UITouch
             myTouchesMoved(touch.locationInView(self))
@@ -207,21 +206,18 @@ class MyGameView: UIView {
 
 
     func myTouchesMoved(point:CGPoint) {
-        let (OK, x, y) = getXYPositionInGrid(point))
+        let (OK, x, y) = getXYPositionInGrid(point)
         if OK && startPointX != -1 && startPointY != -1 {
-            
-            let originX = touch.locationInView(self).x - CGFloat(GV.gameRectSize / 2)
-            let originY = touch.locationInView(self).y - CGFloat(GV.gameRectSize / 2)
+            //et originX = touch.locationInView(self).x - CGFloat(GV.gameRectSize / 2)
+            //let originY = touch.locationInView(self).y - CGFloat(GV.gameRectSize / 2)
             pointLayer!.setNeedsDisplay()
             
             if x != startPointX || y != startPointY {
                 let point: Point = gameboard!.gameArray[x, y]!
                 if !((point.originalPoint && point.color != aktColor) || abs(x - startPointX) > 1 || abs(y - startPointY) > 1) {  // can be moved here
-                    println("touchesMoved for x:\(x), y:\(y)")
                     
                     if point.color != .Unknown && point.color != aktColor  {  // here another line
                         point.earlierColor = point.color
-                        println("deleteEndLine for x:\(x), y:\(y)")
                         deleteEndLine(point,line: GV.lines[point.color]!, calledFrom: "touchesMoved1")  // delete endpart of line, inclusive point
                     }
                     
@@ -233,7 +229,6 @@ class MyGameView: UIView {
                     } else {
                         moved(x, y: y)
                     }
-                    println("call makeLineForLayer")
                     lineLayers[aktColor]!.makeLineForLayer()
                     lineLayers[aktColor]!.setNeedsDisplay()
                     startPointX = x
@@ -245,6 +240,7 @@ class MyGameView: UIView {
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        if GV.gameModus != .JoyStick {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         let point = touch.locationInView(self)
@@ -313,6 +309,7 @@ class MyGameView: UIView {
                 lastColor = aktColor
             }
 
+        }
         }
     }
     

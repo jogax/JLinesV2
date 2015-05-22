@@ -14,7 +14,7 @@ enum JoystickDirections: Int {
 }
 
 class JoyStick: UIView {
-    var color: UIColor
+    var color: LineType = .Unknown
     var knopf = UIView()
     var shadow = CALayer()
     var speedX: CGFloat = 0.0
@@ -23,12 +23,12 @@ class JoyStick: UIView {
     var startTouchPoint = CGPoint(x: 0, y: 0)
     var aktTouchPoint = CGPoint(x: 0, y: 0)
     var timer: NSTimer?
+    let speedCorrection: CGFloat = 8
 
     
     override init(frame: CGRect) {
-        color = UIColor.clearColor()
         super.init(frame: frame)
-        GV.notificationCenter.addObserver(self, selector: "setColor", name: GV.notificationColorChanged, object: nil)
+        GV.notificationCenter.addObserver(self, selector: "changeColor", name: GV.notificationColorChanged, object: nil)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -61,12 +61,6 @@ class JoyStick: UIView {
         //knopf.layer.addSublayer(shadow)
    }
     
-    func setColor (notification:NSNotification) {
-        if let color = notification.userInfo as? LineType {
-           self.color = color
-           knopf.backgroundColor = color
-           knopf.setNeedsDisplay()
-    }
 
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touchCount = touches.count
@@ -80,7 +74,8 @@ class JoyStick: UIView {
         let touch = touches.first as! UITouch
         knopf.center.x = self.bounds.midX
         knopf.center.y = self.bounds.midY
-        speed = 0
+        speedX = 0
+        speedY = 0
         self.timer!.invalidate()
         self.timer = nil
     }
@@ -89,8 +84,8 @@ class JoyStick: UIView {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         aktTouchPoint = touch.locationInView(self)
-        var distanceX = (aktTouchPoint.x - startTouchPoint.x) / 10
-        var distanceY = (aktTouchPoint.y - startTouchPoint.y) / 10
+        var distanceX = (aktTouchPoint.x - startTouchPoint.x) / speedCorrection
+        var distanceY = (aktTouchPoint.y - startTouchPoint.y) / speedCorrection
         
         var x: CGFloat = 0
         var y: CGFloat = 0
@@ -100,23 +95,27 @@ class JoyStick: UIView {
             distanceY = 0
             y = self.bounds.midY
             x = self.bounds.midX + distanceX
-            direction = distanceX > 0 ? .Right : . Left
+            direction = distanceX > 0 ? .Right : .Left
         } else {
             distanceX = 0
             x = self.bounds.midX
             y = self.bounds.midY + distanceY
-            direction = distanceY > 0 ? .Up : . Down
+            direction = distanceY > 0 ? .Up : .Down
         }
-        speedX = distanceX
-        speedY = distanceY
+        GV.speed = CGSizeMake(distanceX, distanceY)
         
         knopf.center.x = x
         knopf.center.y = y
     }
 
     func makeStep () {
-        let dX = speedX
-        let dY = speedY
-        GV.notificationCenter.postNotificationName(GV.notificationJoystickMoved, object: self, userInfo: CGSizeMake(width: dX, height: dY)     
+        GV.notificationCenter.postNotificationName(GV.notificationJoystickMoved, object: nil)
     }
+
+    func changeColor () {
+       self.color = GV.aktColor
+       knopf.backgroundColor = color.uiColor
+       knopf.setNeedsDisplay()
+    }
+
 }
