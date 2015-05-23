@@ -16,14 +16,13 @@ enum JoystickDirections: Int {
 class JoyStick: UIView {
     var color: LineType = .Unknown
     var knopf = UIView()
-    var shadow = CALayer()
     var speedX: CGFloat = 0.0
     var speedY: CGFloat = 0.0
     var direction = JoystickDirections.None
     var startTouchPoint = CGPoint(x: 0, y: 0)
     var aktTouchPoint = CGPoint(x: 0, y: 0)
     var timer: NSTimer?
-    let speedCorrection: CGFloat = 8
+    let speedCorrection: CGFloat = 2
 
     
     override init(frame: CGRect) {
@@ -37,10 +36,12 @@ class JoyStick: UIView {
     
     func setJoyStickLayout () {
 
-        self.layer.borderColor = UIColor.blackColor().CGColor
+        self.layer.borderColor = GV.SilverColor.CGColor
         self.layer.cornerRadius = GV.joyStickRadius / 1.7
-        self.layer.borderWidth = 1.0
-        //self.backgroundColor = color
+        self.layer.borderWidth = 2.8
+        self.layer.shadowColor = GV.BlackColor.CGColor
+        self.layer.shadowOpacity = 1.0
+        self.layer.shadowOffset = CGSizeMake(GV.joyStickRadius / 12, GV.joyStickRadius / 12)
 
         self.backgroundColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 0.5)
         
@@ -54,11 +55,6 @@ class JoyStick: UIView {
         
         self.addSubview(knopf)
         
-        shadow.shadowColor = UIColor.whiteColor().CGColor
-        shadow.shadowOffset = CGSizeMake(5,5)
-        shadow.shadowOpacity = 1.0
-        shadow.backgroundColor = UIColor.whiteColor().CGColor
-        //knopf.layer.addSublayer(shadow)
    }
     
 
@@ -70,14 +66,7 @@ class JoyStick: UIView {
     }
 
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        let touchCount = touches.count
-        let touch = touches.first as! UITouch
-        knopf.center.x = self.bounds.midX
-        knopf.center.y = self.bounds.midY
-        speedX = 0
-        speedY = 0
-        self.timer!.invalidate()
-        self.timer = nil
+        resetJoystick()
     }
 
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -113,9 +102,21 @@ class JoyStick: UIView {
     }
 
     func changeColor () {
-       self.color = GV.aktColor
-       knopf.backgroundColor = color.uiColor
-       knopf.setNeedsDisplay()
+        self.color = GV.aktColor
+        knopf.backgroundColor = color.uiColor
+        knopf.setNeedsDisplay()
+        resetJoystick()
+    }
+
+    func resetJoystick() {
+        knopf.center.x = self.bounds.midX
+        knopf.center.y = self.bounds.midY
+        speedX = 0
+        speedY = 0
+        if self.timer != nil {
+            self.timer!.invalidate()
+            self.timer = nil
+        }
     }
 
 }

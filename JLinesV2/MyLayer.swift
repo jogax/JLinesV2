@@ -33,7 +33,7 @@ class MyLayer: CALayer {
         var coordY: CGFloat = -1
         var line = GV.lines[color]!
         let correction = GV.gameRectSize / 100
-        println("line length: \(line.points.count)")
+        //println("line length: \(line.points.count)")
         if GV.lines[color]!.points.count > 0 {
             for index in 0..<line.points.count {
                 
@@ -47,19 +47,19 @@ class MyLayer: CALayer {
                 
                 coordX = frame.origin.x + CGFloat(pointX) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2.25) - correction * CGFloat(pointX)
                 coordY = frame.origin.y + CGFloat(pointY) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2.25) - correction * CGFloat(pointY)
-                println("gameRectSize: \(GV.gameRectSize), x: \(pointX), y: \(pointY), coordX: \(coordX), coordY: \(coordY)")
+                //println("gameRectSize: \(GV.gameRectSize), x: \(pointX), y: \(pointY), coordX: \(coordX), coordY: \(coordY)")
                 
                 var layer = line.points[index].layer
                 let radius:CGFloat = GV.gameRectSize * 0.12
                 if index > 0 {
-                    println("layer.name: \(layer.name)")
+                    //println("layer.name: \(layer.name)")
                     if layer.name == nil && previousX >= 0  {
                         layer.name = "Layer-\(pointX)-\(pointY)"
                         layer.backgroundColor = color.uiColor.CGColor
                         layer.hidden = false
                         layer.frame.origin.x = min(previousCoordX, coordX) - radius / 2.25
                         layer.frame.origin.y = min(previousCoordY, coordY) - radius / 2.25
-                        println("previousX: \(previousX), x: \(pointX), previousY: \(previousY), y: \(pointY), index: \(index), layer.name: \(layer.name) jetzt generiert\n================\n")
+                        //println("previousX: \(previousX), x: \(pointX), previousY: \(previousY), y: \(pointY), index: \(index), layer.name: \(layer.name) jetzt generiert\n================\n")
                         if pointX != previousX || pointY != previousY {  // only when something changed!
                             if previousX == pointX {
                                 layer.frame.size.width = radius * 2
@@ -76,7 +76,7 @@ class MyLayer: CALayer {
                 
             }
         }
-        println("self.sublayers.count: \(self.sublayers.count)")
+        //println("self.sublayers.count: \(self.sublayers.count)")
         if color != .Unknown && self.sublayers.count > line.points.count {
             
         }

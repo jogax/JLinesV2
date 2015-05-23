@@ -53,7 +53,7 @@ struct GV {
             GV.moveCountLabel.text = "\(GV.moveCount) / \(GV.lines.count) \(step)"
         }
     }
-    static var gameModus = GameModus.Basic
+    static var gameModus = GameModus.JoyStick
     static var joyStickRadius: CGFloat = 0.0
     static var rectSize: CGFloat = 0 // rectSize in Choose Table
     static var gameRectSize: CGFloat = 0 // rectSize in gameboard

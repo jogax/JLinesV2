@@ -164,6 +164,7 @@ class Game: UIView, Printable {
         GV.timeCount = 0
         self.timeLeft = self.timeLeftOrig
         self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
+        handleGameModusChanging()
     }
     
     func handleGameModusChanging() {
@@ -357,7 +358,8 @@ class Game: UIView, Printable {
             let gameName = GV.package!.getVolumeName(GV.volumeNr)
             gameNrPar  = "\(GV.gameNr + 1)  \(gameName)"
             gameNumber.text = GV.language.getText("gameNumber", par: gameNrPar)//"Játék sorszáma: \(GV.gameNr)"
-           // //println("sender: \(sender)")
+            joyStick.resetJoystick()
+
         }
     }
 
