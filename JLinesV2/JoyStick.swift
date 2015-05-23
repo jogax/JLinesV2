@@ -22,7 +22,7 @@ class JoyStick: UIView {
     var startTouchPoint = CGPoint(x: 0, y: 0)
     var aktTouchPoint = CGPoint(x: 0, y: 0)
     var timer: NSTimer?
-    let speedCorrection: CGFloat = 2
+    let speedCorrection: CGFloat = 1
 
     
     override init(frame: CGRect) {
@@ -44,8 +44,9 @@ class JoyStick: UIView {
         self.layer.shadowOffset = CGSizeMake(GV.joyStickRadius / 12, GV.joyStickRadius / 12)
 
         self.backgroundColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 0.5)
+        let knopfSize = CGFloat(Int(GV.joyStickRadius / 1.2))
         
-        knopf.frame.size = CGSizeMake(GV.joyStickRadius / 1.2, GV.joyStickRadius / 1.2)
+        knopf.frame.size = CGSizeMake(knopfSize, knopfSize)
         
         knopf.center.x = self.bounds.midX
         knopf.center.y = self.bounds.midY

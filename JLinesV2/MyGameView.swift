@@ -90,6 +90,9 @@ class MyGameView: UIView {
                 makeNewLayer(color)
             }
             
+            if GV.gameModus == .JoyStick {
+                
+            }
         }
 
     }
@@ -357,6 +360,7 @@ class MyGameView: UIView {
         let firstAction = UIAlertAction(title: GV.language.getText("next level"),
             style: UIAlertActionStyle.Default,
             handler: {(paramAction:UIAlertAction!) in
+                GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil)
                 GV.notificationCenter.removeObserver(self)
                 self.gameEnded(true)
             }
