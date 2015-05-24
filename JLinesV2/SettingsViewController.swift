@@ -103,7 +103,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 
     func chooseGameModus (sender: UIButton) {
         
-        let items = ["Basic", "Joystick", "Other"]
+        let items = ["Finger", "Joystick", "Accelerometer", "Pipiline"]
         gameModusVew = UISegmentedControl(items: items)
         gameModusVew.selectedSegmentIndex = GV.gameModus.rawValue
         gameModusVew.addTarget(self, action: "changedModus:", forControlEvents:  .ValueChanged)
@@ -119,11 +119,15 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     func changedModus (sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            GV.gameModus = .Basic
+            GV.gameModus = .Finger
         case 1:
             GV.gameModus = .JoyStick
+        case 3:
+            GV.gameModus = .Accelerometer
+        case 4:
+            GV.gameModus = .PipeLine
         default:
-            GV.gameModus = .Basic
+            GV.gameModus = .Finger
         }
         GV.notificationCenter.postNotificationName(GV.notificationGameModusChanged, object: nil)
         gameModusVew.removeFromSuperview()

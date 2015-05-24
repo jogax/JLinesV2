@@ -168,7 +168,7 @@ class Game: UIView, Printable {
     }
     
     func handleGameModusChanging() {
-        if GV.gameModus == .Basic {
+        if GV.gameModus != .JoyStick {
             joyStick.hidden = true
             joyStick.removeFromSuperview()
         } else if GV.gameModus == .JoyStick {
@@ -374,9 +374,9 @@ class Game: UIView, Printable {
         constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1.0,
             constant:  -GV.joyStickRadius / 2))
         
-        constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: GV.joyStickRadius * 1.2))
+        constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: CGFloat(Int(GV.joyStickRadius * 1.2))))
         
-        constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: GV.joyStickRadius * 1.2))
+        constraintsArray.append(NSLayoutConstraint(item: joyStick, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: CGFloat(Int(GV.joyStickRadius * 1.2))))
         self.addConstraints(constraintsArray)
     }
     

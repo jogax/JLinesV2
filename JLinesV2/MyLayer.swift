@@ -114,8 +114,8 @@ class MyLayer: CALayer {
 
         if self.name == "point" {
             //println("touchPointX: \(GV.touchPoint.x), touchPoointY: \(GV.touchPoint.y)")
-            self.opacity = 0.20
-            let rad = CGFloat(rectSize / 1.5)
+            self.opacity = 0.50
+            let rad = CGFloat(rectSize / 2.0)
             let xCent: CGFloat = CGFloat(GV.touchPoint.x)
             let yCent: CGFloat = CGFloat(GV.touchPoint.y)
            

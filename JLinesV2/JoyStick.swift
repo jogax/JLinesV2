@@ -15,6 +15,7 @@ enum JoystickDirections: Int {
 
 class JoyStick: UIView {
     var color: LineType = .Unknown
+    var newColor: LineType = .Unknown
     var knopf = UIView()
     var speedX: CGFloat = 0.0
     var speedY: CGFloat = 0.0
@@ -22,7 +23,7 @@ class JoyStick: UIView {
     var startTouchPoint = CGPoint(x: 0, y: 0)
     var aktTouchPoint = CGPoint(x: 0, y: 0)
     var timer: NSTimer?
-    let speedCorrection: CGFloat = 2
+    let speedCorrection: CGFloat = 1
 
     
     override init(frame: CGRect) {
@@ -44,13 +45,14 @@ class JoyStick: UIView {
         self.layer.shadowOffset = CGSizeMake(GV.joyStickRadius / 12, GV.joyStickRadius / 12)
 
         self.backgroundColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 0.5)
+        let knopfSize = CGFloat(Int(GV.joyStickRadius / 1.2))
         
-        knopf.frame.size = CGSizeMake(GV.joyStickRadius / 1.2, GV.joyStickRadius / 1.2)
+        knopf.frame.size = CGSizeMake(knopfSize, knopfSize)
         
         knopf.center.x = self.bounds.midX
         knopf.center.y = self.bounds.midY
         knopf.layer.cornerRadius = GV.joyStickRadius / 2.4
-        knopf.backgroundColor = UIColor.redColor()
+        knopf.backgroundColor = color.uiColor
         knopf.hidden = false
         
         self.addSubview(knopf)
@@ -102,10 +104,7 @@ class JoyStick: UIView {
     }
 
     func changeColor () {
-        self.color = GV.aktColor
-        knopf.backgroundColor = color.uiColor
-        knopf.setNeedsDisplay()
-        resetJoystick()
+        self.newColor = GV.aktColor
     }
 
     func resetJoystick() {
@@ -116,6 +115,11 @@ class JoyStick: UIView {
         if self.timer != nil {
             self.timer!.invalidate()
             self.timer = nil
+        }
+        if self.newColor != self.color {
+            self.color = self.newColor
+            knopf.backgroundColor = color.uiColor
+            knopf.setNeedsDisplay()
         }
     }
 

@@ -13,7 +13,7 @@ enum Choosed: Int{
     case Unknown = 0, Right, Left, Settings, Restart
 }
 enum GameModus: Int {
-    case Basic = 0, JoyStick
+    case Finger = 0, JoyStick, Accelerometer, PipeLine
 }
 
 struct GV {
@@ -24,6 +24,7 @@ struct GV {
     static let notificationGameModusChanged = "gameModusChanged"
     static let notificationJoystickMoved = "joystickMoved"
     static let notificationColorChanged = "colorChanged"
+    static var notInMove = true
     static var aktColor: LineType = .Unknown
     static var speed: CGSize = CGSizeZero
     static var touchPoint = CGPointZero
