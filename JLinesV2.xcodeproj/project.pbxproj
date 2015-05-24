@@ -58,6 +58,8 @@
 		20EB5ECF1AD534000095963C /* repeat.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 20EB5ECC1AD534000095963C /* repeat.jpg */; };
 		20EB5ED01AD534000095963C /* pfeillinks.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 20EB5ECD1AD534000095963C /* pfeillinks.jpg */; };
 		20EB5ED11AD534000095963C /* pfeilrechts.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 20EB5ECE1AD534000095963C /* pfeilrechts.jpg */; };
+		20FAA0901B1228EF001C8018 /* JoyStickNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FAA08F1B1228EF001C8018 /* JoyStickNew.swift */; };
+		20FAA0921B122904001C8018 /* GameNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FAA0911B122904001C8018 /* GameNew.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +130,8 @@
 		20EB5ECC1AD534000095963C /* repeat.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = repeat.jpg; sourceTree = "<group>"; };
 		20EB5ECD1AD534000095963C /* pfeillinks.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeillinks.jpg; sourceTree = "<group>"; };
 		20EB5ECE1AD534000095963C /* pfeilrechts.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeilrechts.jpg; sourceTree = "<group>"; };
+		20FAA08F1B1228EF001C8018 /* JoyStickNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoyStickNew.swift; sourceTree = "<group>"; };
+		20FAA0911B122904001C8018 /* GameNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameNew.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,8 +190,10 @@
 				2009B0B51AB30F7700452C4C /* PagedViewController.swift */,
 				2009B0BD1AB30F7700452C4C /* SettingsViewController.swift */,
 				200A7CE11B0B84330015F20D /* JoyStick.swift */,
+				20FAA08F1B1228EF001C8018 /* JoyStickNew.swift */,
 				2009B0B61AB30F7700452C4C /* MyScrollView.swift */,
 				2009B0B71AB30F7700452C4C /* Game.swift */,
+				20FAA0911B122904001C8018 /* GameNew.swift */,
 				200AF4201AE26CA00055D2D6 /* MyStructs.swift */,
 				200398501AF8D87600F95E7A /* MyDevice.swift */,
 				2009B0B81AB30F7700452C4C /* MyGameView.swift */,
@@ -394,11 +400,13 @@
 				2009B0CC1AB30F7800452C4C /* SwiftyJSON.swift in Sources */,
 				2009B0C41AB30F7700452C4C /* Game.swift in Sources */,
 				20E2EC4F1AD6C7B800E710BC /* Language.swift in Sources */,
+				20FAA0921B122904001C8018 /* GameNew.swift in Sources */,
 				2009B0941AB30EAD00452C4C /* ViewController.swift in Sources */,
 				2009B0C71AB30F7800452C4C /* Point.swift in Sources */,
 				20031C381AE54AC900F73E01 /* CloudData.swift in Sources */,
 				200AF4211AE26CA00055D2D6 /* MyStructs.swift in Sources */,
 				2009B08F1AB30EAD00452C4C /* AppDelegate.swift in Sources */,
+				20FAA0901B1228EF001C8018 /* JoyStickNew.swift in Sources */,
 				2009B0C51AB30F7700452C4C /* MyGameView.swift in Sources */,
 				2009B0C91AB30F7800452C4C /* Line.swift in Sources */,
 				2009B0CB1AB30F7800452C4C /* Package.swift in Sources */,
