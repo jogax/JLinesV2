@@ -9,11 +9,11 @@
 import UIKit
 import Foundation
 
-enum JoystickDirections: Int {
+enum JoystickDirectionsxx: Int {
         case None = 0, Right, Left, Up, Down
 }
 
-class JoyStick: UIView {
+class JoyStickxx: UIView {
     var color: LineType = .Unknown
     var newColor: LineType = .Unknown
     var knopf = UIView()

@@ -12,7 +12,7 @@ import UIKit
 
 
 
-class Game: UIView, Printable {
+class Gamexx: UIView, Printable {
     let multiplicator:CGFloat = 0.90
     var constraintsArray = Array<NSObject>()
     
