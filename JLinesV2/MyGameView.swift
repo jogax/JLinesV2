@@ -91,6 +91,9 @@ class MyGameView: UIView {
                 makeNewLayer(color)
             }
             
+            if GV.gameModus == .JoyStick {
+                
+            }
         }
         if GV.gameModus == .JoyStick {
             setRandomAktColor()
