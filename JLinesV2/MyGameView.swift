@@ -12,13 +12,14 @@ class MyGameView: UIView {
 
     //var gameNumber: Int?
     var package: Package?
+    var alertPresented = false
     //var volumeNr: Int?
 
     //var gameboard: Array2D<Point>?
     
     var gameboard: GameBoard?
     var createNewGame = false
-    //var lines: [LineType:Line]?
+    var notInMove = true
 
     var error: String?
     var startPointX: Int = -1
@@ -162,6 +163,7 @@ class MyGameView: UIView {
             let aktY = GV.lines[randomColor]!.point1!.row
             let aktCoordX = CGFloat(aktX) * CGFloat(GV.gameRectSize) + GV.gameRectSize / 2
             let aktCoordY = CGFloat(aktY) * CGFloat(GV.gameRectSize) + GV.gameRectSize / 2
+            GV.aktColor = randomColor
             myTouchesBegan(CGPointMake(aktCoordX, aktCoordY))
         }
     }
@@ -172,8 +174,8 @@ class MyGameView: UIView {
     }
 
     func handleJoystickMoved() {
-        if GV.notInMove {
-            GV.notInMove = false
+        if notInMove {
+            notInMove = false
             let point = CGPointMake(GV.touchPoint.x + GV.speed.width, GV.touchPoint.y + GV.speed.height)
             if myTouchesMoved(point) {
                 checkIfGameEnded()
@@ -181,7 +183,7 @@ class MyGameView: UIView {
                     setRandomAktColor()
                 }
             }
-            GV.notInMove = true
+            notInMove = true
         }
     }
 
@@ -211,8 +213,6 @@ class MyGameView: UIView {
             }
             pointLayer = MyLayer()
             pointLayer!.name = "point"
-            //let originX = touch.locationInView(self).x - CGFloat(GV.gameRectSize / 2)
-            //let originY = touch.locationInView(self).y - CGFloat(GV.gameRectSize / 2)
             pointLayer!.frame = CGRect(origin: self.frame.origin, size: self.frame.size)
         
             pointLayer!.color = aktColor
@@ -310,20 +310,27 @@ class MyGameView: UIView {
     func getXYPositionInGrid(point:CGPoint, inMoving: Bool) -> (Bool, Int, Int) {
         let xPos = point.x - bounds.origin.x
         let yPos = point.y - bounds.origin.y
+        var myTouchPoint = point
         if xPos < 0 || xPos >= bounds.size.width || yPos < 0 || yPos >= bounds.size.height {
             return (false, 0, 0)
         }
         let x = Int(xPos / CGFloat(GV.gameRectSize))
-        let y = Int(yPos / CGFloat(GV.gameRectSize))        //println("xPos: \(xPos), x: \(x), yPos: \(yPos), y: \(y)")
+        let y = Int(yPos / CGFloat(GV.gameRectSize))
         if x >= GV.gameSize || y >= GV.gameSize {
             return (false, 0, 0)
         }
+        if GV.speed.width == 0 { // moving along Y
+            myTouchPoint.x = CGFloat(x) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize) / 2
+        }
+        if GV.speed.height == 0 { // moving along X
+            myTouchPoint.y = CGFloat(y) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize) / 2
+        }
         let newPointColor = gameboard!.gameArray[x, y]!.color
-        if inMoving && newPointColor != self.aktColor && newPointColor != .Unknown {
+        if inMoving && (newPointColor != self.aktColor && newPointColor != .Unknown)        {
            return (false, 0, 0)
         }
         if x < GV.gameSize && y < GV.gameSize {
-            GV.touchPoint = point
+            GV.touchPoint = myTouchPoint
             return (true, x, y)
         }
         return (false, 0, 0)
@@ -367,65 +374,91 @@ class MyGameView: UIView {
     }
     
     func checkIfGameEnded () -> Bool {
-        for column in 0..<GV.gameSize {
-            for row in 0..<GV.gameSize {
-                if gameboard!.gameArray[column, row]!.color == .Unknown {return false}
+        var completed = false
+        if !alertPresented {
+            completed = true
+            var gameEndAlert:UIAlertController?
+            var messageTxt = ""
+            var titleText = ""
+            var stopText = ""
+            for (color, line) in GV.lines {
+                if !line.lineEnded {return false}
             }
-        }
-        for (color, line) in GV.lines {
-            if !line.lineEnded {return false}
-        }
-        
-        GV.timeAdder = 0
-        nextLevel = false
-        alertNotReady = true
-        //println("Game ended!!!")
-        
-        var gameData = GameData()
-        gameData.gameName = GV.package!.getVolumeName(GV.volumeNr) as String
-        gameData.gameNumber = GV.gameNr
-        gameData.countLines = GV.lines.count
-        gameData.countMoves = GV.moveCount
-        gameData.countSeconds = GV.timeCount
-        
-        GV.dataStore.updateRecord(gameData)
-        
-        var gameEndAlert:UIAlertController?
-        var messageTxt = ""
-        if GV.moveCount == GV.lines.count {
-            messageTxt = GV.language.getText("congratulations")
-        }
-        messageTxt += GV.language.getText("task solved",par:"\(GV.moveCount)", "\(GV.timeCount)")
-        
-        gameEndAlert = UIAlertController(title: GV.language.getText("task completed"),
-            message: messageTxt,
-            preferredStyle: .Alert)
-        
-        let firstAction = UIAlertAction(title: GV.language.getText("next level"),
-            style: UIAlertActionStyle.Default,
-            handler: {(paramAction:UIAlertAction!) in
-                GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil)
-                GV.notificationCenter.removeObserver(self)
-                self.gameEnded(true)
-            }
-        )
-        
-        let secondAction = UIAlertAction(title: GV.language.getText("Stop"),
-            style: UIAlertActionStyle.Cancel,
-            handler: {(paramAction:UIAlertAction!) in
-                //GV.notificationCenter.addObserver(self, selector: "handleJoystickMoved", name: GV.notificationJoystickMoved, object: nil)
+            alertPresented = true
+            
+            for column in 0..<GV.gameSize {
+                for row in 0..<GV.gameSize {
+                    if gameboard!.gameArray[column, row]!.color == .Unknown {
+                        completed = false
+                    }
+                }
             }
             
-        )
-        
-        
-        gameEndAlert!.addAction(firstAction)
-        gameEndAlert!.addAction(secondAction)
-        parent.presentViewController(gameEndAlert!,
-            animated:true,
-            completion: nil)
+            GV.timeAdder = 0
+            nextLevel = false
+            alertNotReady = true
+            
+            if completed {
+                var gameData = GameData()
+                gameData.gameName = GV.package!.getVolumeName(GV.volumeNr) as String
+                gameData.gameNumber = GV.gameNr
+                gameData.countLines = GV.lines.count
+                gameData.countMoves = GV.moveCount
+                gameData.countSeconds = GV.timeCount
+                
+                GV.dataStore.updateRecord(gameData)
+                
+                completed = true
+                titleText = GV.language.getText("task completed")
+                stopText = "stop"
+                if GV.moveCount == GV.lines.count {
+                    messageTxt = GV.language.getText("congratulations")
+                }
+                messageTxt += GV.language.getText("task solved",par:"\(GV.moveCount)", "\(GV.timeCount)")
 
-        return true
+            } else {
+                titleText = GV.language.getText("task not completed")
+                messageTxt = GV.language.getText("fill the board")
+                var gameData = GameData()
+                stopText = "continue"
+                gameData.gameName = GV.package!.getVolumeName(GV.volumeNr) as String
+                gameData.gameNumber = GV.gameNr
+                GV.dataStore.updateRecord(gameData)
+            }
+
+            pointLayer!.removeFromSuperlayer()
+            GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil) // Joystick reset
+
+            gameEndAlert = UIAlertController(title: titleText,
+                message: messageTxt,
+                preferredStyle: .Alert)
+            
+            let firstAction = UIAlertAction(title: GV.language.getText("next level"),
+                style: UIAlertActionStyle.Default,
+                handler: {(paramAction:UIAlertAction!) in
+                    GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil)
+                    GV.notificationCenter.removeObserver(self)
+                    self.gameEnded(true)
+                }
+            )
+            
+            let secondAction = UIAlertAction(title: GV.language.getText(stopText),
+                style: UIAlertActionStyle.Cancel,
+                handler: {(paramAction:UIAlertAction!) in
+                    self.alertPresented = false
+                    //GV.notificationCenter.addObserver(self, selector: "handleJoystickMoved", name: GV.notificationJoystickMoved, object: nil)
+                }
+                
+            )
+            
+            
+            gameEndAlert!.addAction(firstAction)
+            gameEndAlert!.addAction(secondAction)
+            parent.presentViewController(gameEndAlert!,
+                animated:true,
+                completion: nil)
+        }
+        return completed
     }
     
     func getEndedLinesCount() -> Int{

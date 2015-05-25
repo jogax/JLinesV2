@@ -24,7 +24,6 @@ struct GV {
     static let notificationGameModusChanged = "gameModusChanged"
     static let notificationJoystickMoved = "joystickMoved"
     static let notificationColorChanged = "colorChanged"
-    static var notInMove = true
     static var aktColor: LineType = .Unknown
     static var speed: CGSize = CGSizeZero
     static var touchPoint = CGPointZero

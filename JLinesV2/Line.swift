@@ -143,7 +143,7 @@ class Line: Hashable, Printable {
         }
         return false
     }
-    
+/*
     func setEdgePoints () {
         var previousX:Int = -1
         var previousY:Int = -1
@@ -185,7 +185,7 @@ class Line: Hashable, Printable {
             }
         }
     }
-    
+*/
     func lastPoint() -> Point {
         return points[points.count - 1]
     }
@@ -193,7 +193,6 @@ class Line: Hashable, Printable {
     
     func removeLastPoint() {
         lastPoint().inLinePoint = false
-        println("at removeLastPoint: x: \(lastPoint().column), y: \(lastPoint().row), inLinePoint: \(lastPoint().inLinePoint)")
         points.removeAtIndex(points.count - 1)
         cnt = points.count
     }

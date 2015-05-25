@@ -113,12 +113,12 @@ class MyLayer: CALayer {
         }
 
         if self.name == "point" {
-            //println("touchPointX: \(GV.touchPoint.x), touchPoointY: \(GV.touchPoint.y)")
             self.opacity = 0.50
             let rad = CGFloat(rectSize / 2.0)
+            
             let xCent: CGFloat = CGFloat(GV.touchPoint.x)
             let yCent: CGFloat = CGFloat(GV.touchPoint.y)
-           
+            
             CGContextAddArc(ctx, xCent, yCent, rad, 0, endAngle, 1)
             CGContextSetFillColorWithColor(ctx, color.uiColor.CGColor)
             CGContextSetStrokeColorWithColor(ctx,color.uiColor.CGColor)
@@ -166,119 +166,14 @@ class MyLayer: CALayer {
                         
                         let pointX = GV.lines[color]!.points[index].column
                         let pointY = GV.lines[color]!.points[index].row
-                        //println ("pointX:\(pointX), pointY: \(pointY)")
                         let coordX = self.bounds.origin.x + (CGFloat(pointX) * rectSize) + rectSize / 2
                         let coordY = self.bounds.origin.y + (CGFloat(pointY) * rectSize) + rectSize / 2
                         let size = rectSize / 64
-                        //if GV.lines[color]!.point1 == GV.lines[color]!.points[index] {
-                            //println("bounds.width: \(self.bounds.width), color: \(color.colorName), coordX: \(coordX), coordY: \(coordY), width: \(size), heigth: \(size)")
-                            CGContextStrokeRect(ctx, CGRect(x: coordX, y: coordY, width: size, height: size))
-                        //}
+                        CGContextStrokeRect(ctx, CGRect(x: coordX, y: coordY, width: size, height: size))
                     }
-                    //CGContextStrokePath(ctx)
                     
                 }
             }
-/*
-            lineWidth = rad * 0.8
-            
-            CGContextSetLineWidth(ctx, lineWidth)
-            let constant: CGFloat = 1 / 4
-            let edgeRad = GV.gameRectSize * constant
-            var pointX = -1
-            var pointY = -1
-            var oldPointX = -1
-            var oldPointY = -1
-            var center = CGPoint(x: 0,y: 0)
-            //println("color: \(color)")
-            if GV.lines[color]!.points.count > 0 {
-                for index in 0..<GV.lines[color]!.points.count {
-                            //println("color: \(color), count of points: \(line.points.count) \n")
-                    
-                    CGContextSetStrokeColorWithColor(ctx, color.uiColor.CGColor)
-                    oldPointX = pointX
-                    oldPointY = pointY
-                    pointX = GV.lines[color]!.points[index].column
-                    pointY = GV.lines[color]!.points[index].row
-                    let edge = GV.lines[color]!.points[index].edge
-                    //println ("pointX:\(pointX), pointY: \(pointY)")
-                    let coordX = bounds.origin.x + CGFloat(pointX) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2)
-                    let coordY = bounds.origin.y + CGFloat(pointY) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize / 2)
-                    if index == 0 {
-                        CGContextMoveToPoint(ctx,coordX, coordY)
-                    } else {
-                        if edge == Edge.None {
-                            CGContextAddLineToPoint(ctx, coordX, coordY)
-                        } else {
-                            if edge == .LeftUp {
-                                if oldPointX == pointX {  // line comming from up
-                                    CGContextAddLineToPoint(ctx, coordX, coordY - GV.gameRectSize * constant)
-                                } else {
-                                    CGContextAddLineToPoint(ctx, coordX - GV.gameRectSize * constant, coordY)
-                                }
-                                CGContextStrokePath(ctx)
-                                center = CGPoint(x: coordX - GV.gameRectSize * constant, y: coordY - GV.gameRectSize * constant)
-                                CGContextAddArc(ctx, center.x, center.y, edgeRad, oneGrad * 90, oneGrad * 360, 1)
-                                if oldPointX == pointX { // line goes to left
-                                    CGContextMoveToPoint(ctx,coordX - GV.gameRectSize * constant, coordY)
-                                } else {
-                                    CGContextMoveToPoint(ctx,coordX, coordY - GV.gameRectSize * constant)
-                                }
-                            }
-                            if edge == .RightUp {
-                                if oldPointX == pointX {  // line comming from up
-                                    CGContextAddLineToPoint(ctx, coordX, coordY - GV.gameRectSize * constant)
-                                } else {
-                                    CGContextAddLineToPoint(ctx, coordX + GV.gameRectSize * constant, coordY)
-                                }
-                                CGContextStrokePath(ctx)
-                                center = CGPoint(x: coordX + GV.gameRectSize * constant, y: coordY - GV.gameRectSize * constant)
-                                CGContextAddArc(ctx, center.x, center.y, edgeRad, oneGrad * 180, oneGrad * 90, 1)
-                                if oldPointX == pointX { // line goes to left
-                                    CGContextMoveToPoint(ctx,coordX + GV.gameRectSize * constant, coordY)
-                                } else {
-                                    CGContextMoveToPoint(ctx,coordX, coordY - GV.gameRectSize * constant)
-                                }
-                            }
-                            if edge == .LeftDown {
-                                if oldPointX == pointX {  // line comming from up
-                                    CGContextAddLineToPoint(ctx, coordX, coordY + GV.gameRectSize * constant)
-                                } else {
-                                    CGContextAddLineToPoint(ctx, coordX - GV.gameRectSize * constant, coordY)
-                                }
-                                CGContextStrokePath(ctx)
-                                center = CGPoint(x: coordX - GV.gameRectSize * constant, y: coordY + GV.gameRectSize * constant)
-                                CGContextAddArc(ctx, center.x, center.y, edgeRad, oneGrad * 365, oneGrad * 265, 1)
-                                if oldPointX == pointX { // line goes to left
-                                    CGContextMoveToPoint(ctx,coordX - GV.gameRectSize * constant, coordY)
-                                } else {
-                                    CGContextMoveToPoint(ctx,coordX, coordY + GV.gameRectSize * constant)
-                                }
-                            }
-                            if edge == .RightDown {
-                                if oldPointX == pointX {  // line comming from up
-                                    CGContextAddLineToPoint(ctx, coordX, coordY + GV.gameRectSize * constant)
-                                } else {
-                                    CGContextAddLineToPoint(ctx, coordX + GV.gameRectSize * constant, coordY)
-                                }
-                                CGContextStrokePath(ctx)
-                                center = CGPoint(x: coordX + GV.gameRectSize * constant, y: coordY + GV.gameRectSize * constant)
-                                CGContextAddArc(ctx, center.x, center.y, edgeRad, oneGrad * 275, oneGrad * 175, 1)
-                                if oldPointX == pointX { // line goes to left
-                                    CGContextMoveToPoint(ctx,coordX + GV.gameRectSize * constant, coordY)
-                                } else {
-                                    CGContextMoveToPoint(ctx,coordX, coordY + GV.gameRectSize * constant)
-                                }
-                            }
-                        }
-                        
-                    }
-
-                }
-                CGContextStrokePath(ctx)
-
-            }
-*/
         }
         
     }

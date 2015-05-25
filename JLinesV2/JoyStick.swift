@@ -23,7 +23,7 @@ class JoyStick: UIView {
     var startTouchPoint = CGPoint(x: 0, y: 0)
     var aktTouchPoint = CGPoint(x: 0, y: 0)
     var timer: NSTimer?
-    let speedCorrection: CGFloat = 1
+    let speedCorrection: CGFloat = 1.8
 
     
     override init(frame: CGRect) {
@@ -64,9 +64,19 @@ class JoyStick: UIView {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         startTouchPoint = touch.locationInView(self)
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("makeStep"), userInfo: nil, repeats: true)
+        startTimer(true)
     }
 
+    func startTimer(start: Bool) {
+        if self.timer != nil {
+            self.timer!.invalidate()
+        }
+        if start {
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("makeStep"), userInfo: nil, repeats: true)
+        } else {
+            self.timer = nil            
+        }
+    }
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         resetJoystick()
     }
@@ -94,7 +104,7 @@ class JoyStick: UIView {
             direction = distanceY > 0 ? .Up : .Down
         }
         GV.speed = CGSizeMake(distanceX, distanceY)
-        
+
         knopf.center.x = x
         knopf.center.y = y
     }
@@ -105,6 +115,7 @@ class JoyStick: UIView {
 
     func changeColor () {
         self.newColor = GV.aktColor
+        resetJoystick()
     }
 
     func resetJoystick() {
@@ -112,10 +123,7 @@ class JoyStick: UIView {
         knopf.center.y = self.bounds.midY
         speedX = 0
         speedY = 0
-        if self.timer != nil {
-            self.timer!.invalidate()
-            self.timer = nil
-        }
+        startTimer(false)
         if self.newColor != self.color {
             self.color = self.newColor
             knopf.backgroundColor = color.uiColor
