@@ -326,7 +326,9 @@ class MyGameView: UIView {
             myTouchPoint.y = CGFloat(y) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize) / 2
         }
         let newPointColor = gameboard!.gameArray[x, y]!.color
-        if inMoving && (newPointColor != self.aktColor && newPointColor != .Unknown)        {
+        if inMoving && (newPointColor != self.aktColor && newPointColor != .Unknown)
+        {
+            println("returned with oldColor: \(self.aktColor), newColor: \(newPointColor) with speed: \(GV.speed)")
            return (false, 0, 0)
         }
         if x < GV.gameSize && y < GV.gameSize {
@@ -399,6 +401,7 @@ class MyGameView: UIView {
             alertNotReady = true
             
             if completed {
+                GV.moveCount++
                 var gameData = GameData()
                 gameData.gameName = GV.package!.getVolumeName(GV.volumeNr) as String
                 gameData.gameNumber = GV.gameNr

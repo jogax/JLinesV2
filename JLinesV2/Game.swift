@@ -175,7 +175,6 @@ class Game: UIView, Printable {
             self.addSubview(joyStick)
             joyStick.hidden = false
             //joyStickSetupLayout()
-            println("self.frame: \(self.frame), joyStickRadius: \(GV.joyStickRadius)")
             joyStick.frame = CGRectMake(self.frame.midX - GV.joyStickRadius * 0.5, self.frame.maxY - GV.joyStickRadius * 1.8, GV.joyStickRadius * 1.2, GV.joyStickRadius * 1.2)
             joyStick.setJoyStickLayout()
         }

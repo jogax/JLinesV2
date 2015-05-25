@@ -88,6 +88,14 @@ class JoyStick: UIView {
         var distanceX = (aktTouchPoint.x - startTouchPoint.x) / speedCorrection
         var distanceY = (aktTouchPoint.y - startTouchPoint.y) / speedCorrection
         
+        if distanceX > GV.gameRectSize / 2 {
+            distanceX = GV.gameRectSize / 2
+        }
+
+        if distanceY > GV.gameRectSize / 2 {
+            distanceY = GV.gameRectSize / 2
+        }
+
         var x: CGFloat = 0
         var y: CGFloat = 0
         //let maxX = self.bounds.midX - knopf.bounds.midX
