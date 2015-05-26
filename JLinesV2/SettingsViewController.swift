@@ -17,7 +17,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     var gameModusButton = MyButton()
     var pickerData: [[String]] = []
     let chooseView = UIPickerView()
-    var gameModusVew = UISegmentedControl()
+    var gameControllView = UISegmentedControl()
     let chooseOKButton = MyButton()
     let buttonsView = UIView()
     var goWhenEnd: ()->()
@@ -75,7 +75,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         languageButton.addTarget(self, action: "chooseLanguage:", forControlEvents: .TouchUpInside)
 
         gameModusButton.setTitle(GV.language.getText("gameModus"), forState: .Normal)
-        gameModusButton.addTarget(self, action: "chooseGameModus:", forControlEvents: .TouchUpInside)
+        gameModusButton.addTarget(self, action: "chooseGameControll:", forControlEvents: .TouchUpInside)
         
         clearButton.setTitle(GV.language.getText("cleangame"), forState: .Normal)
         clearButton.addTarget(self, action: "clearGame:", forControlEvents: .TouchUpInside)
@@ -101,36 +101,38 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         self.dismissViewControllerAnimated(true, completion: {self.goWhenEnd()})
     }
 
-    func chooseGameModus (sender: UIButton) {
+    func chooseGameControll (sender: UIButton) {
         
         let items = ["Finger", "Joystick", "Accelerometer", "Pipiline"]
-        gameModusVew = UISegmentedControl(items: items)
-        gameModusVew.selectedSegmentIndex = GV.gameModus.rawValue
-        gameModusVew.addTarget(self, action: "changedModus:", forControlEvents:  .ValueChanged)
-        gameModusVew.backgroundColor = GV.PeachPuffColor
-        gameModusVew.layer.shadowColor = GV.BlackColor.CGColor
-        gameModusVew.layer.shadowOffset = CGSizeMake(3, 3)
-        gameModusVew.layer.shadowOpacity = 1.0
-        self.view.addSubview(gameModusVew)
-        setupGameModusView()
+        gameControllView = UISegmentedControl(items: items)
+        gameControllView.selectedSegmentIndex = GV.gameControll.rawValue
+        gameControllView.addTarget(self, action: "changedModus:", forControlEvents:  .ValueChanged)
+        gameControllView.backgroundColor = GV.PeachPuffColor
+        gameControllView.layer.shadowColor = GV.BlackColor.CGColor
+        gameControllView.layer.shadowOffset = CGSizeMake(3, 3)
+        gameControllView.layer.shadowOpacity = 1.0
+        self.view.addSubview(gameControllView)
+        setupGameControllView()
         
     }
     
     func changedModus (sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            GV.gameModus = .Finger
+            GV.gameControll = .Finger
         case 1:
-            GV.gameModus = .JoyStick
+            GV.gameControll = .JoyStick
         case 3:
-            GV.gameModus = .Accelerometer
+            GV.gameControll = .Accelerometer
         case 4:
-            GV.gameModus = .PipeLine
+            GV.gameControll = .PipeLine
         default:
-            GV.gameModus = .Finger
+            GV.gameControll = .Finger
         }
-        GV.notificationCenter.postNotificationName(GV.notificationGameModusChanged, object: nil)
-        gameModusVew.removeFromSuperview()
+        GV.appData.gameControll = Int64(GV.gameControll.rawValue)
+        GV.notificationCenter.postNotificationName(GV.notificationGameControllChanged, object: nil)
+        GV.dataStore.createAppVariablesRecord(GV.appData)
+        gameControllView.removeFromSuperview()
     }    
 
     func chooseLanguage(sender: UIButton) {
@@ -232,21 +234,21 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         returnButton.setTitle(GV.language.getText("return"), forState: .Normal)
     }
 
-    func setupGameModusView() {
+    func setupGameControllView() {
         
-        gameModusVew.setTranslatesAutoresizingMaskIntoConstraints(false)
+        gameControllView.setTranslatesAutoresizingMaskIntoConstraints(false)
         var constraintsArray = Array<NSObject>()
         
         // gameModusVew
         
         
-        constraintsArray.append(NSLayoutConstraint(item: gameModusVew, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
+        constraintsArray.append(NSLayoutConstraint(item: gameControllView, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: gameModusVew, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: -80.0))
+        constraintsArray.append(NSLayoutConstraint(item: gameControllView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: -80.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: gameModusVew, attribute: .Width, relatedBy: .Equal, toItem: buttonsView, attribute: .Width, multiplier: 1.0, constant: 0.0))
+        constraintsArray.append(NSLayoutConstraint(item: gameControllView, attribute: .Width, relatedBy: .Equal, toItem: buttonsView, attribute: .Width, multiplier: 1.0, constant: 0.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: gameModusVew, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 70.0))
+        constraintsArray.append(NSLayoutConstraint(item: gameControllView, attribute: .Height , relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 70.0))
         
       
         self.view.addConstraints(constraintsArray)

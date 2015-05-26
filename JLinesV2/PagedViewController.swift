@@ -78,6 +78,8 @@ class PagedViewController: UIViewController, UIScrollViewDelegate {
         let pageCount = GV.maxVolumeNr
         if delete {GV.dataStore.deleteAllRecords()}
         GV.gameData = GV.dataStore.getDataArray()
+        GV.appData = GV.dataStore.getAppVariablesData()
+        GV.gameControll = GameControll(rawValue: Int(GV.appData.gameControll))!
         let myGame = GV.gameData
         GV.dataStore.printRecords()
         

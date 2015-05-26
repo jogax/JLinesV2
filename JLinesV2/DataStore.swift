@@ -23,23 +23,27 @@ class DataStore {
     //let request = NSFetchRequest()
     var error: NSError?
     var gameEntity: GameStatus?
+    var appVariablesEntity: AppVariables?
+    var appVariables: AppVariables?
     var exists: Bool = true
-    var entityDescription:NSEntityDescription?
+    var gameStatusDescription:NSEntityDescription?
+    var appVariablesDescription:NSEntityDescription?
     
     init() {
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext!
-        entityDescription = NSEntityDescription.entityForName("GameStatus", inManagedObjectContext:managedObjectContext!)
-//        gameEntity = GameStatus(entity:entityDescription!, insertIntoManagedObjectContext: managedObjectContext)
+        gameStatusDescription = NSEntityDescription.entityForName("GameStatus", inManagedObjectContext:managedObjectContext!)
+        appVariablesDescription = NSEntityDescription.entityForName("AppVariables", inManagedObjectContext:managedObjectContext!)
  
     }
+    
     func createRecord(gameData: GameData) {
         if exists(gameData) {
             deleteRecords(gameData)
         }
         //println("\(gameData)")
-        gameEntity = GameStatus(entity:entityDescription!, insertIntoManagedObjectContext: managedObjectContext)
+        gameEntity = GameStatus(entity:gameStatusDescription!, insertIntoManagedObjectContext: managedObjectContext)
         updateRecord(gameData)
     }
     
@@ -48,7 +52,7 @@ class DataStore {
             deleteRecords(gameData)
         }
         //GV.cloudData.saveRecord(gameData)
-        gameEntity = GameStatus(entity:entityDescription!, insertIntoManagedObjectContext: managedObjectContext)
+        gameEntity = GameStatus(entity:gameStatusDescription!, insertIntoManagedObjectContext: managedObjectContext)
         let volume = GV.volumeNr
         GV.gameData.volumes[volume].games[gameData.gameNumber] = gameData
         gameEntity!.countLines = gameData.countLines
@@ -65,7 +69,7 @@ class DataStore {
    
     func exists(gameData:GameData)->Bool {
         let request = NSFetchRequest()
-        request.entity = entityDescription
+        request.entity = gameStatusDescription
  
         let p1 = NSPredicate(format: "gameName = %@", gameData.gameName)
         let p2 = NSPredicate(format: "gameNumber = %ld", gameData.gameNumber)
@@ -81,21 +85,20 @@ class DataStore {
         }
     }
     
-    func getData()->GameData {
-        var gameData = GameData()
-        gameData.gameName = gameEntity!.gameName
-        gameData.gameNumber = gameEntity!.gameNumber as! Int
-        gameData.countLines = gameEntity!.countLines as! Int
-        gameData.countMoves = gameEntity!.countMoves as! Int
-        gameData.countSeconds = gameEntity!.countSeconds as! Int
-
-        return gameData
+    
+    func getCountRecords() -> Int {
+        let request = NSFetchRequest()
+        
+        request.entity = gameStatusDescription
+        
+        var results = managedObjectContext!.executeFetchRequest(request, error: &error)
+        return results!.count
     }
 
     func deleteAllRecords() {
         let request = NSFetchRequest()
-
-        request.entity = entityDescription
+        
+        request.entity = gameStatusDescription
         
         var results = managedObjectContext!.executeFetchRequest(request, error: &error)
         //println("countResults: \(results!.count)")
@@ -105,22 +108,14 @@ class DataStore {
         results = managedObjectContext!.executeFetchRequest(request, error: &error)
         //println("countResults: \(results!.count)")
     }
+    
+    
 
-    
-    func getCountRecords() -> Int {
-        let request = NSFetchRequest()
-        
-        request.entity = entityDescription
-        
-        var results = managedObjectContext!.executeFetchRequest(request, error: &error)
-        return results!.count
-    }
-    
     func deleteRecords(gameData:GameData) {
         printRecords()
         //println("--------------------------------")
         let request = NSFetchRequest()
-        request.entity = entityDescription
+        request.entity = gameStatusDescription
         let p1 = NSPredicate(format: "gameName = %@", gameData.gameName)
         let p2 = NSPredicate(format: "gameNumber = %ld", gameData.gameNumber)
         request.predicate = NSCompoundPredicate.andPredicateWithSubpredicates([p1, p2])
@@ -132,9 +127,10 @@ class DataStore {
         printRecords()
     }
 
+
     func getDataArray() -> MyGames {
         let request = NSFetchRequest()
-        request.entity = entityDescription
+        request.entity = gameStatusDescription
         //var cloudArray = GV.cloudData.fetchAllRecords()
         var results = managedObjectContext?.executeFetchRequest(request, error: &error)
         //println("countResults: \(results!.count)")
@@ -162,14 +158,55 @@ class DataStore {
     
     func getNumberRecords () -> Int {
         let request = NSFetchRequest()
-        request.entity = entityDescription
+        request.entity = gameStatusDescription
         var results = managedObjectContext?.executeFetchRequest(request, error: &error)
         return results!.count
     }
     
+    func createAppVariablesRecord(appData: AppData) {
+        deleteGlobalVariablesRecords()
+        //GV.cloudData.saveRecord(gameData)
+        appVariablesEntity = AppVariables(entity:appVariablesDescription!, insertIntoManagedObjectContext: managedObjectContext)
+        appVariablesEntity!.gameControll = NSNumber(longLong: appData.gameControll)
+        managedObjectContext?.save(&error)
+        if let err = error {
+            let errorMessage = GV.language.getText("errorBySaveData",par:String(_cocoaString: err))
+            //println("\(errorMessage)")
+        }
+    }
+    
+    func getAppVariablesData()->AppData {
+        var appData = AppData()
+        
+        let request = NSFetchRequest()
+        
+        request.entity = self.appVariablesDescription
+        
+        var results = managedObjectContext!.executeFetchRequest(request, error: &error)
+        if let match = results!.first as? NSManagedObject {
+
+            appData.gameControll = Int64(match.valueForKey("gameControll") as! NSInteger)
+        } else {
+            appData.gameControll = Int64(GameControll.Finger.rawValue)
+        }
+        return appData
+    }
+    
+    func deleteGlobalVariablesRecords() {
+        let request = NSFetchRequest()
+        
+        request.entity = appVariablesDescription
+        
+        var results = managedObjectContext!.executeFetchRequest(request, error: &error)
+        for (ind,result) in enumerate(results!) {
+            managedObjectContext!.deleteObject(result as! NSManagedObject)
+        }
+        results = managedObjectContext!.executeFetchRequest(request, error: &error)
+    }
+    
     func printRecords() {
         let request = NSFetchRequest()
-        request.entity = entityDescription
+        request.entity = gameStatusDescription
         var results = managedObjectContext?.executeFetchRequest(request, error: &error)
         for (ind, result) in enumerate(results!) {
             let match = result as! NSManagedObject
