@@ -175,12 +175,12 @@
 		2009B08B1AB30EAD00452C4C /* JLinesV2 */ = {
 			isa = PBXGroup;
 			children = (
-				20FB11FD1B14E4B600A70ED7 /* AppVariables.swift */,
 				20031C341AE5438500F73E01 /* JLinesV2.entitlements */,
 				2009B08E1AB30EAD00452C4C /* AppDelegate.swift */,
 				2009B0931AB30EAD00452C4C /* ViewController.swift */,
 				20079F321ADE9D8A006F2972 /* JLinesV2.xcdatamodeld */,
 				20031C321AE540E900F73E01 /* GameStatusX.swift */,
+				20FB11FD1B14E4B600A70ED7 /* AppVariables.swift */,
 				2003C9301AE7E7E100537ED9 /* GameStatus.swift */,
 				2009DB2F1ADE58B800D021DA /* DataStore.swift */,
 				20031C371AE54AC900F73E01 /* CloudData.swift */,
