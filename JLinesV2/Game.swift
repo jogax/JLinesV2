@@ -54,7 +54,7 @@ class Game: UIView, Printable {
         let size = frame.size
         let origin = frame.origin
         GV.gameSizeMultiplier = (self.frame.height / self.frame.width) / 1.8
-        GV.notificationCenter.addObserver(self, selector: "handleGameModusChanging", name: GV.notificationGameModusChanged, object: nil)
+        GV.notificationCenter.addObserver(self, selector: "handleGameControllChanging", name: GV.notificationGameControllChanged, object: nil)
 /*
         device.beginGeneratingDeviceOrientationNotifications()			//Tell it to start monitoring the accelerometer for orientation
         NSNotificationCenter.defaultCenter().addObserver(
@@ -164,14 +164,14 @@ class Game: UIView, Printable {
         GV.timeCount = 0
         self.timeLeft = self.timeLeftOrig
         self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("countDown"), userInfo: nil, repeats: true)
-        handleGameModusChanging()
+        handleGameControllChanging()
     }
     
-    func handleGameModusChanging() {
-        if GV.gameModus != .JoyStick {
+    func handleGameControllChanging() {
+        if GV.gameControll != .JoyStick {
             joyStick.hidden = true
             joyStick.removeFromSuperview()
-        } else if GV.gameModus == .JoyStick {
+        } else if GV.gameControll == .JoyStick {
             self.addSubview(joyStick)
             joyStick.hidden = false
             //joyStickSetupLayout()
@@ -266,6 +266,7 @@ class Game: UIView, Printable {
                 timer!.invalidate()
                 timer = nil
             }
+            GV.notificationCenter.removeObserver(firstGameView!)
             if let name = (parent.view.subviews[ind]  as! UIView).layer.name {
                 if name == GV.scrollViewName {
                     (parent.view.subviews[ind] as! UIView).hidden = false     // auswahl wieder anzeige

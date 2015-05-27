@@ -58,6 +58,7 @@
 		20EB5ECF1AD534000095963C /* repeat.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 20EB5ECC1AD534000095963C /* repeat.jpg */; };
 		20EB5ED01AD534000095963C /* pfeillinks.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 20EB5ECD1AD534000095963C /* pfeillinks.jpg */; };
 		20EB5ED11AD534000095963C /* pfeilrechts.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 20EB5ECE1AD534000095963C /* pfeilrechts.jpg */; };
+		20FB11FE1B14E4B600A70ED7 /* AppVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FB11FD1B14E4B600A70ED7 /* AppVariables.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +129,7 @@
 		20EB5ECC1AD534000095963C /* repeat.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = repeat.jpg; sourceTree = "<group>"; };
 		20EB5ECD1AD534000095963C /* pfeillinks.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeillinks.jpg; sourceTree = "<group>"; };
 		20EB5ECE1AD534000095963C /* pfeilrechts.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pfeilrechts.jpg; sourceTree = "<group>"; };
+		20FB11FD1B14E4B600A70ED7 /* AppVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppVariables.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,7 @@
 		2009B08B1AB30EAD00452C4C /* JLinesV2 */ = {
 			isa = PBXGroup;
 			children = (
+				20FB11FD1B14E4B600A70ED7 /* AppVariables.swift */,
 				20031C341AE5438500F73E01 /* JLinesV2.entitlements */,
 				2009B08E1AB30EAD00452C4C /* AppDelegate.swift */,
 				2009B0931AB30EAD00452C4C /* ViewController.swift */,
@@ -385,6 +388,7 @@
 				2009B0C21AB30F7700452C4C /* PagedViewController.swift in Sources */,
 				2009B0C61AB30F7700452C4C /* GameBoardOrig.swift in Sources */,
 				2009B0C31AB30F7700452C4C /* MyScrollView.swift in Sources */,
+				20FB11FE1B14E4B600A70ED7 /* AppVariables.swift in Sources */,
 				200398511AF8D87600F95E7A /* MyDevice.swift in Sources */,
 				2007DFFD1AF0F532005DF578 /* MyButton.swift in Sources */,
 				200A7CE21B0B84330015F20D /* JoyStick.swift in Sources */,

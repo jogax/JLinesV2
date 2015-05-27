@@ -41,7 +41,7 @@ class MyGameView: UIView {
     init(frame: CGRect, package: Package, parent: UIViewController, gameEnded: (Bool)->()) {
         self.parent = parent
         var device = UIDevice.currentDevice()					//Get the device object
-
+        println("in MyGameView GV.volumeNr: \(GV.volumeNr)")
         self.gameEnded = gameEnded
         var gameArray: Array2D<Point>
         var error: String
@@ -92,11 +92,11 @@ class MyGameView: UIView {
                 makeNewLayer(color)
             }
             
-            if GV.gameModus == .JoyStick {
+            if GV.gameControll == .JoyStick {
                 
             }
         }
-        if GV.gameModus == .JoyStick {
+        if GV.gameControll == .JoyStick {
             setRandomAktColor()
         }
 
@@ -136,7 +136,7 @@ class MyGameView: UIView {
         }
         GV.lineCount = 0
         GV.moveCount = 0
-        if GV.gameModus == .JoyStick {
+        if GV.gameControll == .JoyStick {
             setRandomAktColor()
         }
     }
@@ -239,7 +239,7 @@ class MyGameView: UIView {
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if GV.gameModus != .JoyStick {
+        if GV.gameControll != .JoyStick {
             let touchCount = touches.count
             let touch = touches.first as! UITouch
             myTouchesMoved(touch.locationInView(self))
@@ -283,7 +283,7 @@ class MyGameView: UIView {
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if GV.gameModus != .JoyStick {
+        if GV.gameControll != .JoyStick {
             let touchCount = touches.count
             let touch = touches.first as! UITouch
             let point = touch.locationInView(self)
@@ -401,7 +401,9 @@ class MyGameView: UIView {
             alertNotReady = true
             
             if completed {
-                GV.moveCount++
+                if GV.gameControll == .JoyStick {
+                    GV.moveCount++
+                }
                 var gameData = GameData()
                 gameData.gameName = GV.package!.getVolumeName(GV.volumeNr) as String
                 gameData.gameNumber = GV.gameNr

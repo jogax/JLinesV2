@@ -12,7 +12,7 @@ import UIKit
 enum Choosed: Int{
     case Unknown = 0, Right, Left, Settings, Restart
 }
-enum GameModus: Int {
+enum GameControll: Int {
     case Finger = 0, JoyStick, Accelerometer, PipeLine
 }
 
@@ -21,7 +21,7 @@ struct GV {
     //static var horNormWert: CGFloat = 0 // Geräteabhängige Constante
     //static var vertNormWert: CGFloat = 0 // Geräteabhängige Constante
     static var notificationCenter = NSNotificationCenter.defaultCenter()
-    static let notificationGameModusChanged = "gameModusChanged"
+    static let notificationGameControllChanged = "gameModusChanged"
     static let notificationJoystickMoved = "joystickMoved"
     static let notificationColorChanged = "colorChanged"
     static var aktColor: LineType = .Unknown
@@ -53,7 +53,7 @@ struct GV {
             GV.moveCountLabel.text = "\(GV.moveCount) / \(GV.lines.count) \(step)"
         }
     }
-    static var gameModus = GameModus.JoyStick
+    static var gameControll = GameControll.Finger
     static var joyStickRadius: CGFloat = 0.0
     static var rectSize: CGFloat = 0 // rectSize in Choose Table
     static var gameRectSize: CGFloat = 0 // rectSize in gameboard
@@ -73,6 +73,7 @@ struct GV {
     static let volumeName: [Int:String] = [0:"5 x 5", 1:"6 x 6", 2:"7 x 7", 3:"8 x 8", 4:"9 x 9"]
     static let volumeNumber: [String:Int] = ["5 x 5":0, "6 x 6":1, "7 x 7":2, "8 x 8":3, "9 x 9":4]
     static var gameData = MyGames()
+    static var appData = AppData()
     static var sublayer = CALayer()
     static let images = DrawImages()
     
@@ -120,6 +121,7 @@ struct GameData {
             }
         }
     }
+
     
     var countSeconds: Int
     var timeStemp: NSDate
@@ -158,6 +160,7 @@ struct VolumeData {
 
 }
 
+
 struct MyGames {
     var volumes = [VolumeData]()
     
@@ -167,3 +170,12 @@ struct MyGames {
         }
     }
 }
+
+struct AppData {
+    var gameControll: Int64
+
+    init() {
+        gameControll = Int64(GameControll.Finger.rawValue)
+    }
+}
+
