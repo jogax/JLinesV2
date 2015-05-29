@@ -26,7 +26,7 @@ class Game: UIView, Printable {
     var forwardPfeilRect: CGRect?
     var backwardPfeilRect: CGRect?
     var firstGameView: MyGameView?
-    var secondGameView: MyGameView?
+    //var secondGameView: MyGameView?
     var timeLeft: Int = 30
     let timeLeftOrig = 30
     var gameContainer   = UIView()
@@ -38,6 +38,7 @@ class Game: UIView, Printable {
     let settingsButton  = MyButton()
     let backButton      = MyButton()
     let joyStick        = JoyStick()
+    
     var settingsViewController: UIViewController?
     var timer: NSTimer?
     var gameNrPar = ""
@@ -168,7 +169,7 @@ class Game: UIView, Printable {
     }
     
     func handleGameControllChanging() {
-        if GV.gameControll != .JoyStick {
+        if GV.gameControll == .Finger {
             joyStick.hidden = true
             joyStick.removeFromSuperview()
         } else if GV.gameControll == .JoyStick {
@@ -177,6 +178,9 @@ class Game: UIView, Printable {
             //joyStickSetupLayout()
             joyStick.frame = CGRectMake(self.frame.midX - GV.joyStickRadius * 0.5, self.frame.maxY - GV.joyStickRadius * 1.8, GV.joyStickRadius * 1.2, GV.joyStickRadius * 1.2)
             joyStick.setJoyStickLayout()
+        } else if GV.gameControll == .Accelerometer {
+            joyStick.hidden = true
+            joyStick.removeFromSuperview()
         }
     }
     
@@ -358,6 +362,7 @@ class Game: UIView, Printable {
             let gameName = GV.package!.getVolumeName(GV.volumeNr)
             gameNrPar  = "\(GV.gameNr + 1)  \(gameName)"
             gameNumber.text = GV.language.getText("gameNumber", par: gameNrPar)//"Játék sorszáma: \(GV.gameNr)"
+            GV.notificationCenter.removeObserver(firstGameView!)
             joyStick.resetJoystick()
 
         }

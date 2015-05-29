@@ -24,6 +24,7 @@ class JoyStick: UIView {
     var aktTouchPoint = CGPoint(x: 0, y: 0)
     var timer: NSTimer?
     let speedCorrection: CGFloat = 1.8
+    let triggerWert: CGFloat = 10.0
 
     
     override init(frame: CGRect) {
@@ -87,6 +88,13 @@ class JoyStick: UIView {
         aktTouchPoint = touch.locationInView(self)
         var distanceX = (aktTouchPoint.x - startTouchPoint.x) / speedCorrection
         var distanceY = (aktTouchPoint.y - startTouchPoint.y) / speedCorrection
+
+        if abs(distanceX) < triggerWert {
+            distanceX = 0
+        }
+        if abs(distanceY) < triggerWert {
+            distanceY = 0
+        }
         
         if distanceX > GV.gameRectSize / 2 {
             distanceX = GV.gameRectSize / 2
@@ -118,7 +126,7 @@ class JoyStick: UIView {
     }
 
     func makeStep () {
-        GV.notificationCenter.postNotificationName(GV.notificationJoystickMoved, object: nil)
+        GV.notificationCenter.postNotificationName(GV.notificationMadeMove, object: nil)
     }
 
     func changeColor () {

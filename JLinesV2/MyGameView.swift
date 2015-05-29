@@ -41,7 +41,6 @@ class MyGameView: UIView {
     init(frame: CGRect, package: Package, parent: UIViewController, gameEnded: (Bool)->()) {
         self.parent = parent
         var device = UIDevice.currentDevice()					//Get the device object
-        println("in MyGameView GV.volumeNr: \(GV.volumeNr)")
         self.gameEnded = gameEnded
         var gameArray: Array2D<Point>
         var error: String
@@ -70,7 +69,7 @@ class MyGameView: UIView {
         
         
         super.init(frame: frame)
-        GV.notificationCenter.addObserver(self, selector: "handleJoystickMoved", name: GV.notificationJoystickMoved, object: nil)
+        GV.notificationCenter.addObserver(self, selector: "handleMadeMove", name: GV.notificationMadeMove, object: nil)
         if GV.gameNr < GV.maxGameNr {
             //println("GV.volumeNr: \(GV.volumeNr), GV.gameNr: \(GV.gameNr)")
             var gameData = GV.gameData.volumes[GV.volumeNr].games[GV.gameNr]
@@ -96,7 +95,7 @@ class MyGameView: UIView {
                 
             }
         }
-        if GV.gameControll == .JoyStick {
+        if GV.gameControll == .JoyStick || GV.gameControll == .Accelerometer {
             setRandomAktColor()
         }
 
@@ -134,9 +133,10 @@ class MyGameView: UIView {
             makeNewLayer(color)
             line.lineEnded = false
         }
+        GV.notificationCenter.addObserver(self, selector: "handleMadeMove", name: GV.notificationMadeMove, object: nil)
         GV.lineCount = 0
         GV.moveCount = 0
-        if GV.gameControll == .JoyStick {
+        if GV.gameControll == .JoyStick || GV.gameControll == .Accelerometer {
             setRandomAktColor()
         }
     }
@@ -158,9 +158,16 @@ class MyGameView: UIView {
             }
         }
         if colorTab.count > 0 {
+            var aktX = 0
+            var aktY = 0
             let randomColor = colorTab[random(0, max: colorTab.count - 1)]
-            let aktX = GV.lines[randomColor]!.point1!.column
-            let aktY = GV.lines[randomColor]!.point1!.row
+            if random(0, max: 1) == 0 {
+                aktX = GV.lines[randomColor]!.point1!.column
+                aktY = GV.lines[randomColor]!.point1!.row
+            } else {
+                aktX = GV.lines[randomColor]!.point2!.column
+                aktY = GV.lines[randomColor]!.point2!.row
+            }
             let aktCoordX = CGFloat(aktX) * CGFloat(GV.gameRectSize) + GV.gameRectSize / 2
             let aktCoordY = CGFloat(aktY) * CGFloat(GV.gameRectSize) + GV.gameRectSize / 2
             GV.aktColor = randomColor
@@ -173,7 +180,7 @@ class MyGameView: UIView {
         return randomInt
     }
 
-    func handleJoystickMoved() {
+    func handleMadeMove() {
         if notInMove {
             notInMove = false
             let point = CGPointMake(GV.touchPoint.x + GV.speed.width, GV.touchPoint.y + GV.speed.height)
@@ -230,7 +237,10 @@ class MyGameView: UIView {
                 line.addPoint(point)
             }
             lineLayers[aktColor]!.setNeedsDisplay()
-            GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil)
+            if GV.gameControll == .JoyStick || GV.gameControll == .Accelerometer {
+                GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil)
+                GV.accelerometer.startAccelerometer()
+            }
         }
         else {
             startPointX = -1
@@ -239,7 +249,7 @@ class MyGameView: UIView {
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if GV.gameControll != .JoyStick {
+        if GV.gameControll == .Finger {
             let touchCount = touches.count
             let touch = touches.first as! UITouch
             myTouchesMoved(touch.locationInView(self))
@@ -283,7 +293,7 @@ class MyGameView: UIView {
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if GV.gameControll != .JoyStick {
+        if GV.gameControll == .Finger {
             let touchCount = touches.count
             let touch = touches.first as! UITouch
             let point = touch.locationInView(self)
@@ -401,7 +411,7 @@ class MyGameView: UIView {
             alertNotReady = true
             
             if completed {
-                if GV.gameControll == .JoyStick {
+                if GV.gameControll == .JoyStick || GV.gameControll == .Accelerometer {
                     GV.moveCount++
                 }
                 var gameData = GameData()
@@ -432,7 +442,7 @@ class MyGameView: UIView {
             }
 
             pointLayer!.removeFromSuperlayer()
-            GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil) // Joystick reset
+            GV.notificationCenter.postNotificationName(GV.notificationColorChanged, object: nil) // Joystick / Accelerometer reset
 
             gameEndAlert = UIAlertController(title: titleText,
                 message: messageTxt,
@@ -454,9 +464,12 @@ class MyGameView: UIView {
                     //GV.notificationCenter.addObserver(self, selector: "handleJoystickMoved", name: GV.notificationJoystickMoved, object: nil)
                 }
                 
+
             )
             
-            
+            if GV.gameControll == GameControll.Accelerometer {
+                GV.accelerometer.stopAccelerometer()
+            }
             gameEndAlert!.addAction(firstAction)
             gameEndAlert!.addAction(secondAction)
             parent.presentViewController(gameEndAlert!,

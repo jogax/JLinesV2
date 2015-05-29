@@ -12,6 +12,7 @@
 		200348C31AF253AB004C4F76 /* pfeillinks.png in Resources */ = {isa = PBXBuildFile; fileRef = 200348C21AF253AB004C4F76 /* pfeillinks.png */; };
 		200348C51AF25730004C4F76 /* DrawImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200348C41AF25730004C4F76 /* DrawImages.swift */; };
 		200398511AF8D87600F95E7A /* MyDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200398501AF8D87600F95E7A /* MyDevice.swift */; };
+		2003A79B1B16181E00678EEA /* Accelerometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2003A79A1B16181E00678EEA /* Accelerometer.swift */; };
 		2003C9311AE7E7E100537ED9 /* GameStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2003C9301AE7E7E100537ED9 /* GameStatus.swift */; };
 		20064CF71AE6C10200375D51 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20064CF61AE6C10200375D51 /* CloudKit.framework */; };
 		20079F341ADE9D8A006F2972 /* JLinesV2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 20079F321ADE9D8A006F2972 /* JLinesV2.xcdatamodeld */; };
@@ -78,6 +79,7 @@
 		200348C21AF253AB004C4F76 /* pfeillinks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pfeillinks.png; path = "../../../../../../Pictures/iPhoto-Mediathek.photolibrary/Masters/2015/04/30/20150430-141153/pfeillinks.png"; sourceTree = "<group>"; };
 		200348C41AF25730004C4F76 /* DrawImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawImages.swift; sourceTree = "<group>"; };
 		200398501AF8D87600F95E7A /* MyDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyDevice.swift; sourceTree = "<group>"; };
+		2003A79A1B16181E00678EEA /* Accelerometer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accelerometer.swift; sourceTree = "<group>"; };
 		2003C9301AE7E7E100537ED9 /* GameStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameStatus.swift; path = JLinesV2.xcodeproj/../GameStatus.swift; sourceTree = SOURCE_ROOT; };
 		20064CF61AE6C10200375D51 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		20079F331ADE9D8A006F2972 /* JLinesV2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JLinesV2.xcdatamodel; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				20031C341AE5438500F73E01 /* JLinesV2.entitlements */,
+				2003A79A1B16181E00678EEA /* Accelerometer.swift */,
 				2009B08E1AB30EAD00452C4C /* AppDelegate.swift */,
 				2009B0931AB30EAD00452C4C /* ViewController.swift */,
 				20079F321ADE9D8A006F2972 /* JLinesV2.xcdatamodeld */,
@@ -394,6 +397,7 @@
 				200A7CE21B0B84330015F20D /* JoyStick.swift in Sources */,
 				20031C331AE540E900F73E01 /* GameStatusX.swift in Sources */,
 				20E7C3881AD7F6BE00E6DF7E /* TableViewController.swift in Sources */,
+				2003A79B1B16181E00678EEA /* Accelerometer.swift in Sources */,
 				20079F341ADE9D8A006F2972 /* JLinesV2.xcdatamodeld in Sources */,
 				2009B0CC1AB30F7800452C4C /* SwiftyJSON.swift in Sources */,
 				2009B0C41AB30F7700452C4C /* Game.swift in Sources */,

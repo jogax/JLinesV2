@@ -113,7 +113,7 @@ class MyLayer: CALayer {
         }
 
         if self.name == "point" {
-            self.opacity = 0.50
+            self.opacity = 0.80
             let rad = CGFloat(rectSize / 2.0)
             
             let xCent: CGFloat = CGFloat(GV.touchPoint.x)

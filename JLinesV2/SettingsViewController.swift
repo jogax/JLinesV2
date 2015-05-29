@@ -103,7 +103,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
 
     func chooseGameControll (sender: UIButton) {
         
-        let items = ["Finger", "Joystick", "Accelerometer", "Pipiline"]
+        let items = ["Finger", "Joystick", "Accelerometer", "Pipeline"]
         gameControllView = UISegmentedControl(items: items)
         gameControllView.selectedSegmentIndex = GV.gameControll.rawValue
         gameControllView.addTarget(self, action: "changedModus:", forControlEvents:  .ValueChanged)
@@ -122,9 +122,9 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
             GV.gameControll = .Finger
         case 1:
             GV.gameControll = .JoyStick
-        case 3:
+        case 2:
             GV.gameControll = .Accelerometer
-        case 4:
+        case 3:
             GV.gameControll = .PipeLine
         default:
             GV.gameControll = .Finger
