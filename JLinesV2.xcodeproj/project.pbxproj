@@ -177,6 +177,7 @@
 		2009B08B1AB30EAD00452C4C /* JLinesV2 */ = {
 			isa = PBXGroup;
 			children = (
+				20FB11FD1B14E4B600A70ED7 /* AppVariables.swift */,
 				20031C341AE5438500F73E01 /* JLinesV2.entitlements */,
 				2003A79A1B16181E00678EEA /* Accelerometer.swift */,
 				2009B08E1AB30EAD00452C4C /* AppDelegate.swift */,

@@ -41,6 +41,10 @@ class MyGameView: UIView {
     init(frame: CGRect, package: Package, parent: UIViewController, gameEnded: (Bool)->()) {
         self.parent = parent
         var device = UIDevice.currentDevice()					//Get the device object
+<<<<<<< HEAD
+=======
+        println("in MyGameView GV.volumeNr: \(GV.volumeNr)")
+>>>>>>> FETCH_HEAD
         self.gameEnded = gameEnded
         var gameArray: Array2D<Point>
         var error: String
@@ -95,7 +99,11 @@ class MyGameView: UIView {
                 
             }
         }
+<<<<<<< HEAD
         if GV.gameControll == .JoyStick || GV.gameControll == .Accelerometer {
+=======
+        if GV.gameControll == .JoyStick {
+>>>>>>> FETCH_HEAD
             setRandomAktColor()
         }
 
@@ -136,7 +144,11 @@ class MyGameView: UIView {
         GV.notificationCenter.addObserver(self, selector: "handleMadeMove", name: GV.notificationMadeMove, object: nil)
         GV.lineCount = 0
         GV.moveCount = 0
+<<<<<<< HEAD
         if GV.gameControll == .JoyStick || GV.gameControll == .Accelerometer {
+=======
+        if GV.gameControll == .JoyStick {
+>>>>>>> FETCH_HEAD
             setRandomAktColor()
         }
     }
@@ -249,7 +261,11 @@ class MyGameView: UIView {
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+<<<<<<< HEAD
         if GV.gameControll == .Finger {
+=======
+        if GV.gameControll != .JoyStick {
+>>>>>>> FETCH_HEAD
             let touchCount = touches.count
             let touch = touches.first as! UITouch
             myTouchesMoved(touch.locationInView(self))
@@ -293,7 +309,11 @@ class MyGameView: UIView {
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+<<<<<<< HEAD
         if GV.gameControll == .Finger {
+=======
+        if GV.gameControll != .JoyStick {
+>>>>>>> FETCH_HEAD
             let touchCount = touches.count
             let touch = touches.first as! UITouch
             let point = touch.locationInView(self)
@@ -411,7 +431,11 @@ class MyGameView: UIView {
             alertNotReady = true
             
             if completed {
+<<<<<<< HEAD
                 if GV.gameControll == .JoyStick || GV.gameControll == .Accelerometer {
+=======
+                if GV.gameControll == .JoyStick {
+>>>>>>> FETCH_HEAD
                     GV.moveCount++
                 }
                 var gameData = GameData()
