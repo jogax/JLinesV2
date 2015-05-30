@@ -24,7 +24,7 @@ class JoyStick: UIView {
     var aktTouchPoint = CGPoint(x: 0, y: 0)
     var timer: NSTimer?
     let speedCorrection: CGFloat = 1.8
-    let triggerWert: CGFloat = 10.0
+    let triggerWert: CGFloat = 15.0
 
     
     override init(frame: CGRect) {
