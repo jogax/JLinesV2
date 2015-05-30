@@ -169,11 +169,7 @@ class Game: UIView, Printable {
     }
     
     func handleGameControllChanging() {
-<<<<<<< HEAD
         if GV.gameControll == .Finger {
-=======
-        if GV.gameControll != .JoyStick {
->>>>>>> FETCH_HEAD
             joyStick.hidden = true
             joyStick.removeFromSuperview()
         } else if GV.gameControll == .JoyStick {

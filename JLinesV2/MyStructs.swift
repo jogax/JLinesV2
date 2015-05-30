@@ -22,11 +22,8 @@ struct GV {
     //static var vertNormWert: CGFloat = 0 // Geräteabhängige Constante
     static var notificationCenter = NSNotificationCenter.defaultCenter()
     static let notificationGameControllChanged = "gameModusChanged"
-<<<<<<< HEAD
     static let notificationMadeMove = "MadeMove"
-=======
     static let notificationJoystickMoved = "joystickMoved"
->>>>>>> FETCH_HEAD
     static let notificationColorChanged = "colorChanged"
     static let accelerometer   = Accelerometer()
     static var aktColor: LineType = .Unknown
