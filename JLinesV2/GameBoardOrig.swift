@@ -5,7 +5,7 @@
 //  Created by Jozsef Romhanyi on 12.03.15.
 //  Copyright (c) 2015 Jozsef Romhanyi. All rights reserved.
 //
-
+/*
 import Foundation
 
 struct LowValues: Hashable {
@@ -665,3 +665,4 @@ func ==(lhs: (x: Int, y: Int), rhs: (x:Int, y:Int)) -> Bool {
     return lhs.x == rhs.x && lhs.y == rhs.y
 }
 
+*/

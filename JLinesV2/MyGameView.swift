@@ -18,7 +18,7 @@ class MyGameView: UIView {
     //var gameboard: Array2D<Point>?
     
     var gameboard: GameBoard?
-    var createNewGame = false
+    var createNewGame = true
     var notInMove = true
 
     var error: String?

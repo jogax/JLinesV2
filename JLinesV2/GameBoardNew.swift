@@ -5,7 +5,7 @@
 //  Created by Jozsef Romhanyi on 12.03.15.
 //  Copyright (c) 2015 Jozsef Romhanyi. All rights reserved.
 //
-/*
+
 import Foundation
 
 struct LowValues: Hashable {
@@ -50,7 +50,7 @@ class GameBoard {
     }
     
     
-    var debugging = false
+    var debugging = true
     var gameArray: Array2D<Point>
     //var directions: Array2D<Directions>
     var tempGameArray: Array2D<Point>?
@@ -562,7 +562,8 @@ class GameBoard {
         }
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
-        if debugging {//println("analyzeGameboard elapsedTime:\(elapsedTime) ms")}
+        if debugging {//println("analyzeGameboard elapsedTime:\(elapsedTime) ms")
+        }
     }
     
     func checkDirections(x: Int, y: Int) {
@@ -609,7 +610,8 @@ class GameBoard {
         }
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
-        if debugging {//println("checkDirections elapsedTime:\(elapsedTime) ms")}
+        if debugging {//println("checkDirections elapsedTime:\(elapsedTime) ms")
+        }
         
     }
     
@@ -703,4 +705,3 @@ func ==(lhs: (x: Int, y: Int), rhs: (x:Int, y:Int)) -> Bool {
 
 
 
-*/
