@@ -13,20 +13,34 @@ import UIKit
 
 class Accelerometer: UIView {
     let motionManager = CMMotionManager()
-    let acceleroCorrectur = 40.0
-    let triggerWert: CGFloat = 5.0
+    let acceleroCorrectur = 20.0
+    let triggerWert: CGFloat = 3.0
     var speed = CGSizeMake(0, 0)
     
     init() {
         super.init(frame:CGRectMake(0,0,0,0))
         GV.notificationCenter.addObserver(self, selector: "changeColor", name: GV.notificationColorChanged, object: nil)
-        motionManager.accelerometerUpdateInterval = 0.1
+        motionManager.accelerometerUpdateInterval = 0.02
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func stopAccelerometer() {
+        motionManager.stopAccelerometerUpdates()
+    }
+    
+    func startAccelerometer() {
+        motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {(accelerometerData: CMAccelerometerData!, error:NSError!)in
+            self.outputAccelerationData(accelerometerData.acceleration)
+            if (error != nil)
+            {
+                println("\(error)")
+            }
+        })
+    }
+    
     func changeColor () {
         startAccelerometer()
     }
@@ -54,20 +68,6 @@ class Accelerometer: UIView {
             GV.speed = speed
             GV.notificationCenter.postNotificationName(GV.notificationMadeMove, object: nil)
         }
-    }
-    
-    func stopAccelerometer() {
-       motionManager.stopAccelerometerUpdates()
-    }
-        
-    func startAccelerometer() {
-        motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue(), withHandler: {(accelerometerData: CMAccelerometerData!, error:NSError!)in
-            self.outputAccelerationData(accelerometerData.acceleration)
-            if (error != nil)
-            {
-                println("\(error)")
-            }
-        })
     }
     
     

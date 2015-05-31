@@ -319,6 +319,7 @@ class Game: UIView, Printable {
         
         
         if adder != 0 {
+            GV.notificationCenter.removeObserver(self.firstGameView!)
             UIView.transitionWithView(gameContainer, duration: 0.5, options: transitionOptions, animations: {
                 self.firstGameView!.removeFromSuperview()
                 self.firstGameView = nil
@@ -342,6 +343,7 @@ class Game: UIView, Printable {
                         GV.gameRectSize = 0
                     }
                 }
+                
                 //self.vSize = self.gameContainer.frame.size
                 self.firstGameView = MyGameView(frame:CGRect(origin: CGPointZero, size: self.vSize), package: self.package!, parent: self.parent, gameEnded:self.nextAction )
                 self.backgroundColor = GV.lightSalmonColor
@@ -362,7 +364,6 @@ class Game: UIView, Printable {
             let gameName = GV.package!.getVolumeName(GV.volumeNr)
             gameNrPar  = "\(GV.gameNr + 1)  \(gameName)"
             gameNumber.text = GV.language.getText("gameNumber", par: gameNrPar)//"Játék sorszáma: \(GV.gameNr)"
-            GV.notificationCenter.removeObserver(firstGameView!)
             joyStick.resetJoystick()
 
         }

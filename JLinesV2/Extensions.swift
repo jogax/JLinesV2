@@ -248,9 +248,9 @@ public extension UIDevice {
     }
 }
 
+extension NSNotificationCenter {
 
-
-
+}
 
 
 

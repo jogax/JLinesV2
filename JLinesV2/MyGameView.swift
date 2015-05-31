@@ -133,7 +133,7 @@ class MyGameView: UIView {
             makeNewLayer(color)
             line.lineEnded = false
         }
-        GV.notificationCenter.addObserver(self, selector: "handleMadeMove", name: GV.notificationMadeMove, object: nil)
+        //GV.notificationCenter.addObserver(self, selector: "handleMadeMove", name: GV.notificationMadeMove, object: nil)
         GV.lineCount = 0
         GV.moveCount = 0
         if GV.gameControll == .JoyStick || GV.gameControll == .Accelerometer {
@@ -320,8 +320,9 @@ class MyGameView: UIView {
     func getXYPositionInGrid(point:CGPoint, inMoving: Bool) -> (Bool, Int, Int) {
         let xPos = point.x - bounds.origin.x
         let yPos = point.y - bounds.origin.y
+        let halfGameRectSize = CGFloat(GV.gameRectSize) / 2
         var myTouchPoint = point
-        if xPos < 0 || xPos >= bounds.size.width || yPos < 0 || yPos >= bounds.size.height {
+        if xPos < halfGameRectSize || xPos >= bounds.size.width - halfGameRectSize || yPos < halfGameRectSize || yPos >= bounds.size.height - halfGameRectSize {
             return (false, 0, 0)
         }
         let x = Int(xPos / CGFloat(GV.gameRectSize))
@@ -330,15 +331,15 @@ class MyGameView: UIView {
             return (false, 0, 0)
         }
         if GV.speed.width == 0 { // moving along Y
-            myTouchPoint.x = CGFloat(x) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize) / 2
+            myTouchPoint.x = CGFloat(x) * CGFloat(GV.gameRectSize) + halfGameRectSize
         }
         if GV.speed.height == 0 { // moving along X
-            myTouchPoint.y = CGFloat(y) * CGFloat(GV.gameRectSize) + CGFloat(GV.gameRectSize) / 2
+            myTouchPoint.y = CGFloat(y) * CGFloat(GV.gameRectSize) + halfGameRectSize
         }
         let newPointColor = gameboard!.gameArray[x, y]!.color
         if inMoving && (newPointColor != self.aktColor && newPointColor != .Unknown)
         {
-            println("returned with oldColor: \(self.aktColor), newColor: \(newPointColor) with speed: \(GV.speed)")
+            //println("returned with oldColor: \(self.aktColor), newColor: \(newPointColor) with speed: \(GV.speed)")
            return (false, 0, 0)
         }
         if x < GV.gameSize && y < GV.gameSize {

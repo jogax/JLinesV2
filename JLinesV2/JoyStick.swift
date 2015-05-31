@@ -23,8 +23,9 @@ class JoyStick: UIView {
     var startTouchPoint = CGPoint(x: 0, y: 0)
     var aktTouchPoint = CGPoint(x: 0, y: 0)
     var timer: NSTimer?
-    let speedCorrection: CGFloat = 1.8
-    let triggerWert: CGFloat = 15.0
+    let speedCorrection: CGFloat = 12.5
+    let triggerWert: CGFloat = 1.0
+    let timerInterval = 0.02
 
     
     override init(frame: CGRect) {
@@ -65,6 +66,7 @@ class JoyStick: UIView {
         let touchCount = touches.count
         let touch = touches.first as! UITouch
         startTouchPoint = touch.locationInView(self)
+        GV.speed = CGSizeMake(0, 0)
         startTimer(true)
     }
 
@@ -73,7 +75,7 @@ class JoyStick: UIView {
             self.timer!.invalidate()
         }
         if start {
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("makeStep"), userInfo: nil, repeats: true)
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(timerInterval, target: self, selector: Selector("makeStep"), userInfo: nil, repeats: true)
         } else {
             self.timer = nil            
         }
@@ -119,6 +121,7 @@ class JoyStick: UIView {
             y = self.bounds.midY + distanceY
             direction = distanceY > 0 ? .Up : .Down
         }
+        //rintln("distanceX: \(distanceX), distanceY: \(distanceY)")
         GV.speed = CGSizeMake(distanceX, distanceY)
 
         knopf.center.x = x
