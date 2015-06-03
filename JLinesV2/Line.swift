@@ -10,25 +10,27 @@ import Foundation
 import UIKit
 
 enum LineType: Int, Printable {
-    case Unknown = 0, Red, Gold, Springgreen, Pink, Green, Blue, Magenta, Yellow, Purple, Orange, Cyan, Brown, LightGrayColor, DarkGreyColor, LastColor
+    case Unknown = 0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, LastColor
 
     var colorName: String {
         let colorNames = [
             "none",
-            "Red",
-            "Gold",
-            "Springgreen",
-            "Pink",
-            "Green",
-            "Blue",
-            "Magenta",
-            "Yellow",
-            "Purple",
-            "Orange",
-            "Cyan",
-            "Brown",
-            "LightGrayColor",
-            "DarkGreyColor",
+            "C1",
+            "C2",
+            "C3",
+            "C4",
+            "C5",
+            "C6",
+            "C7",
+            "C8",
+            "C9",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
             "LastColor"
         ]
         
@@ -52,6 +54,8 @@ enum LineType: Int, Printable {
             "L",
             "M",
             "N",
+            "O",
+            "P",
             " "
         ]
         
@@ -59,7 +63,7 @@ enum LineType: Int, Printable {
     }
 
     var uiColor: UIColor {
-        let uiColorTypes = [
+        var uiColorTypes = [
             UIColor.clearColor(),
             UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1), // Red
             UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1), // Gold
@@ -75,6 +79,8 @@ enum LineType: Int, Printable {
             UIColor.brownColor(),
             UIColor.lightGrayColor(),
             UIColor.darkGrayColor(),
+            UIColor(red:255/255, green: 228/255, blue: 225/255, alpha:1),
+            UIColor(red: 165/255, green: 42/255, blue: 42/255, alpha:1),
             UIColor.blackColor()
         ]
         
@@ -89,27 +95,6 @@ enum LineType: Int, Printable {
 func ==(lhs: LineType, rhs: LineType) -> Bool {
     return lhs.colorName == rhs.colorName
 }
-
-enum Edge: Int, Printable {
-    
-    case None = 0, LeftDown, LeftUp, RightDown, RightUp
-    
-    var edgeSide: String {
-        let edgeSides = [
-            "None",
-            "LeftDown",
-            "LeftUp",
-            "RightDown",
-            "RightUp"
-        ]
-        return edgeSides[rawValue]
-    }
-    
-    var description: String {
-        return edgeSide
-    }
-}
-
 
 class Line: Hashable, Printable {
     var cnt: Int
@@ -143,49 +128,6 @@ class Line: Hashable, Printable {
         }
         return false
     }
-/*
-    func setEdgePoints () {
-        var previousX:Int = -1
-        var previousY:Int = -1
-        if points.count > 0 {
-            for ind in 0..<points.count - 1 {
-                if ind > 0 {
-                    previousX = points[ind - 1].column
-                    previousY = points[ind - 1].row
-                }
-                let aktX = points[ind].column
-                let aktY = points[ind].row
-                let nextX = points[ind + 1].column
-                let nextY = points[ind + 1].row
-                var left = false
-                var right = false
-                var up = false
-                var down = false
-                
-                if previousX != nextX && previousY != nextY { // this is an edgePoint
-                    
-                    if aktX > previousX || aktX > nextX {
-                        left = true
-                    } else {
-                        right = true
-                    }
-
-                
-                    if aktY > previousY || aktY > nextY {
-                        up = true
-                    } else {
-                        down = true
-                    }
-                    points[ind].edge = left && up ? Edge.LeftUp : left && down ? Edge.LeftDown : right && up ? Edge.RightUp : Edge.RightDown
-                    
-                } else {
-                    points[ind].edge = Edge.None
-                }
-                //println("ind: \(ind), aktX: \(aktX), aktY: \(aktY), edge: \(points[ind].edge)")
-            }
-        }
-    }
-*/
     func lastPoint() -> Point {
         return points[points.count - 1]
     }

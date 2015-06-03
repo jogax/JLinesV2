@@ -29,7 +29,7 @@
 		2009B0C31AB30F7700452C4C /* MyScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009B0B61AB30F7700452C4C /* MyScrollView.swift */; };
 		2009B0C41AB30F7700452C4C /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009B0B71AB30F7700452C4C /* Game.swift */; };
 		2009B0C51AB30F7700452C4C /* MyGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009B0B81AB30F7700452C4C /* MyGameView.swift */; };
-		2009B0C61AB30F7700452C4C /* GameBoardOrig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009B0B91AB30F7700452C4C /* GameBoardOrig.swift */; };
+		2009B0C61AB30F7700452C4C /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009B0B91AB30F7700452C4C /* GameBoard.swift */; };
 		2009B0C71AB30F7800452C4C /* Point.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009B0BA1AB30F7700452C4C /* Point.swift */; };
 		2009B0C81AB30F7800452C4C /* MySet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009B0BB1AB30F7700452C4C /* MySet.swift */; };
 		2009B0C91AB30F7800452C4C /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2009B0BC1AB30F7700452C4C /* Line.swift */; };
@@ -100,7 +100,7 @@
 		2009B0B61AB30F7700452C4C /* MyScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyScrollView.swift; sourceTree = "<group>"; };
 		2009B0B71AB30F7700452C4C /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Game.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		2009B0B81AB30F7700452C4C /* MyGameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyGameView.swift; sourceTree = "<group>"; };
-		2009B0B91AB30F7700452C4C /* GameBoardOrig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBoardOrig.swift; sourceTree = "<group>"; };
+		2009B0B91AB30F7700452C4C /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBoard.swift; sourceTree = "<group>"; };
 		2009B0BA1AB30F7700452C4C /* Point.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Point.swift; sourceTree = "<group>"; };
 		2009B0BB1AB30F7700452C4C /* MySet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySet.swift; sourceTree = "<group>"; };
 		2009B0BC1AB30F7700452C4C /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -177,7 +177,6 @@
 		2009B08B1AB30EAD00452C4C /* JLinesV2 */ = {
 			isa = PBXGroup;
 			children = (
-				20FB11FD1B14E4B600A70ED7 /* AppVariables.swift */,
 				20031C341AE5438500F73E01 /* JLinesV2.entitlements */,
 				2003A79A1B16181E00678EEA /* Accelerometer.swift */,
 				2009B08E1AB30EAD00452C4C /* AppDelegate.swift */,
@@ -200,7 +199,7 @@
 				2009B0B81AB30F7700452C4C /* MyGameView.swift */,
 				20D85AF81AC95E370020D25A /* MyLayer.swift */,
 				2007DFFC1AF0F532005DF578 /* MyButton.swift */,
-				2009B0B91AB30F7700452C4C /* GameBoardOrig.swift */,
+				2009B0B91AB30F7700452C4C /* GameBoard.swift */,
 				2054CF421B0353F500B9546C /* GameBoardNew.swift */,
 				200348C41AF25730004C4F76 /* DrawImages.swift */,
 				2009B0BC1AB30F7700452C4C /* Line.swift */,
@@ -390,7 +389,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2009B0C21AB30F7700452C4C /* PagedViewController.swift in Sources */,
-				2009B0C61AB30F7700452C4C /* GameBoardOrig.swift in Sources */,
+				2009B0C61AB30F7700452C4C /* GameBoard.swift in Sources */,
 				2009B0C31AB30F7700452C4C /* MyScrollView.swift in Sources */,
 				20FB11FE1B14E4B600A70ED7 /* AppVariables.swift in Sources */,
 				200398511AF8D87600F95E7A /* MyDevice.swift in Sources */,

@@ -8,100 +8,9 @@
 
 import Foundation
 
-struct LowValues: Hashable {
-    var tuple: (x:Int, y:Int)
-    var hashValue: Int {
-        return tuple.x * 100 + tuple.y
-    }
-}
-func ==(lhs: LowValues, rhs: LowValues) -> Bool {
-    return lhs.tuple.x == rhs.tuple.x && lhs.tuple.y == rhs.tuple.y
-}
-
-struct Member: Hashable {
-    var x: Int
-    var y: Int
-    var checked: Bool
-    var endPoint: Bool
-    var hashValue: Int {
-        return x * 100 + y
-    }
-}
-
-func ==(lhs: Member, rhs: Member) -> Bool {
-    return lhs.x == rhs.x && lhs.y == rhs.y
-}
-
-
-
-class GameBoard {
-    struct Area {
-        var points:Array<Member>
-        var hasEndPoints: Bool
-        var countEndPoints: Int
-        var countNotCheckedMembers: Int
-        
-        init () {
-            points = Array<Member>()
-            countNotCheckedMembers = 0
-            hasEndPoints = false
-            countEndPoints = 0
-        }
-    }
+extension GameBoard {
     
-    
-    var debugging = true
-    var gameArray: Array2D<Point>
-    //var directions: Array2D<Directions>
-    var tempGameArray: Array2D<Point>?
-    //var tempDirections: Array2D<Directions>?
-    var lowCountDirections = Array<(x:Int, y:Int)>()
-    //var lowValuesIndex: Int = 0
-    var numEmptyPoints: Int
-    //var lines: [LineType:Line]
-    var numColors: Int = 0
-    var countMoves: Int = 0
-    var areas = [Int:Area]()
-    var areaNr = 0
-    var minLength = 4
-    
-    
-    
-    init (gameArray: Array2D<Point>, lines: [LineType:Line],  numColors: Int) {
-        
-        self.numColors = numColors
-        self.gameArray = gameArray
-        GV.lines = lines
-        self.numEmptyPoints = GV.gameSize * GV.gameSize
-        
-    }
-    
-    init () {
-        let minMaxColorCount = [ // Key: gameSize, worth: min & max count of colors
-            5:(4, 5),
-            6:(4, 6),
-            7:(5, 8),
-            8:(6, 9),
-            9:(6, 10)
-        ]
-        var (minColorCount, maxColorCount) = minMaxColorCount[GV.gameSize]!
-        self.gameArray =  Array2D<Point>(columns:GV.gameSize, rows: GV.gameSize)
-        //self.directions = Array2D<Directions>(columns:GV.gameSize, rows: GV.gameSize)
-        self.numEmptyPoints = GV.gameSize * GV.gameSize
-        
-        GV.lines = [LineType:Line]()
-        printFunction("GameBoard.init()")
-        numColors = random(minColorCount, max: maxColorCount, comment: "wähle Anzahl colors")
-        let startTime = NSDate()
-        (gameArray, GV.lines) = generateGameArray()
-        let currentTime = NSDate()
-        let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000 / 1000
-        //println("Time für Generierung von Gameboard:\(elapsedTime) sec")
-        
-    }
-    
-    
-    func generateGameArray() -> (Array2D<Point>, [LineType:Line]) {
+    func generateGameArrayExtended() -> (Array2D<Point>, [LineType:Line]) {
         printFunction("generateGameArray()")
         
         //let countColors = LineType.LastColor.rawValue - 1
@@ -132,7 +41,7 @@ class GameBoard {
         //for ind in 0..<self.numColors {
         //for ind in 0..<2
         do {
-            let color = LineType(rawValue: (LineType.Red.rawValue + ind))!
+            let color = LineType(rawValue: (LineType.C1.rawValue + ind))!
             let startTime = NSDate()
             
             
@@ -142,8 +51,8 @@ class GameBoard {
                 tempGameArray![x1, y1]!.color = color
                 tempGameArray![x1, y1]!.originalPoint = true
                 tempGameArray![x1, y1]!.inLinePoint = true
-                lines[color] = generateLineFromPoint(x1, y: y1, color: color)
-                deleted = deleteLineIfRequired(color)
+                lines[color] = generateLineFromPointExtended(x1, y: y1, color: color)
+                deleted = deleteLineIfRequiredExtended(color)
             } while deleted
             
             let currentTime = NSDate()
@@ -156,7 +65,7 @@ class GameBoard {
         print ("{\"lineCount\": \(lines.count), \"lines\":[")
         for index in 0..<lines.count
         {
-            let color = LineType(rawValue: (LineType.Red.rawValue + index))!
+            let color = LineType(rawValue: (LineType.C1.rawValue + index))!
             let line = lines[color]!
             while line.points.count > 0 {
                 let x = line.lastPoint().column
@@ -184,33 +93,7 @@ class GameBoard {
         
     }
     
-    func random(min: Int, max: Int, comment: String) -> Int {
-        let randomInt = min + Int(arc4random_uniform(UInt32(max + 1 - min)))
-        printFunction("random(min: \(min), max: \(max)) -> \(randomInt), comment: \(comment)")
-        return randomInt
-    }
-    
-    func getRandomPoint () -> (Int, Int) {
-        var randomSet: [(x:Int, y:Int)]
-        randomSet = []
-        
-        
-        var area = areas[self.areaNr]!
-        for (index, member) in enumerate(area.points) {
-            if !area.hasEndPoints || area.points[index].endPoint {
-                let x = area.points[index].x
-                let y = area.points[index].y
-                randomSet.append(x: x, y: y)
-            }
-            
-        }
-        let randomWert = randomSet[random(0, max: randomSet.count - 1, comment: "generiere Point")]
-        printFunction("getRandomPoint () -> \(randomWert)")
-        
-        return randomWert
-    }
-    
-    func generateLineFromPoint(x: Int, y: Int, color:LineType) -> Line {
+    func generateLineFromPointExtended(x: Int, y: Int, color:LineType) -> Line {
         printFunction("generateLineFromPoint(x: \(x), y: \(y), color:\(color))")
         /*
         //println("arrays:\(areas.count)")
@@ -249,11 +132,11 @@ class GameBoard {
             if restLinesCount > 0 {
                 averageLength = emptyPointsCount / restLinesCount
             } else {
-                averageLength = minLength
+                averageLength = emptyPointsCount
             }
             var possibleLengths = [Int]()
             for i in 0..<6 {
-                if averageLength - minLength + i > 2 {
+                if averageLength - minLength + i > 3 {
                     possibleLengths.append(averageLength - minLength + i)
                     if i == minLength {
                         possibleLengths.append(averageLength - minLength + i)
@@ -386,7 +269,7 @@ class GameBoard {
         return GV.lines[color]!
     }
     
-    func deleteLineIfRequired(color: LineType) -> Bool {
+    func deleteLineIfRequiredExtended(color: LineType) -> Bool {
         printFunction("deleteLineIfRequired(color: \(color))")
         let line = GV.lines[color]!
         var toDelete = false
@@ -395,10 +278,14 @@ class GameBoard {
                 toDelete = true
             }
         }
-        /*
+        
         if line.point1 == line.point2 {
             toDelete = true
         }
+        if line.length < 6 && (line.point1!.column == line.point2!.column || line.point1?.row == line.point2?.row) {
+            toDelete = true
+        }
+        /*
         if line.point1!.column == line.point2!.column || line.point1!.row == line.point2!.row {
             let countLines = GV.lines.count
             let checkLineHor = line.point1!.row == line.point2!.row
@@ -445,263 +332,8 @@ class GameBoard {
         return toDelete
         
     }
-    func printGameboard() {
-        if debugging {
-            printFunction("printGameboard()")
-            var lineString = "+"
-            for i in 0..<GV.gameSize {lineString += "---+"}
-            //println (lineString)
-            for y in 0..<GV.gameSize {
-                var printString = "| "
-                for x in 0..<GV.gameSize {
-                    var p: String
-                    switch tempGameArray![x, y]!.color {
-                    case .Unknown: p = "\(tempGameArray![x, y]!.areaNumber)"
-                    case .Red: p = "r"
-                    case .Green: p = "g"
-                    case .Blue: p = "b"
-                    case .Magenta: p = "m"
-                    case .Yellow: p = "y"
-                    case .Purple: p = "p"
-                    case .Orange: p = "o"
-                    case .Cyan: p = "c"
-                    case .Brown: p = "k"
-                    case .LightGrayColor: p = "l"
-                    case .DarkGreyColor: p = "d"
-                    default: p = " "
-                    }
-                    if tempGameArray![x, y]!.originalPoint {
-                        p = p.uppercaseString
-                    }
-                    printString += p + " | "
-                }
-                //println("\(printString)")
-                //println("\(lineString)")
-            }
-        }
-    }
-    
-    func analyzeGameboard() {
-        let startTime = NSDate()
-        printFunction("analyzeGameboard()")
-        self.areas = [Int:Area]()
-        var area = Area()
-        for x in 0..<GV.gameSize {
-            for y in 0..<GV.gameSize {
-                tempGameArray![x, y]!.areaNumber = -1
-            }
-        }
-        var areaNumber = 0
-        var minAreaLength = 1000
-        for x in 0..<GV.gameSize {
-            for y in 0..<GV.gameSize {
-                if tempGameArray![x, y]!.color == .Unknown &&
-                    tempGameArray![x, y]!.areaNumber == -1 {
-                        area.points.append(Member(x: x, y: y, checked: false, endPoint: false))
-                        tempGameArray![x, y]!.areaNumber = areaNumber
-                        area.countNotCheckedMembers++
-                        while area.countNotCheckedMembers > 0 {
-                            for (index, member) in enumerate(area.points) {
-                                if !member.checked {
-                                    let x = member.x
-                                    let y = member.y
-                                    if tempGameArray![x, y]!.directions.left > 0 &&
-                                        tempGameArray![x - 1, y]!.color == .Unknown &&
-                                        tempGameArray![x - 1, y]!.areaNumber == -1 {
-                                            
-                                            tempGameArray![x - 1, y]!.areaNumber = areaNumber
-                                            area.points.append(Member(x: x - 1, y: y, checked: false, endPoint: false))
-                                            area.countNotCheckedMembers++
-                                    }
-                                    if tempGameArray![x, y]!.directions.right > 0 &&
-                                        tempGameArray![x + 1, y]!.color == .Unknown &&
-                                        tempGameArray![x + 1, y]!.areaNumber == -1 {
-                                            
-                                            tempGameArray![x + 1, y]!.areaNumber = areaNumber
-                                            area.points.append(Member(x: x + 1, y: y, checked: false, endPoint: false))
-                                            area.countNotCheckedMembers++
-                                    }
-                                    if tempGameArray![x, y]!.directions.up > 0 &&
-                                        tempGameArray![x, y - 1]!.color == .Unknown &&
-                                        tempGameArray![x, y - 1]!.areaNumber == -1 {
-                                            
-                                            tempGameArray![x, y - 1]!.areaNumber = areaNumber
-                                            area.points.append(Member(x: x, y: y - 1, checked: false, endPoint: false))
-                                            area.countNotCheckedMembers++
-                                    }
-                                    if tempGameArray![x, y]!.directions.down > 0 &&
-                                        tempGameArray![x, y + 1]!.color == .Unknown &&
-                                        tempGameArray![x, y + 1]!.areaNumber == -1 {
-                                            
-                                            tempGameArray![x, y + 1]!.areaNumber = areaNumber
-                                            area.points.append(Member(x: x, y: y + 1, checked: false, endPoint: false))
-                                            area.countNotCheckedMembers++
-                                    }
-                                    if tempGameArray![x, y]!.directions.countDirections == 1 {
-                                        area.hasEndPoints = true
-                                        area.countEndPoints++
-                                        area.points[index].endPoint = true
-                                    }
-                                    area.points[index].checked = true
-                                    area.countNotCheckedMembers--
-                                    //println("index: \(index), x: \(x), y:\(y), notChecked: \(area.countNotCheckedMembers), areaNumber: \(areaNumber)")
-                                }
-                            }
-                        }
-                        self.areas[areaNumber] = area
-                        if minAreaLength > area.points.count {
-                            minAreaLength = area.points.count
-                            self.areaNr = areaNumber
-                        }
-                        //printGameboard()
-                        area = Area()
-                        areaNumber++
-                }
-                
-            }
-        }
-        let currentTime = NSDate()
-        let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
-        if debugging {//println("analyzeGameboard elapsedTime:\(elapsedTime) ms")
-        }
-    }
-    
-    func checkDirections(x: Int, y: Int) {
-        printFunction("checkDirections(x: \(x), y: \(y))")
-        checkDirections()
-        
-        var startTime = NSDate()
-        var pointer = lowCountDirections.count
-        if let point = tempGameArray![x, y] {
-            if point.color == .Unknown {
-                checkDirections()
-            } else {
-                var columnLeft: Int = x - 1
-                tempGameArray![x, y]!.clearDirections()
-                while columnLeft >= 0 && tempGameArray![columnLeft, y]!.color == .Unknown {
-                    tempGameArray![columnLeft, y]!.directions.right = x - columnLeft - 1
-                    tempGameArray![columnLeft, y]!.countDirections()
-                    columnLeft--
-                }
-                var columnRight = x + 1
-                tempGameArray![x, y]!.directions.right = 0
-                while columnRight < GV.gameSize && tempGameArray![columnRight, y]!.color == .Unknown {
-                    tempGameArray![columnRight, y]!.directions.left = columnRight - x - 1
-                    tempGameArray![columnRight, y]!.countDirections()
-                    columnRight++
-                }
-                var rowUp = y - 1
-                tempGameArray![x, y]!.directions.up = 0
-                while rowUp >= 0 && tempGameArray![x, rowUp]!.color == .Unknown {
-                    tempGameArray![x, rowUp]!.directions.down = y - rowUp - 1
-                    tempGameArray![x, rowUp]!.countDirections()
-                    rowUp--
-                }
-                var rowDown = y + 1
-                tempGameArray![x, y]!.directions.down = 0
-                while rowDown < GV.gameSize && tempGameArray![x, rowDown]!.color == .Unknown {
-                    tempGameArray![x, rowDown]!.directions.up = rowDown - y - 1
-                    tempGameArray![rowDown, y]!.countDirections()
-                    rowDown++
-                }
-                analyzeGameboard()
-                printGameboard()
-            }
-        }
-        let currentTime = NSDate()
-        let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
-        if debugging {//println("checkDirections elapsedTime:\(elapsedTime) ms")
-        }
-        
-    }
-    
-    func checkDirections() {
-        printFunction("checkDirections()")
-        var startTime = NSDate()
-        if let point = tempGameArray![0, 0] {
-            var lowCountDir = Array<(x:Int, y:Int)>()
-            for x in 0..<GV.gameSize {
-                for y in 0..<GV.gameSize {
-                    var dir = Directions()
-                    if tempGameArray![x, y]!.color != .Unknown {
-                        tempGameArray![x, y]!.directions = dir
-                    } else {
-                        if x > 0 {
-                            var col = x - 1
-                            while col >= 0 && tempGameArray![col, y]!.color == .Unknown {
-                                col--
-                                dir.left++
-                            }
-                        }
-                        
-                        if x < GV.gameSize - 1 {
-                            var col = x + 1
-                            while col <= GV.gameSize - 1 && tempGameArray![col, y]!.color == .Unknown {
-                                col++
-                                dir.right++
-                            }
-                        }
-                        
-                        if y > 0 {
-                            var row = y - 1
-                            while row >= 0 && tempGameArray![x, row]!.color == .Unknown {
-                                row--
-                                dir.up++
-                            }
-                        }
-                        
-                        if y < GV.gameSize - 1 {
-                            var row = y + 1
-                            while row <= GV.gameSize - 1 && tempGameArray![x, row]!.color == .Unknown {
-                                row++
-                                dir.down++
-                            }
-                        }
-                        dir.count = dir.left + dir.right + dir.up + dir.down
-                        dir.countDirections = dir.left > 0 ? 1 : 0
-                        dir.countDirections += dir.right > 0 ? 1 : 0
-                        dir.countDirections += dir.up > 0 ? 1 : 0
-                        dir.countDirections += dir.down > 0 ? 1 : 0
-                        if dir.countDirections < 2 {
-                            lowCountDir.append(x: x, y: y)
-                        }
-                        tempGameArray![x, y]!.directions = dir
-                    }
-                }
-            }
-            self.lowCountDirections = lowCountDir
-            analyzeGameboard()
-        }
-        let currentTime = NSDate()
-        let elapsedTime = currentTime.timeIntervalSinceDate(startTime)
-        //println("elapsedTime:\(elapsedTime)")
-        
-        
-    }
-    
-    func countEmptyPoints() -> Int {
-        printFunction("countEmptyPoints()")
-        var count = 0
-        for x in 0..<GV.gameSize {
-            for y in 0..<GV.gameSize {
-                if tempGameArray![x, y]!.color == .Unknown {
-                    count++
-                }
-            }
-        }
-        return count
-    }
-    func printFunction(funcName:String) {
-        if debugging {
-            //println("Function: \(funcName)")
-        }
-    }
 }
 
-
-func ==(lhs: (x: Int, y: Int), rhs: (x:Int, y:Int)) -> Bool {
-    return lhs.x == rhs.x && lhs.y == rhs.y
-}
 
 
 

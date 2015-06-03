@@ -5,7 +5,7 @@
 //  Created by Jozsef Romhanyi on 12.03.15.
 //  Copyright (c) 2015 Jozsef Romhanyi. All rights reserved.
 //
-/*
+
 import Foundation
 
 struct LowValues: Hashable {
@@ -50,7 +50,6 @@ class GameBoard {
     }
 
     
-    var debugging = false
     var gameArray: Array2D<Point>
     //var directions: Array2D<Directions>
     var tempGameArray: Array2D<Point>?
@@ -63,6 +62,7 @@ class GameBoard {
     var countMoves: Int = 0
     var areas = [Int:Area]()
     var areaNr = 0
+    let minLength = 4
 
     
     
@@ -92,7 +92,7 @@ class GameBoard {
         printFunction("GameBoard.init()")
         numColors = random(minColorCount, max: maxColorCount, comment: "wähle Anzahl colors")
         let startTime = NSDate()
-        (gameArray, GV.lines) = generateGameArray()
+        (gameArray, GV.lines) = generateGameArrayExtended()
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000 / 1000
         //println("Time für Generierung von Gameboard:\(elapsedTime) sec")
@@ -131,7 +131,7 @@ class GameBoard {
         //for ind in 0..<self.numColors {
         //for ind in 0..<2 
         do {
-            let color = LineType(rawValue: (LineType.Red.rawValue + ind))!
+            let color = LineType(rawValue: (LineType.C1.rawValue + ind))!
             let startTime = NSDate()
             
             
@@ -155,7 +155,7 @@ class GameBoard {
         print ("{\"lineCount\": \(lines.count), \"lines\":[")
         for index in 0..<lines.count
         {
-            let color = LineType(rawValue: (LineType.Red.rawValue + index))!
+            let color = LineType(rawValue: (LineType.C1.rawValue + index))!
             let line = lines[color]!
             while line.points.count > 0 {
                 let x = line.lastPoint().column
@@ -410,7 +410,7 @@ class GameBoard {
 
     }
     func printGameboard() {
-        if debugging {
+        if GV.debugging {
             printFunction("printGameboard()")
             var lineString = "+"
             for i in 0..<GV.gameSize {lineString += "---+"}
@@ -419,21 +419,7 @@ class GameBoard {
                 var printString = "| "
                 for x in 0..<GV.gameSize {
                     var p: String
-                    switch tempGameArray![x, y]!.color {
-                        case .Unknown: p = "\(tempGameArray![x, y]!.areaNumber)"
-                        case .Red: p = "r"
-                        case .Green: p = "g"
-                        case .Blue: p = "b"
-                        case .Magenta: p = "m"
-                        case .Yellow: p = "y"
-                        case .Purple: p = "p"
-                        case .Orange: p = "o"
-                        case .Cyan: p = "c"
-                        case .Brown: p = "k"
-                        case .LightGrayColor: p = "l"
-                        case .DarkGreyColor: p = "d"
-                        default: p = " "
-                    }
+                    p = tempGameArray![x, y]!.color.colorAbbr.lowercaseString
                     if tempGameArray![x, y]!.originalPoint {
                         p = p.uppercaseString
                     }
@@ -526,7 +512,7 @@ class GameBoard {
         }
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
-        if debugging {println("analyzeGameboard elapsedTime:\(elapsedTime) ms")}
+        if GV.debuggingTime {println("analyzeGameboard elapsedTime:\(elapsedTime) ms")}
     }
 
     func checkDirections(x: Int, y: Int) {
@@ -573,7 +559,7 @@ class GameBoard {
         }
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000
-        if debugging {println("checkDirections elapsedTime:\(elapsedTime) ms")}
+        if GV.debuggingTime {println("checkDirections elapsedTime:\(elapsedTime) ms")}
 
     }
     
@@ -654,7 +640,7 @@ class GameBoard {
         return count
     }
     func printFunction(funcName:String) {
-        if debugging {
+        if GV.debuggingFunctions {
             println("Function: \(funcName)")
         }
     }
@@ -665,4 +651,3 @@ func ==(lhs: (x: Int, y: Int), rhs: (x:Int, y:Int)) -> Bool {
     return lhs.x == rhs.x && lhs.y == rhs.y
 }
 
-*/

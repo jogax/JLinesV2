@@ -91,7 +91,13 @@ struct GV {
     static let SilverColor          = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1)
     static let BlackColor           = UIColor(red: 0/255,   green: 0/255,   blue: 0/255,    alpha: 1)
     
-   
+
+    // generierung new game
+    static let createNewGame = true
+    static let debugging = true
+    static let debuggingFunctions = false
+    static let debuggingTime = false
+
     
     // globale Labels
     

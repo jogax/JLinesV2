@@ -18,7 +18,6 @@ class MyGameView: UIView {
     //var gameboard: Array2D<Point>?
     
     var gameboard: GameBoard?
-    var createNewGame = true
     var notInMove = true
 
     var error: String?
@@ -52,7 +51,7 @@ class MyGameView: UIView {
         if GV.gameNr <= GV.maxGameNr {
             (OK, numColors, gameArray, error, lines) = package.getGameNew(GV.volumeNr, numberIn: GV.gameNr)
             if OK {
-                if createNewGame {
+                if GV.createNewGame {
                     self.gameboard = GameBoard()
                 } else {
                     self.gameboard = GameBoard(gameArray: gameArray, lines: lines, numColors: numColors)
@@ -87,7 +86,7 @@ class MyGameView: UIView {
 
             let linesCount = GV.lines.count
             for index in 0..<linesCount {
-                let color = LineType(rawValue: (LineType.Red.rawValue + index))!
+                let color = LineType(rawValue: (LineType.C1.rawValue + index))!
                 makeNewLayer(color)
             }
             
@@ -115,7 +114,7 @@ class MyGameView: UIView {
     func restart() {
         for index in 0..<GV.lines.count
         {
-            let color = LineType(rawValue: (LineType.Red.rawValue + index))!
+            let color = LineType(rawValue: (LineType.C1.rawValue + index))!
             let line = GV.lines[color]!
             while line.points.count > 0 {
                 let x = line.lastPoint().column
@@ -152,7 +151,7 @@ class MyGameView: UIView {
         colorTab = []
         for index in 0..<GV.lines.count
         {
-            let color = LineType(rawValue: (LineType.Red.rawValue + index))!
+            let color = LineType(rawValue: (LineType.C1.rawValue + index))!
             if !GV.lines[color]!.lineEnded {
                 colorTab.append(color)
             }
@@ -483,7 +482,7 @@ class MyGameView: UIView {
     func getEndedLinesCount() -> Int{
         var count = 0
         for index in 0..<GV.lines.count {
-            count += GV.lines[LineType(rawValue: (LineType.Red.rawValue + index))!]!.lineEnded ? 1 : 0
+            count += GV.lines[LineType(rawValue: (LineType.C1.rawValue + index))!]!.lineEnded ? 1 : 0
 
         }
        //println("aktColor: \(aktColor), count:\(count)")
