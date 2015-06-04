@@ -145,7 +145,7 @@ extension GameBoard {
                 }
             }
             
-            if emptyPointsCount < 6 || restLinesCount == 1 || areasCount == restLinesCount {
+            if emptyPointsCount < 8 || restLinesCount == 1 || areasCount == restLinesCount {
                 lineLength = emptyPointsCount + 1
             } else {
                 if emptyPointsCount >  9 {
@@ -275,7 +275,7 @@ extension GameBoard {
         let line = GV.lines[color]!
         var toDelete = false
         for ind in 0..<areas.count {
-            if areas[ind]!.points.count < minLength || areas[ind]!.countEndPoints == 3 {//> 2 && areas[ind]!.points.count < 6) { //zu kurze Area or zu viele EndPoints --> line weglöschen!
+            if areas[ind]!.points.count <= minLength || areas[ind]!.countEndPoints == 3 {//> 2 && areas[ind]!.points.count < 6) { //zu kurze Area or zu viele EndPoints --> line weglöschen!
                 toDelete = true
             }
         }

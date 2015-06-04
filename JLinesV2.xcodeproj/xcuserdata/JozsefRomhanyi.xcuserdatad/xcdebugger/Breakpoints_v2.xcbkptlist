@@ -24,6 +24,7 @@
          <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
+            condition = "lineLength == 6 || lineLength == 7"
             continueAfterRunningActions = "No"
             filePath = "JLinesV2/GameBoardNew.swift"
             timestampString = "455037324.411025"
@@ -262,7 +263,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JLinesV2/GameBoard.swift"
@@ -272,6 +273,22 @@
             startingLineNumber = "445"
             endingLineNumber = "445"
             landmarkName = "printGameboard()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JLinesV2/GameBoardNew.swift"
+            timestampString = "455134030.253392"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
+            landmarkName = "generateLineFromPointExtended(_:y:color:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
