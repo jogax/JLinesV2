@@ -94,9 +94,10 @@ struct GV {
 
     // generierung new game
     static let createNewGame = true
-    static let debugging = true
+    static let debugging = false
     static let debuggingFunctions = false
     static let debuggingTime = false
+    static let printGeneratedLine = true
 
     
     // globale Labels

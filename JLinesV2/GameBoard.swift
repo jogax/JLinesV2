@@ -63,7 +63,7 @@ class GameBoard {
     var areas = [Int:Area]()
     var areaNr = 0
     let minLength = 4
-
+    var debugging = GV.debugging
     
     
     init (gameArray: Array2D<Point>, lines: [LineType:Line],  numColors: Int) {
@@ -93,6 +93,8 @@ class GameBoard {
         numColors = random(minColorCount, max: maxColorCount, comment: "wähle Anzahl colors")
         let startTime = NSDate()
         (gameArray, GV.lines) = generateGameArrayExtended()
+        removeLinesFromGameboard()
+        printGeneratedLine()
         let currentTime = NSDate()
         let elapsedTime = currentTime.timeIntervalSinceDate(startTime) * 1000 / 1000
         //println("Time für Generierung von Gameboard:\(elapsedTime) sec")
@@ -152,15 +154,22 @@ class GameBoard {
             toContinue = (ind < self.numColors && self.numEmptyPoints != 0) || self.numEmptyPoints != 0
         } while toContinue
 
-        print ("{\"lineCount\": \(lines.count), \"lines\":[")
-        for index in 0..<lines.count
+        
+        GV.gameNr++
+        return (tempGameArray!, lines)
+        
+    }
+
+    func removeLinesFromGameboard() {
+        for index in 0..<GV.lines.count
         {
             let color = LineType(rawValue: (LineType.C1.rawValue + index))!
-            let line = lines[color]!
+            let line = GV.lines[color]!
             while line.points.count > 0 {
                 let x = line.lastPoint().column
                 let y = line.lastPoint().row
-                if line.lastPoint() != line.point1 && line.lastPoint() != line.point2 {
+                if line.lastPoint() != line.point1 && line.lastPoint() != line.point2
+                {
                     tempGameArray![x, y]!.color = .Unknown
                     tempGameArray![x, y]!.originalPoint = false
                 }
@@ -169,18 +178,26 @@ class GameBoard {
             }
             line.point1!.inLinePoint = false
             line.point2!.inLinePoint = false
-            //   {"lineCount":5, "lines":[{"P1":23, "P2":03},{"P1":24, "P2":04},{"P1":12, "P2":22},{"P1":10, "P2":02},{"P1":7, "P2":15}
-            let pos1 = line.point1!.row * GV.gameSize + line.point1!.column
-            let pos2 = line.point2!.row * GV.gameSize + line.point2!.column
-            if index > 0 {print(",")}
-            print("{\"P1\":\(pos1),\"P2\":\(pos2)}")
- 
         }
-        print("]},")
-        println()
-        GV.gameNr++
-        return (tempGameArray!, lines)
-        
+    }
+    
+    func printGeneratedLine() {
+        if GV.printGeneratedLine {
+            print ("{\"lineCount\": \(GV.lines.count), \"lines\":[")
+            for index in 0..<GV.lines.count
+            {
+                let color = LineType(rawValue: (LineType.C1.rawValue + index))!
+                let line = GV.lines[color]!
+                let pos1 = line.point1!.row * GV.gameSize + line.point1!.column
+                let pos2 = line.point2!.row * GV.gameSize + line.point2!.column
+                if index > 0 {
+                    print(",")
+                }
+                print("{\"P1\":\(pos1),\"P2\":\(pos2)}")
+            }
+            print("]},")
+            println()
+        }
     }
     
     func random(min: Int, max: Int, comment: String) -> Int {
@@ -410,7 +427,7 @@ class GameBoard {
 
     }
     func printGameboard() {
-        if GV.debugging {
+        if debugging {
             printFunction("printGameboard()")
             var lineString = "+"
             for i in 0..<GV.gameSize {lineString += "---+"}

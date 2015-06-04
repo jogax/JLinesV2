@@ -61,7 +61,7 @@ extension GameBoard {
             ind++
             toContinue = (ind < self.numColors && self.numEmptyPoints != 0) || self.numEmptyPoints != 0
         } while toContinue
-        
+/*
         print ("{\"lineCount\": \(lines.count), \"lines\":[")
         for index in 0..<lines.count
         {
@@ -89,6 +89,7 @@ extension GameBoard {
         print("]},")
         //println()
         //GV.gameNr++
+*/
         return (tempGameArray!, lines)
         
     }
@@ -162,31 +163,31 @@ extension GameBoard {
                 randomSet = []
                 var cnt = 0
                 while randomSet.count == 0 && cnt <= minLength {
-                    switch leftUpRightDown {
-                    case left:
+//                    switch leftUpRightDown {
+//                    case left:
                         if aktX > 0 && tempGameArray![aktX - 1, aktY]!.color == .Unknown && tempGameArray![aktX - 1, aktY]!.areaNumber == areaNr && (aktX - 1 != blockedX || aktY != blockedY) {
                             let setX = aktX - 1
                             let setY = aktY
                             randomSet.append(x: setX, y: setY)
                         }
-                    case right:
+//                    case right:
                         if aktX < GV.gameSize - 1 && tempGameArray![aktX + 1, aktY]!.color == .Unknown && tempGameArray![aktX + 1, aktY]!.areaNumber == areaNr  && (aktX + 1 != blockedX || aktY != blockedY) {
                             let setX = aktX + 1
                             let setY = aktY
                             randomSet.append(x: setX, y: setY)
                         }
-                    case up:
+//                    case up:
                         if aktY > 0 && tempGameArray![aktX, aktY - 1]!.color == .Unknown && tempGameArray![aktX, aktY - 1]!.areaNumber == areaNr && (aktX != blockedX || aktY - 1 != blockedY) {
                             let setX = aktX
                             let setY = aktY - 1
                             randomSet.append(x: setX, y: setY)
                         }
-                    default: //down
+//                    default: //down
                         if aktY < GV.gameSize - 1 && tempGameArray![aktX, aktY + 1]!.color == .Unknown && tempGameArray![aktX, aktY + 1]!.areaNumber == areaNr && (aktX != blockedX || aktY + 1 != blockedY) {
                             let setX = aktX
                             let setY = aktY + 1
                             randomSet.append(x: setX, y: setY)}
-                    }
+//                    }
                     if randomSet.count == 0 {
                         if ++leftUpRightDown > down {leftUpRightDown = 0}
                         cnt++
@@ -282,7 +283,7 @@ extension GameBoard {
         if line.point1 == line.point2 {
             toDelete = true
         }
-        if line.length < 6 && (line.point1!.column == line.point2!.column || line.point1?.row == line.point2?.row) {
+        if line.length < 6 && (line.point1!.column == line.point2!.column || line.point1?.row == line.point2?.row) && GV.lines.count < numColors {
             toDelete = true
         }
         /*
