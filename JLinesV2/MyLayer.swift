@@ -134,14 +134,27 @@ class MyLayer: CALayer {
             
             let xPos1 = GV.lines[color]!.point1!.column * iRectSize
             let yPos1 = GV.lines[color]!.point1!.row * iRectSize
-            
+/*
+            let colorName = colortype?.color.colorAbbr
+            let textStyle = NSMutableParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+            textStyle.alignment = NSTextAlignment.Center
+            let fontSize = rectSize / 2
+            let font = UIFont.boldSystemFontOfSize(fontSize) //   preferredFontForTextStyle(UIFontTextStyleHeadline)
+            let textColor = UIColor.blackColor()
+            let textFontAttributes = [
+                NSFontAttributeName: font,
+                NSForegroundColorAttributeName: textColor,
+                NSParagraphStyleAttributeName: textStyle
+            ]
+*/
             let xCent1: CGFloat = CGFloat(self.bounds.origin.x) + CGFloat(xPos1) + CGFloat(rectSize) / CGFloat(2)
             let yCent1: CGFloat = CGFloat(self.bounds.origin.y) + CGFloat(yPos1) + CGFloat(rectSize) / CGFloat(2)
             CGContextAddArc(ctx, xCent1, yCent1, rad, 0, endAngle, 1)
             CGContextSetFillColorWithColor(ctx, color.uiColor.CGColor)
             CGContextSetStrokeColorWithColor(ctx,color.uiColor.CGColor)
-            CGContextDrawPath(ctx, kCGPathFillStroke);
+            CGContextDrawPath(ctx, kCGPathFillStroke)
             
+            let rectText = CGRect(x: CGFloat(xCent1 ), y: CGFloat(yCent1), width: rectSize, height: rectSize)
             let xPos2 = GV.lines[color]!.point2!.column * iRectSize
             let yPos2 = GV.lines[color]!.point2!.row * iRectSize
             let xCent2: CGFloat = CGFloat(self.bounds.origin.x) + CGFloat(xPos2) + CGFloat(rectSize) / CGFloat(2)
@@ -151,7 +164,12 @@ class MyLayer: CALayer {
             CGContextSetFillColorWithColor(ctx, color.uiColor.CGColor)
             CGContextSetStrokeColorWithColor(ctx,color.uiColor.CGColor)
             CGContextDrawPath(ctx, kCGPathFillStroke);
+/*
+            colorName!.drawInRect(rectText, withAttributes: textFontAttributes)
             
+            CGContextStrokePath(ctx)
+*/            
+
             var lineWidth: CGFloat = 0.0
 
             if GV.lines[color]!.lineEnded {

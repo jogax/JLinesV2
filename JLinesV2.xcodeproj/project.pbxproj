@@ -45,6 +45,7 @@
 		200A7CE21B0B84330015F20D /* JoyStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200A7CE11B0B84330015F20D /* JoyStick.swift */; };
 		200AF4211AE26CA00055D2D6 /* MyStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200AF4201AE26CA00055D2D6 /* MyStructs.swift */; };
 		200AF4231AE299A00055D2D6 /* back.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 200AF4221AE299A00055D2D6 /* back.jpg */; };
+		200E29651B25E12F0067B1AF /* ChooseColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200E29641B25E12F0067B1AF /* ChooseColorViewController.swift */; };
 		2054CF431B0353F500B9546C /* GameBoardNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2054CF421B0353F500B9546C /* GameBoardNew.swift */; };
 		20C6C2201AD94B9C00E8FFA7 /* hu.json in Resources */ = {isa = PBXBuildFile; fileRef = 20C6C21F1AD94B9C00E8FFA7 /* hu.json */; };
 		20C6C2221AD94BCC00E8FFA7 /* ru.json in Resources */ = {isa = PBXBuildFile; fileRef = 20C6C2211AD94BCC00E8FFA7 /* ru.json */; };
@@ -117,6 +118,7 @@
 		200A7CE11B0B84330015F20D /* JoyStick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoyStick.swift; sourceTree = "<group>"; };
 		200AF4201AE26CA00055D2D6 /* MyStructs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyStructs.swift; sourceTree = "<group>"; };
 		200AF4221AE299A00055D2D6 /* back.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = back.jpg; path = "../../../../../XCode Bilder/back.jpg"; sourceTree = "<group>"; };
+		200E29641B25E12F0067B1AF /* ChooseColorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseColorViewController.swift; sourceTree = "<group>"; };
 		2054CF421B0353F500B9546C /* GameBoardNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBoardNew.swift; sourceTree = "<group>"; };
 		20C6C21F1AD94B9C00E8FFA7 /* hu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = hu.json; sourceTree = "<group>"; };
 		20C6C2211AD94BCC00E8FFA7 /* ru.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ru.json; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				20E7C3871AD7F6BE00E6DF7E /* TableViewController.swift */,
 				2009B0B51AB30F7700452C4C /* PagedViewController.swift */,
 				2009B0BD1AB30F7700452C4C /* SettingsViewController.swift */,
+				200E29641B25E12F0067B1AF /* ChooseColorViewController.swift */,
 				2009B0B61AB30F7700452C4C /* MyScrollView.swift */,
 				2009B0B71AB30F7700452C4C /* Game.swift */,
 				200AF4201AE26CA00055D2D6 /* MyStructs.swift */,
@@ -413,6 +416,7 @@
 				2009B0CA1AB30F7800452C4C /* SettingsViewController.swift in Sources */,
 				2009DB301ADE58B800D021DA /* DataStore.swift in Sources */,
 				20D85AF91AC95E370020D25A /* MyLayer.swift in Sources */,
+				200E29651B25E12F0067B1AF /* ChooseColorViewController.swift in Sources */,
 				2054CF431B0353F500B9546C /* GameBoardNew.swift in Sources */,
 				2009B0CD1AB30F7800452C4C /* Array2D.swift in Sources */,
 				2009B0CE1AB30F7800452C4C /* Extensions.swift in Sources */,

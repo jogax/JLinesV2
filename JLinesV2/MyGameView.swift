@@ -77,7 +77,7 @@ class MyGameView: UIView {
             GV.gameRectSize = self.frame.width * GV.gameSizeMultiplier / CGFloat(GV.gameSize)
             
             bgLayer.frame = CGRect(origin: self.frame.origin, size: CGSizeMake(self.frame.width * GV.gameSizeMultiplier, self.frame.height * GV.gameSizeMultiplier))
-            bgLayer.backgroundColor = GV.darkTurquoiseColor.CGColor
+            bgLayer.backgroundColor = GV.DarkForrestGreen.CGColor //GV.darkTurquoiseColor.CGColor
             bgLayer.color = .Unknown
             bgLayer.name = "background"
             
@@ -320,8 +320,9 @@ class MyGameView: UIView {
         let xPos = point.x - bounds.origin.x
         let yPos = point.y - bounds.origin.y
         let halfGameRectSize = CGFloat(GV.gameRectSize) / 2
+        let checkCorrectur = GV.gameControll == .JoyStick || GV.gameControll == .Accelerometer ? CGFloat(GV.gameRectSize) / 2 : 0
         var myTouchPoint = point
-        if xPos < halfGameRectSize || xPos >= bounds.size.width - halfGameRectSize || yPos < halfGameRectSize || yPos >= bounds.size.height - halfGameRectSize {
+        if xPos < checkCorrectur || xPos >= bounds.size.width - checkCorrectur || yPos < checkCorrectur || yPos >= bounds.size.height - checkCorrectur {
             return (false, 0, 0)
         }
         let x = Int(xPos / CGFloat(GV.gameRectSize))

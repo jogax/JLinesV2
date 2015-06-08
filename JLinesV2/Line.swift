@@ -63,6 +63,9 @@ enum LineType: Int, Printable {
     }
 
     var uiColor: UIColor {
+        var uiColorTypes:[UIColor] = GV.colorSets[GV.colorSetIndex]
+
+        /*
         var uiColorTypes = [
             UIColor.clearColor(),
             UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1), // Red
@@ -83,7 +86,7 @@ enum LineType: Int, Printable {
             UIColor(red: 165/255, green: 42/255, blue: 42/255, alpha:1),
             UIColor.blackColor()
         ]
-        
+        */
         return uiColorTypes[rawValue]
     }
 

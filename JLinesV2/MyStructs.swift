@@ -90,10 +90,11 @@ struct GV {
     static let PeachPuffColor       = UIColor(red: 255/255, green: 218/255, blue: 185/255, alpha: 1)
     static let SilverColor          = UIColor(red: 192/255, green: 192/255, blue: 192/255, alpha: 1)
     static let BlackColor           = UIColor(red: 0/255,   green: 0/255,   blue: 0/255,    alpha: 1)
+    static let DarkForrestGreen     = UIColor(red: 0x25/0xff, green: 0x41/0xff, blue: 0x17/0xff, alpha: 1)
     
 
     // generierung new game
-    static let createNewGame = true
+    static let createNewGame = false
     static let debugging = false
     static let debuggingFunctions = false
     static let debuggingTime = false
@@ -105,7 +106,75 @@ struct GV {
     static let moveCountLabel = UILabel()
     static let lineCountLabel = UILabel()
     
-    
+    // ColorSets
+    static var colorSetIndex = 2
+    static var colorSets = [
+        // standerad Colors
+        [
+            UIColor.clearColor(),
+            UIColor(red: 0xff/0xff, green: 0x00/0xff, blue: 0x00/0xff, alpha: 1), // Red
+            UIColor(red: 0xff/0xff, green: 0xD7/0xff, blue: 0x00/0xff, alpha: 1), // Gold
+            UIColor(red: 0x00/0xff, green: 0xff/0xff, blue: 0x7f/0xff, alpha: 1), // Springgreen
+            UIColor(red: 0xff/0xff, green: 0x69/0xff, blue: 0xb4/0xff, alpha: 1), // HotPink
+            UIColor(red: 0x00/0xff, green: 0x80/0xff, blue: 0x00/0xff, alpha: 1), // green
+            UIColor(red: 0x00/0xff, green: 0x00/0xff, blue: 0xff/0xff, alpha: 1), // blue
+            UIColor(red: 0xff/0xff, green: 0x00/0xff, blue: 0xff/0xff, alpha: 1), // magenta
+            UIColor(red: 0xff/0xff, green: 0xda/0xff, blue: 0x9b/0xff, alpha: 1), // PeachPuff
+            UIColor(red: 0x80/0xff, green: 0x00/0xff, blue: 0x80/0xff, alpha: 1), // purpleColor
+            UIColor(red: 0xff/0xff, green: 0xa5/0xff, blue: 0x00/0xff, alpha: 1), // orangeColor
+            UIColor(red: 0x00/0xff, green: 0xff/0xff, blue: 0xff/0xff, alpha: 1), // cyanColor
+            UIColor(red: 0xa5/0xff, green: 0x2a/0xff, blue: 0x2a/0xff, alpha: 1), // brownColor
+            UIColor(red: 0x80/0xff, green: 0x80/0xff, blue: 0x80/0xff, alpha: 1), // darkGrayColor
+            UIColor(red: 0xc0/0xff, green: 0xc0/0xff, blue: 0xc0/0xff, alpha: 1), // silver
+            UIColor(red: 0xc6/0xff, green: 0xbe/0xff, blue: 0x17/0xff, alpha: 1), // caramel
+            UIColor(red: 0x7F/0xff, green: 0x46/0xff, blue: 0x2C/0xff, alpha: 1), // sepia
+            UIColor.blackColor()
+        ],
+        
+        // light colors
+        [
+            UIColor.clearColor(),
+            UIColor(red: 0xF9/0xff, green: 0x96/0xff, blue: 0x6B/0xff, alpha: 1), // Light Salmon
+            UIColor(red: 0xF2/0xff, green: 0xBB/0xff, blue: 0x66/0xff, alpha: 1), // Maccaroni & Cheese
+            UIColor(red: 0x5E/0xff, green: 0xFB/0xff, blue: 0x6E/0xff, alpha: 1), // Jade Green
+            UIColor(red: 0xFD/0xff, green: 0xD7/0xff, blue: 0xE4/0xff, alpha: 1), // Pig Pink
+            UIColor(red: 0x59/0xff, green: 0xE8/0xff, blue: 0x17/0xff, alpha: 1), // Nebula Green
+            UIColor(red: 0x5C/0xff, green: 0xB3/0xff, blue: 0xff/0xff, alpha: 1), // Crystal Blue
+            UIColor(red: 0xB9/0xff, green: 0x3B/0xff, blue: 0x8F/0xff, alpha: 1), // Plum
+            UIColor(red: 0xC4/0xff, green: 0x81/0xff, blue: 0x89/0xff, alpha: 1), // Pink Bow
+            UIColor(red: 0x6C/0xff, green: 0x2D/0xff, blue: 0xC7/0xff, alpha: 1), // Purple Ametist
+            UIColor(red: 0xF8/0xff, green: 0x72/0xff, blue: 0x17/0xff, alpha: 1), // Pumpkin Orange
+            UIColor(red: 0x4E/0xff, green: 0xE2/0xff, blue: 0xEC/0xff, alpha: 1), // Blue Diamond
+            UIColor(red: 0x6F/0xff, green: 0x4E/0xff, blue: 0x37/0xff, alpha: 1), // Coffee
+            UIColor(red: 0x72/0xff, green: 0x6E/0xff, blue: 0x6D/0xff, alpha: 1), // Smokey Grey
+            UIColor(red: 0x15/0xff, green: 0x1B/0xff, blue: 0x54/0xff, alpha: 1), // Midnight Blue
+            UIColor(red: 0xFF/0xff, green: 0x7F/0xff, blue: 0x50/0xff, alpha: 1), // Coral
+            UIColor(red: 0x7F/0xff, green: 0x46/0xff, blue: 0x2C/0xff, alpha: 1), // sepia
+            UIColor.blackColor()
+        ],
+        [
+            UIColor.clearColor(),
+            UIColor(red: 0xff/0xff, green: 0x00/0xff, blue: 0x00/0xff, alpha: 1), // Red
+            UIColor(red: 0xff/0xff, green: 0xD7/0xff, blue: 0x00/0xff, alpha: 1), // Gold
+            UIColor(red: 0x00/0xff, green: 0xff/0xff, blue: 0x7f/0xff, alpha: 1), // Springgreen
+            UIColor(red: 0xff/0xff, green: 0x69/0xff, blue: 0xb4/0xff, alpha: 1), // HotPink
+            UIColor(red: 0x00/0xff, green: 0x80/0xff, blue: 0x00/0xff, alpha: 1), // green
+            UIColor(red: 0x00/0xff, green: 0x00/0xff, blue: 0xff/0xff, alpha: 1), // blue
+            UIColor(red: 0xff/0xff, green: 0x00/0xff, blue: 0xff/0xff, alpha: 1), // magenta
+            UIColor(red: 0xff/0xff, green: 0xda/0xff, blue: 0x9b/0xff, alpha: 1), // PeachPuff
+            UIColor(red: 0x80/0xff, green: 0x00/0xff, blue: 0x80/0xff, alpha: 1), // purpleColor
+            UIColor(red: 0xff/0xff, green: 0xa5/0xff, blue: 0x00/0xff, alpha: 1), // orangeColor
+            UIColor(red: 0x00/0xff, green: 0xff/0xff, blue: 0xff/0xff, alpha: 1), // cyanColor
+            UIColor(red: 0xa5/0xff, green: 0x2a/0xff, blue: 0x2a/0xff, alpha: 1), // brownColor
+            UIColor(red: 0x80/0xff, green: 0x80/0xff, blue: 0x80/0xff, alpha: 1), // darkGrayColor
+            UIColor(red: 0xc0/0xff, green: 0xc0/0xff, blue: 0xc0/0xff, alpha: 1), // silver
+            UIColor(red: 0xc6/0xff, green: 0xbe/0xff, blue: 0x17/0xff, alpha: 1), // caramel
+            UIColor(red: 0x7F/0xff, green: 0x46/0xff, blue: 0x2C/0xff, alpha: 1), // sepia
+            UIColor.blackColor()
+        ]
+        
+        
+    ]
     // Constraints
     static let myDevice = MyDevice()
     
