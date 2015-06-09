@@ -16,7 +16,9 @@ class ChooseColorViewController: UIViewController, UIPickerViewDataSource, UIPic
     let chooseView = UIPickerView()
     var descriptionsLabel = UILabel()
     let buttonsView = UIView()
+    var colorSetLabels = [UILabel]()
     var colorSetButtons = [MyButton]()
+    var colorSets = [[]]
     var goWhenEnd: ()->()
 
     init(callBack: ()->()) {
@@ -36,11 +38,14 @@ class ChooseColorViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         view.backgroundColor = GV.lightSalmonColor
         
-        descriptionsLabel.backgroundColor = GV.lightSalmonColor
+        descriptionsLabel.backgroundColor = UIColor.clearColor()
         descriptionsLabel.text = GV.language.getText("chooseColorSet")
         descriptionsLabel.numberOfLines = 3
         descriptionsLabel.textAlignment = NSTextAlignment.Center
         descriptionsLabel.layer.cornerRadius = 10
+        descriptionsLabel.layer.shadowColor = UIColor.blackColor().CGColor
+        descriptionsLabel.layer.shadowOffset = CGSizeMake(8, 8)
+        descriptionsLabel.layer.shadowOpacity = 1.0
         view.addSubview(descriptionsLabel)
         view.addSubview(buttonsView)
         view.addSubview(backButton)
@@ -50,9 +55,36 @@ class ChooseColorViewController: UIViewController, UIPickerViewDataSource, UIPic
         buttonsView.layer.shadowOpacity = 1.0
         buttonsView.layer.shadowOffset = CGSizeMake(3, 3)
         buttonsView.layer.shadowColor = UIColor.blackColor().CGColor
+        colorSets.removeAll(keepCapacity: false)
+        var colorSet = [UIView]()
         for index in 0..<GV.colorSets.count {
+            colorSetLabels.append(UILabel())
+            colorSetLabels[index].setTranslatesAutoresizingMaskIntoConstraints(false)
+            colorSetLabels[index].backgroundColor = GV.PeachPuffColor
+            colorSetLabels[index].clipsToBounds = true
+            colorSetLabels[index].layer.masksToBounds = false
+            colorSetLabels[index].layer.cornerRadius = 3.0
+            colorSetLabels[index].layer.shadowColor = UIColor.blackColor().CGColor
+            colorSetLabels[index].layer.shadowOffset = CGSizeMake(3, 3)
+            colorSetLabels[index].layer.shadowOpacity = 1.0
+            colorSetLabels[index].layer.name = "colorLabel index: \(index)"
             colorSetButtons.append(MyButton())
             colorSetButtons[index].setTranslatesAutoresizingMaskIntoConstraints(false)
+            colorSet.removeAll(keepCapacity: false)
+            for colorIndex in 0..<GV.colorSets[index].count - 4 {
+                colorSet.append(UIView())
+                colorSet[colorIndex].backgroundColor = GV.colorSets[index][colorIndex + 1]
+                println("index: \(index), colorIndex: \(colorIndex), bgColor: \(colorSet[colorIndex].backgroundColor)")
+                colorSet[colorIndex].layer.cornerRadius = 3.0
+                colorSet[colorIndex].layer.shadowColor = UIColor.blackColor().CGColor
+                colorSet[colorIndex].layer.shadowOffset = CGSizeMake(3, 3)
+                colorSet[colorIndex].layer.shadowOpacity = 1.0
+                colorSet[colorIndex].alpha = 1.0
+                colorSet[colorIndex].layer.name = "colorset:\(index):\(colorIndex)"
+                colorSetLabels[index].addSubview(colorSet[colorIndex])
+            }
+            colorSets.append(colorSet)
+            view.addSubview(colorSetLabels[index])
             view.addSubview(colorSetButtons[index])
         }
         backButton.setImage(GV.images.getBack(), forState: .Normal)
@@ -96,7 +128,7 @@ class ChooseColorViewController: UIViewController, UIPickerViewDataSource, UIPic
         var constraintsArray = Array<NSObject>()
         
         let countButtons: CGFloat = 4
-        let buttonsHeight = self.view.frame.height * 0.2
+        let buttonsHeight = self.view.frame.height * 0.1
         let buttonsGap = buttonsHeight / 5
         let buttonsViewHeight = countButtons * (buttonsHeight + buttonsGap) + buttonsGap
         
@@ -109,7 +141,7 @@ class ChooseColorViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         constraintsArray.append(NSLayoutConstraint(item: descriptionsLabel, attribute: .CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: descriptionsLabel, attribute: .Top, relatedBy: .Equal, toItem: buttonsView, attribute: .Top, multiplier: 1.0, constant: 40))
+        constraintsArray.append(NSLayoutConstraint(item: descriptionsLabel, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 40))
         
         constraintsArray.append(NSLayoutConstraint(item: descriptionsLabel, attribute: .Width, relatedBy: .Equal, toItem: buttonsView, attribute: .Width, multiplier: 0.95, constant: 0))
         
@@ -118,7 +150,7 @@ class ChooseColorViewController: UIViewController, UIPickerViewDataSource, UIPic
         // buttonsView
         constraintsArray.append(NSLayoutConstraint(item: buttonsView, attribute: .CenterX, relatedBy: .Equal, toItem: self.view, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
         
-        constraintsArray.append(NSLayoutConstraint(item: buttonsView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 50.0))
+        constraintsArray.append(NSLayoutConstraint(item: buttonsView, attribute: .Top, relatedBy: .Equal, toItem: descriptionsLabel, attribute: .Bottom, multiplier: 1.0, constant: 20.0))
         
         constraintsArray.append(NSLayoutConstraint(item: buttonsView, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 0.8, constant: 0))
         
@@ -126,19 +158,46 @@ class ChooseColorViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         // chooseColorSet Buttons
         
-        for index in 0..<colorSetButtons.count {
+        for index in 0..<colorSetLabels.count {
             let multiplier = CGFloat(index + 1)
-            
-            constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .CenterX, relatedBy: .Equal, toItem: buttonsView, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
+
+            constraintsArray.append(NSLayoutConstraint(item: colorSetLabels[index], attribute: .Left, relatedBy: .Equal, toItem: buttonsView, attribute: .Left, multiplier: 1.0, constant: buttonsGap / 2))
+            constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .Right, relatedBy: .Equal, toItem: buttonsView, attribute: .Right, multiplier: 1.0, constant: -buttonsGap / 2))
             
             if index == 0 {
-                constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .Top, relatedBy: .Equal, toItem: buttonsView, attribute: .Top, multiplier: 1.0, constant: 20))
+                constraintsArray.append(NSLayoutConstraint(item: colorSetLabels[index], attribute: .Top, relatedBy: .Equal, toItem: buttonsView, attribute: .Top, multiplier: 1.0, constant: 20))
+                constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .CenterY, relatedBy: .Equal, toItem: colorSetLabels[index], attribute: .CenterY, multiplier: 1.0, constant: 0))
             } else {
-                constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .Top, relatedBy: .Equal, toItem: colorSetButtons[index - 1], attribute: .Bottom, multiplier: 1.0, constant: 20))
+                constraintsArray.append(NSLayoutConstraint(item: colorSetLabels[index], attribute: .Top, relatedBy: .Equal, toItem: colorSetLabels[index - 1], attribute: .Bottom, multiplier: 1.0, constant: 20))
+                constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .CenterY, relatedBy: .Equal, toItem: colorSetLabels[index], attribute: .CenterY, multiplier: 1.0, constant: 0))
             }
-            constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .Width, relatedBy: .Equal, toItem: buttonsView, attribute: .Width, multiplier: 0.8, constant: 1))
+            constraintsArray.append(NSLayoutConstraint(item: colorSetLabels[index], attribute: .Width, relatedBy: .Equal, toItem: buttonsView, attribute: .Width, multiplier: 0.6, constant: 1))
+            constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .Width, relatedBy: .Equal, toItem: buttonsView, attribute: .Width, multiplier: 0.3, constant: 1))
+
+            constraintsArray.append(NSLayoutConstraint(item: colorSetLabels[index], attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonsHeight))
+            constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonsHeight / 2))
             
-            constraintsArray.append(NSLayoutConstraint(item: colorSetButtons[index], attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: buttonsHeight))
+            for colorIndex in 0..<colorSets[index].count {
+                if colorIndex == 0 {
+                    if colorIndex == 0 || colorIndex == 7 {
+                        constraintsArray.append(NSLayoutConstraint(item: colorSets[index][colorIndex], attribute: .Left, relatedBy: .Equal, toItem: colorSetLabels[index], attribute: .Left, multiplier: 1.0, constant: 10))
+                    } else {
+                        constraintsArray.append(NSLayoutConstraint(item: colorSets[index][colorIndex], attribute: .Left, relatedBy: .Equal, toItem: colorSets[index][colorIndex], attribute: .Right, multiplier: 1.0, constant: 10))
+                    }
+                    if colorIndex < 7 {
+                        constraintsArray.append(NSLayoutConstraint(item: colorSets[index][colorIndex], attribute: .Top, relatedBy: .Equal, toItem: colorSetLabels[index], attribute: .Top, multiplier: 1.0, constant: 10))
+                    } else {
+                        constraintsArray.append(NSLayoutConstraint(item: colorSets[index][colorIndex], attribute: .Top, relatedBy: .Equal, toItem: colorSetLabels[index], attribute: .Bottom, multiplier: 1.0, constant: -10))
+                    }
+                    
+                    constraintsArray.append(NSLayoutConstraint(item: colorSets[index][colorIndex], attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1, constant: 20))
+                    
+                    constraintsArray.append(NSLayoutConstraint(item: colorSets[index][colorIndex], attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 20))
+                }
+                
+            }
+            
+
         }
 
         
@@ -151,6 +210,7 @@ class ChooseColorViewController: UIViewController, UIPickerViewDataSource, UIPic
         constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 0.05, constant: 0.0))
         
         constraintsArray.append(NSLayoutConstraint(item: backButton, attribute: .Height , relatedBy: .Equal, toItem: backButton, attribute: .Width, multiplier: 1.0, constant: 0.0))
+        
         self.view.addConstraints(constraintsArray)
     }
 
