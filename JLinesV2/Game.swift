@@ -56,14 +56,16 @@ class Game: UIView, Printable {
         let origin = frame.origin
         GV.gameSizeMultiplier = (self.frame.height / self.frame.width) / 1.8
         GV.notificationCenter.addObserver(self, selector: "handleGameControllChanging", name: GV.notificationGameControllChanged, object: nil)
-/*
+        if GV.gameSizeMultiplier > 0.8  { // IPhone?
+           GV.onIpad = false
+        }
         device.beginGeneratingDeviceOrientationNotifications()			//Tell it to start monitoring the accelerometer for orientation
         NSNotificationCenter.defaultCenter().addObserver(
             self,
             selector: "orientationChanged:",
             name: UIDeviceOrientationDidChangeNotification,
             object: nil)
-*/        
+        
         
         //gameContainer = UIView()
         gameContainer.backgroundColor = GV.lightSalmonColor
