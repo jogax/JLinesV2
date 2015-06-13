@@ -47,6 +47,7 @@
     "gameModus":        "Chose Game Controll",
     "ChooseColor":      "Choose Colors",
     "chooseColorSet":   "Choose a colorset. \nIf you choose the User Defined Set, \nyou can define every color himself.",
+    "choose": "choose",
     "return":           "return",
     "not found":        "text not found",
     "freePlayCell":     "training game",
