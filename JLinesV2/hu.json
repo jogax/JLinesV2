@@ -48,6 +48,7 @@
     "gameModus":        "Játék vezérlés kiválasztása",
     "ChooseColor":      "Szinek kiválasztása",
     "chooseColorSet":   "Válasszon szinkészletet. \nA felhasználói szinkészlet kiválasztáse esetén \nminden szint ön határozhat meg.",
+    "choose":         "kiválaszt",
     "return":           "vissza",
     "not found":        "nem találom a szöveget",
     "freePlayCell":     "Edző játék",
