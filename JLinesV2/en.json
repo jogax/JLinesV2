@@ -40,6 +40,7 @@
     "red":              "Red",
     "green":            "Green",
     "blue":             "Blue",
+    "pause":            "pause",
     
     "cleangame":        "Reset Game",
     "areYouSure":       "Are you sure?",
