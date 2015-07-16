@@ -28,6 +28,7 @@
     "playWithLines":    "Игра с линиями",
     "playWithColors":   "Игра с цветами",
     "playWithPoints":   "Игра с точками",
+    "playWithSprites":  "Игра с эльфами",
     "otherPlays":       "Другие игры",
     "settings":         "Настройки",
     "checkResult":      "Проверка",
@@ -41,6 +42,12 @@
     "green":            "Зеленый",
     "blue":             "Синий",
     "pause":            "пауза",
+    "levelComplete":    "Уровень завершен",
+    "gameOver":         "Игра проиграна",
+    "timeout":          "Время закончилось",
+    "gameAgain":        "заново",
+    "no Message":       "",
+    "level":            "Уровень",
 
     
     "cleangame":        "Сбрось",
